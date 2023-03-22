@@ -9,5 +9,8 @@
   },
   "author": "",
   "license": "ISC",
-  "type": "module"
+  "type": "module",
+  "dependencies": {
+    "mongodb": "^5.0.1"
+  }
 }

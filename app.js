@@ -10,6 +10,6 @@ let job1 = undefined;
 //next to test the create function
 
 
-//finally to close up shop,, get back to the terminal after doing what u need to do
+//finally to close up shop,, get back to the terminal after doing what u need to do in the db
 await closeConnection();
 console.log('Done!');

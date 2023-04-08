@@ -53,5 +53,19 @@ async function addUsers(newUsername, newPassword) {
     throw "New user was not created!";
   }
 
-  return newInfo.insertedId;
+  return getUser(newInfo.insertedId.toString());
 }
+
+async function getUser(id) {
+  validID(id);
+
+  const usersCollection = await users();
+  const user = await usersCollection.findOne({ _id: ObjectId(id) });
+
+  if (!user) {
+    throw "User not found!";
+  }
+
+  return user;
+}
+

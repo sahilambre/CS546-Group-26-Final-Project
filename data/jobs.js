@@ -70,8 +70,20 @@ const get = async (id) => {
     return jobW;
 };
 
+const getAllJobs = async() => {
+    const jobsCollection = await jobs();
+    return await jobsCollection.find({}).toArray();
+};
+
+const getJobsByRecruiterId = async(recruiterId) => {
+    const jobsCollection = await jobs();
+    return await jobsCollection.find({recuiterId:recruiterId}).toArray();
+};//allows recruiters to see all jobs that they have posted
+
 const exportedMethods = {
     create,
-    get
+    get,
+    getAllJobs,
+    getJobsByRecruiterId
 }
 export default exportedMethods;

@@ -19,3 +19,4 @@ const getCollectionFn = (collection) => {
 export const jobs = getCollectionFn('jobs');
 export const users = getCollectionFn("users");
 export const applicants = getCollectionFn("applicants");
+export const recruiters = getCollectionFn("applicants");

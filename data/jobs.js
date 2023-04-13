@@ -2,17 +2,17 @@ import {jobs} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 
 const create = async (
-    name,
+    title,
     company,
     website,
     tags
 ) => {
-    //name
-    if (!name) throw 'You must provide a name for your job listing';
-    if (typeof name !== 'string') throw 'Job name must be a string';
-    if (name.trim().length === 0)
-        throw 'Job name cannot be an empty string or string with just spaces';
-    name = name.trim();
+    //title
+    if (!title) throw 'You must provide a title for your job listing';
+    if (typeof title !== 'string') throw 'Job title must be a string';
+    if (title.trim().length === 0)
+        throw 'Job title cannot be an empty string or string with just spaces';
+    title = title.trim();
     //company
     if (!company) throw 'You must provide a company name';
     if (typeof company !== 'string') throw 'Company name must be a string';
@@ -40,6 +40,7 @@ const create = async (
         }
         tags[i] = tags[i].trim();
     }
+    //job listings also need to contain an array of applicant ids
 
     let newJob = {
         name: name,

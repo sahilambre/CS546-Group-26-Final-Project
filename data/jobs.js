@@ -43,7 +43,7 @@ const create = async (
     //job listings also need to contain an array of applicant ids
 
     let newJob = {
-        name: name,
+        title: title,
         company: company,
         website: website,
         tags: tags

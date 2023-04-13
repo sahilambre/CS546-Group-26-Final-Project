@@ -72,7 +72,13 @@ const get = async (id) => {
 
 const getAllJobs = async() => {
     const jobsCollection = await jobs();
-    return await jobsCollection.find({}).toArray();
+    let jobList = await jobsCollection.find({}).toArray();
+    if (!jobList) throw 'Could not get all jobs';
+    jobList = jobList.map((element) => {
+        element._id = element._id.toString();
+        return element;
+    });
+    return jobList;
 };
 
 const getJobsByRecruiterId = async(recruiterId) => {

@@ -3,7 +3,21 @@ import {ObjectId} from 'mongodb';
 
 const create = async (
     name,
-    otherFields) => {};
+    email,
+    age,
+    state,
+    gradYr
+) => {
+    //name
+
+    //email
+
+    //age
+
+    //state
+
+    //gradYr
+};
 
 const getAll = async () => {};
 

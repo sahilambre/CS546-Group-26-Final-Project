@@ -86,6 +86,8 @@ const getJobsByRecruiterId = async(recruiterId) => {
     return await jobsCollection.find({recuiterId:recruiterId}).toArray();
 };//allows recruiters to see all jobs that they have posted
 
+//yet to implement getJobsApplied and getJobsByTag
+
 const exportedMethods = {
     create,
     get,

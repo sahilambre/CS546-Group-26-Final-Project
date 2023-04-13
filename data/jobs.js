@@ -81,6 +81,22 @@ const getAllJobs = async() => {
     return jobList;
 };
 
+const remove = async(id) => {
+    if (!id) throw 'You must provide an id to search for';
+    if (typeof id !== 'string') throw 'Id must be a string';
+    if (id.trim().length === 0)
+        throw 'id cannot be an empty string or just spaces';
+    id = id.trim();
+    if (!ObjectId.isValid(id)) throw 'invalid object ID';
+    const jobCollection = await posts();
+    const deletionInfo = await jobCollection.findOneAndDelete({
+        _id: new ObjectId(id)
+    });
+    if (deletionInfo.lastErrorObject.n === 0)
+        throw `Could not delete post with id of ${id}`;
+    return {deleted: true};
+};
+
 const getJobsByRecruiterId = async(recruiterId) => {
     const jobsCollection = await jobs();
     return await jobsCollection.find({recuiterId:recruiterId}).toArray();
@@ -92,6 +108,7 @@ const exportedMethods = {
     create,
     get,
     getAllJobs,
+    remove,
     getJobsByRecruiterId
 }
 export default exportedMethods;

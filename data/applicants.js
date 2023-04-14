@@ -30,7 +30,7 @@ const create = async (
     //age
     if (!age) throw 'You must enter your age';
     if (typeof age !== 'number') throw 'Age must be a number';
-    //oh also handle the NAN case
+    //also handle the NAN case
     //also probably restrict the age?? like if ur over 80 please retire
 
     //state

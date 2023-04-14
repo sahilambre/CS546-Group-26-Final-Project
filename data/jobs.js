@@ -42,6 +42,9 @@ const create = async (
         tags[i] = tags[i].trim();
     }
     //job listings also need to contain an array of applicant ids
+    //should we include any other job properties?
+    //maybe location, on-site vs remote, job type like full-time or internship, etc
+    //some of those could be tags, so lets stick with the properties we have for now
 
     let newJob = {
         title: title,

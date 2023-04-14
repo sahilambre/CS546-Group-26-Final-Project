@@ -1,5 +1,6 @@
 import {jobs} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
+import validation from '../validation.js';
 
 const create = async (
     title,
@@ -103,13 +104,23 @@ const getJobsByRecruiterId = async(recruiterId) => {
     return await jobsCollection.find({recuiterId:recruiterId}).toArray();
 };//allows recruiters to see all jobs that they have posted
 
-//yet to implement getJobsApplied and getJobsByTag
+const getJobsByTag = async(tag) => {
+    tag = validation.checkString(tag, 'Tag');
+    const postCollection = await posts();
+    return await postCollection.find({tags: tag}).toArray();
+};//allows applicants to search jobs by tags
+
+const getJobsApplied = async() => {
+    //TODO
+};
 
 const exportedMethods = {
     create,
     get,
     getAllJobs,
     remove,
-    getJobsByRecruiterId
+    getJobsByRecruiterId,
+    getJobsByTag,
+    getJobsApplied
 }
 export default exportedMethods;

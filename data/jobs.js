@@ -115,7 +115,7 @@ const getJobsByTag = async(tag) => {
 
 const getJobsApplied = async() => {
     //TODO
-};
+};//allows applicants to view jobs that they have applied to
 
 const exportedMethods = {
     create,

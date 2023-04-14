@@ -1,5 +1,6 @@
 import {applicants} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
+import validation from '../validation.js';
 
 const create = async (
     firstName,
@@ -21,6 +22,9 @@ const create = async (
     if (lastName.trim().length === 0)
         throw 'Last name cannot be an empty string or string with just spaces';
     lastName = lastName.trim();
+
+    //i want to rewrite this create funcion using the helper functions from validation.js
+
     /*in the name params, i want to add smth that keeps ppl from entering numbers in the string
     no one has numbers in their name
     unless ur like John Doe the fourth, in which case you can use roman numerals

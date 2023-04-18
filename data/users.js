@@ -2,29 +2,28 @@ import { users } from "../config/mongoCollections.js";
 import { ObjectId } from 'mongodb';
 import bcryptjs from 'bcryptjs';
 
-function validID(id) {
+export function validID(id) {
   if (!id) { throw "id is not defined"; }
-  if (id.constructor !== String) { throw "id must be a string"; }
+  if (typeof id !== 'string') { throw "id must be a string"; }
   if (!ObjectId.isValid(id)) { throw "id is invalid"; }
 }
 
-function validUsername(username) {
+export function validUsername(username) {
   if (!username) { throw "username is not defined"; }
-  if (username.constructor !== String) { throw "username must be a string"; }
+  if (typeof username !== 'string') { throw "username must be a string"; }
   if (username.length < 6) { throw "username length must be at least 6 characters"; }
-  let letterNumber = /^[0-9a-zA-Z]+$/;
-  if (!username.match(letterNumber)) { throw "username can only contain letters and numbers"; }
+  if (!username.match(/^[0-9a-zA-Z]+$/)) { throw "username can only contain letters and numbers"; }
 }
 
-function validPassword(password) {
+export function validPassword(password) {
   if (!password) { throw "password is not defined"; }
-  if (password.constructor !== String) { throw "password must be a string"; }
+  if (typeof password !== String) { throw "password must be a string"; }
   if (password.length < 8) { throw "password length must be at least 8 characters"; }
   if (password.length > 31) { throw "password length must not exceed 31 characters"; }
 }
 
 
-async function addUsers(newUsername, newPassword) {
+export async function addUsers(newUsername, newPassword) {
   validUsername(newUsername);
   validPassword(newPassword);
 
@@ -37,7 +36,8 @@ async function addUsers(newUsername, newPassword) {
 
   let hashedPassword;
   try {
-    hashedPassword = await bcryptjs.hash(newPassword, 12);
+    let salt = 12;
+    hashedPassword = await bcryptjs.hash(newPassword, salt);
   } catch (e) {
     throw "Error hashing password!";
   }
@@ -56,7 +56,7 @@ async function addUsers(newUsername, newPassword) {
   return getUser(newInfo.insertedId.toString());
 }
 
-async function getUser(id) {
+export async function getUser(id) {
   validID(id);
 
   const usersCollection = await users();
@@ -68,4 +68,6 @@ async function getUser(id) {
 
   return user;
 }
+
+
 

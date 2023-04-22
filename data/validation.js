@@ -34,7 +34,6 @@ const exportedMethods = {
       }
       arr[i] = arr[i].trim();
     }
-
     return arr;
   }
 };

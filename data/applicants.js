@@ -37,6 +37,7 @@ const create = async (
     if (typeof age !== 'number' || age == NaN) throw 'Age must be a number';
     //also we gotta restrict the age, users must be 12 and up
     //also if ur over 80 please retire or smth
+    if (age < 12 || age > 80) throw 'Invalid age';
 
     //state
 

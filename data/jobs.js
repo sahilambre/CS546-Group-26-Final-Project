@@ -93,7 +93,7 @@ const remove = async(id) => {
         throw 'id cannot be an empty string or just spaces';
     id = id.trim();
     if (!ObjectId.isValid(id)) throw 'invalid object ID';
-    const jobCollection = await posts();
+    const jobCollection = await jobs();
     const deletionInfo = await jobCollection.findOneAndDelete({
         _id: new ObjectId(id)
     });

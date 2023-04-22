@@ -80,7 +80,9 @@ const get = async (applicantId) => {
     return applicantW;
 };
 
-const remove = async (applicantId) => {};  
+const remove = async (applicantId) => {
+    applicantId = validation.checkId(applicantId);
+};
 
 const update = async (
     Id,

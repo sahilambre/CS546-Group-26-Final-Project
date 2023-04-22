@@ -104,7 +104,7 @@ const update = async (
     const appCollection = await applicants();
     const updateInfo = await appCollection.findOneAndUpdate(
         {_id: ObjectId(id)},
-        {$set: updatedPost},
+        {$set: updatedApp},
         {returnDocument: 'after'}
     );
     if (updateInfo.lastErrorObject.n === 0) throw 'Error: Update failed';

@@ -63,12 +63,20 @@ the applicant id gets added to the job object
 and the job id gets added to the applicant object
 */
 
+const favoriteJob = async (
+    applicantId,
+    jobId) => {
+    //TODO
+};
+//users need to be able to filter jobs based on a favorites list
+
 const exportedMethods = {
     create,
     getAll,
     get,
     remove,
     update,
-    applyJob
+    applyJob,
+    favoriteJob
 };
 export default exportedMethods;

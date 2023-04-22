@@ -59,9 +59,25 @@ const create = async (
     return applicant;
 };
 
-const getAll = async () => {};
+const getAll = async () => {
+    const appsCollection = await applicants();
+    let applicantList = await appsCollection.find({}).toArray();
+    if (!applicantList) throw 'Could not get applicant(s)';
+    applicantList = applicantList.map((element) => {
+        element._id = element._id.toString();
+        return element;
+    });
+    return applicantList;
+};//we need to restrict the use of this function probably
 
-const get = async (applicantId) => {};
+const get = async (applicantId) => {
+    applicantId = validation.checkId(applicantId);
+    const applicantCollection = await applicants();
+    const applicantW = await applicantCollection.findOne({_id: new ObjectId(id)});
+    if (applicantW === null) throw 'No job listings with that id';
+    applicantW._id = applicantW._id.toString();
+    return applicantW;
+};
 
 const remove = async (applicantId) => {};  
 

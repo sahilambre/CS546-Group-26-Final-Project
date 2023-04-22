@@ -83,9 +83,33 @@ const get = async (applicantId) => {
 const remove = async (applicantId) => {};  
 
 const update = async (
-    applicantId,
-    name,
-    otherFields) => {};
+    Id,
+    firstName,
+    lastName,
+    email,
+    age,
+    state,
+    gradYr
+) => {
+    Id = validation.checkId(Id);
+    //TODO: more error handling
+    let updatedApp = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        age: age,
+        state: state,
+        gradYr: gradYr
+    };
+    const appCollection = await applicants();
+    const updateInfo = await appCollection.findOneAndUpdate(
+        {_id: ObjectId(id)},
+        {$set: updatedPost},
+        {returnDocument: 'after'}
+    );
+    if (updateInfo.lastErrorObject.n === 0) throw 'Error: Update failed';
+    return updateInfo.value;
+};
 
 const applyJob = async (
     applicantId,

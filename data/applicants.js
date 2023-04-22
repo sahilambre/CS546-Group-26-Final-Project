@@ -114,7 +114,7 @@ const update = async (
 const applyJob = async (
     applicantId,
     jobId) => {
-    //ouch
+    //TODO
 };
 /*when someone applies to a job, 2 things happen:
 the applicant id gets added to the job object

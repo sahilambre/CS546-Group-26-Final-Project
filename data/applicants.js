@@ -82,6 +82,13 @@ const get = async (applicantId) => {
 
 const remove = async (applicantId) => {
     applicantId = validation.checkId(applicantId);
+    const applicantCollection = await applicants();
+    const deletionInfo = await applicantCollection.findOneAndDelete({
+        _id: new ObjectId(id)
+    });
+    if (deletionInfo.lastErrorObject.n === 0)
+        throw `Could not delete post with id of ${id}`;
+    return {deleted: true};
 };
 
 const update = async (

@@ -10,6 +10,7 @@ const create = async (
     state,
     gradYr
 ) => {
+    //TODO: complete input validation
     //firstName
     if (!firstName) throw 'You must enter your name';
     if (typeof firstName !== 'string') throw 'Name must be a string';
@@ -23,23 +24,39 @@ const create = async (
         throw 'Last name cannot be an empty string or string with just spaces';
     lastName = lastName.trim();
 
-    //i want to rewrite this create funcion using the helper functions from validation.js
+    //i want to use the helper functions to write this input validation
 
     /*in the name params, i want to add smth that keeps ppl from entering numbers in the string
     no one has numbers in their name
     unless ur like John Doe the fourth, in which case you can use roman numerals
-    */
+    */   
     //email
 
     //age
     if (!age) throw 'You must enter your age';
-    if (typeof age !== 'number') throw 'Age must be a number';
-    //also handle the NAN case
-    //also probably restrict the age?? like if ur over 80 please retire
+    if (typeof age !== 'number' || age == NaN) throw 'Age must be a number';
+    //also we gotta restrict the age, users must be 12 and up
+    //also if ur over 80 please retire or smth
 
     //state
 
     //gradYr
+
+    let newApp = {
+        firstName: firstName,
+        lastName: lastName,
+        email: email,
+        age: age,
+        state: state,
+        gradYr: gradYr
+    };
+    const applicantCollection = await applicants();
+    const insertInfo = await applicantCollection.insertOne(newApp);
+    if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Unable to add user';
+
+    const newId = insertInfo.insertedId.toString();
+    const applicant = await get(newId);
+    return applicant;
 };
 
 const getAll = async () => {};

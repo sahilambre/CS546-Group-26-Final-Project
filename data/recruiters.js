@@ -1,6 +1,12 @@
 const create = async (
-    name,
-    otherFields) => {};
+    firstName,
+    lastName,
+    email,
+    company,
+    jobListings) => {
+        //TODO
+        //note, might need to change params, recruiters may need different properties
+    };
 
 const getAll = async () => {
     const recsCollection = await recruiters();

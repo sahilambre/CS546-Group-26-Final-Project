@@ -68,6 +68,7 @@ const get = async (id) => {
         throw 'Id cannot be an empty string or just spaces';
     id = id.trim();
     if (!ObjectId.isValid(id)) throw 'invalid object ID';
+    //can be replaced with validation.checkId
     const jobCollection = await jobs();
     const jobW = await jobCollection.findOne({_id: new ObjectId(id)});
     if (jobW === null) throw 'No job listings with that id';
@@ -103,6 +104,7 @@ const remove = async(id) => {
 };
 
 const getJobsByRecruiterId = async(recruiterId) => {
+    recruiterId = validation.checkId(recruiterId);
     const jobsCollection = await jobs();
     return await jobsCollection.find({recuiterId:recruiterId}).toArray();
 };//allows recruiters to see all jobs that they have posted

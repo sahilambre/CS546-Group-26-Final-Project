@@ -25,8 +25,12 @@ const remove = async (recruiterId) => {};
 
 const update = async (
     recruiterId,
-    name,
-    otherFields) => {};
+    firstName,
+    lastName,
+    email,
+    company) => {
+        //TODO
+    };
 
 const exportedMethods = {
     create,

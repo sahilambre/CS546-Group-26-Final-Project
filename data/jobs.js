@@ -106,7 +106,7 @@ const remove = async(id) => {
 const getJobsByRecruiterId = async(recruiterId) => {
     recruiterId = validation.checkId(recruiterId);
     const jobsCollection = await jobs();
-    return await jobsCollection.find({recuiterId:recruiterId}).toArray();
+    return await jobsCollection.find({recuiterId: recruiterId}).toArray();
 };//allows recruiters to see all jobs that they have posted
 
 const getJobsByTag = async(tag) => {
@@ -115,8 +115,16 @@ const getJobsByTag = async(tag) => {
     return await postCollection.find({tags: tag}).toArray();
 };//allows applicants to search jobs by tags
 
-const getJobsApplied = async() => {
-    //TODO
+const getJobsApplied = async(applicantId) => {
+    applicantId = validation.checkId(applicantId);
+    const jobsCollection = await jobs();
+    return await jobsCollection.find({applicantId: applicantId}).toArray();
+    /*
+    validate the user id
+    await the jobs collection
+    then, traverse the jobsApplied array in the user object,
+    and get jobs by those ids
+    */
 };//allows applicants to view jobs that they have applied to
 
 const exportedMethods = {

@@ -18,3 +18,4 @@ const getCollectionFn = (collection) => {
 // NOTE: YOU WILL NEED TO CHANGE THE CODE BELOW TO HAVE THe appropriate collection name or smth
 export const jobs = getCollectionFn('jobs');
 export const users = getCollectionFn("users");
+export const recruiters = getCollectionFn("recruiters");

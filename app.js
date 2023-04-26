@@ -89,13 +89,16 @@ app.get('/signup', async (req, res, next) => {
 });
 
 app.get('/logout', async (req, res, next) => {
+    if(req.method === "GET"){
         if(req.session.user){
-
+            
         }else{
             req.method = 'GET';
             return res.redirect("/login");
         }
+    }
     next();
+
 });
 
 

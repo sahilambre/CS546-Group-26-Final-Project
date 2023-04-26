@@ -107,12 +107,16 @@ const getJobsByRecruiterId = async(recruiterId) => {
     recruiterId = validation.checkId(recruiterId);
     const jobsCollection = await jobs();
     return await jobsCollection.find({recuiterId: recruiterId}).toArray();
+    /*^^this line
+    reminded me that the job object needs to include
+    the id of the recruiter who posted it
+    */
 };//allows recruiters to see all jobs that they have posted
 
 const getJobsByTag = async(tag) => {
     tag = validation.checkString(tag, 'Tag');
-    const postCollection = await posts();
-    return await postCollection.find({tags: tag}).toArray();
+    const jobCollection = await jobs();
+    return await jobCollection.find({tags: tag}).toArray();
 };//allows applicants to search jobs by tags
 
 const getJobsApplied = async(applicantId) => {
@@ -120,9 +124,9 @@ const getJobsApplied = async(applicantId) => {
     const jobsCollection = await jobs();
     return await jobsCollection.find({applicantId: applicantId}).toArray();
     /*
-    validate the user id
+    validate the applicant id
     await the jobs collection
-    then, traverse the jobsApplied array in the user object,
+    then, traverse the jobsApplied array in the applicant object,
     and get jobs by those ids
     */
 };//allows applicants to view jobs that they have applied to

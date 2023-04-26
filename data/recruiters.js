@@ -7,7 +7,6 @@ const create = async (
     email,
     company,
     jobListings) => {
-        //TODO
         //note, might need to change params, recruiters may need different properties
         if(!firstName || !lastName || !email || !company || !jobListings){
             throw 'All fields are required';
@@ -88,7 +87,6 @@ const update = async (
     lastName,
     email,
     company) => {
-        //TODO
         if(!recruitersId || !firstName || !lastName || !email || !company){
             throw 'All fields are required';
         }

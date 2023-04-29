@@ -1,12 +1,14 @@
 import {jobs} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import validation from 'validation.js';
+import applicantData from '../data/applicants.js';
 
 const create = async (
     title,
     company,
     website,
-    tags
+    tags,
+    recruiterId
 ) => {
     //title
     if (!title) throw 'You must provide a title for your job listing';
@@ -50,7 +52,9 @@ const create = async (
         title: title,
         company: company,
         website: website,
-        tags: tags
+        tags: tags,
+        recruiterId: recruiterId,
+        applicants: []
     };
     const jobCollection = await jobs();
     const insertInfo = await jobCollection.insertOne(newJob);
@@ -114,22 +118,57 @@ const getJobsByRecruiterId = async(recruiterId) => {
 };//allows recruiters to see all jobs that they have posted
 
 const getJobsByTag = async(tag) => {
+    //allows applicants to search jobs by tag
     tag = validation.checkString(tag, 'Tag');
     const jobCollection = await jobs();
     return await jobCollection.find({tags: tag}).toArray();
-};//allows applicants to search jobs by tags
+    //search will work on a single tag that is contained in jobs' tags
+};
 
-const getJobsApplied = async(applicantId) => {
-    applicantId = validation.checkId(applicantId);
-    const jobsCollection = await jobs();
-    return await jobsCollection.find({applicantId: applicantId}).toArray();
+const getJobApplicants = async(jobId) => {
+    //returns applicants that have applied for this job
     /*
-    validate the applicant id
-    await the jobs collection
-    then, traverse the jobsApplied array in the applicant object,
-    and get jobs by those ids
+    get the job
+    then, traverse the applicants array in the job object,
+    and get applicants by those ids
     */
-};//allows applicants to view jobs that they have applied to
+    let job = await get(jobId);
+    const jobsCollection = await jobs();
+    let applicantIdArray = job.applicants;
+    let applicantsArray = [];
+
+    for (let applicantId of applicantIdArray)
+    {
+        let applicant = await applicantData.get(applicantId);
+        applicantsArray.push(applicant);
+    }
+    return applicantsArray;
+};
+
+const addJobApplicant = async(jobId, applicantId) => {
+    //returns applicants that have applied for this job
+    /*
+    get the job
+    add applicant id to applicants list
+    update job
+    */
+    let job = await get(jobId);
+    const jobsCollection = await jobs();
+    let applicantIdArray = job.applicants;
+    if (applicantIdArray.includes(applicantId)) throw 'Applicant already applied for job';
+    applicantIdArray.push(applicantId);
+
+    let updatedInfo = await jobsCollection.findOneAndUpdate(
+        {_id: new ObjectId(jobId)},
+        {$set: {applicants: applicantIdArray}},
+        {returnDocument: 'after'}
+    );
+    if (updatedInfo.lastErrorObject.n === 0) {
+        throw 'could not update job with new applicant successfully';
+    }
+    job = await get(jobId);
+    return job;
+};
 
 const exportedMethods = {
     create,
@@ -138,6 +177,7 @@ const exportedMethods = {
     remove,
     getJobsByRecruiterId,
     getJobsByTag,
-    getJobsApplied
+    getJobApplicants,
+    addJobApplicant
 }
 export default exportedMethods;

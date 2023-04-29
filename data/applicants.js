@@ -1,6 +1,7 @@
 import {applicants} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import validation from 'validation.js';
+import jobData from '../data/jobs.js';
 
 const create = async (
     firstName,
@@ -38,7 +39,9 @@ const create = async (
         email: email,
         age: age,
         state: state,
-        gradYr: gradYr
+        gradYr: gradYr,
+        jobsApplied: [],
+        jobsFavorited: []
     };
     const applicantCollection = await applicants();
     const insertInfo = await applicantCollection.insertOne(newApp);
@@ -63,7 +66,7 @@ const getAll = async () => {
 const get = async (applicantId) => {
     applicantId = validation.checkId(applicantId);
     const applicantCollection = await applicants();
-    const applicantW = await applicantCollection.findOne({_id: new ObjectId(id)});
+    const applicantW = await applicantCollection.findOne({_id: new ObjectId(applicantId)});
     if (applicantW === null) throw 'No job listings with that id';
     applicantW._id = applicantW._id.toString();
     return applicantW;
@@ -81,15 +84,17 @@ const remove = async (applicantId) => {
 };
 
 const update = async (
-    Id,
+    id,
     firstName,
     lastName,
     email,
     age,
     state,
-    gradYr
+    gradYr,
+    jobsApplied,
+    jobsFavorited
 ) => {
-    Id = validation.checkId(Id);
+    id = validation.checkId(id);
     //TODO: more error handling
     let updatedApp = {
         firstName: firstName,
@@ -97,11 +102,13 @@ const update = async (
         email: email,
         age: age,
         state: state,
-        gradYr: gradYr
+        gradYr: gradYr,
+        jobsApplied: jobsApplied,
+        jobsFavorited: jobsFavorited
     };
     const appCollection = await applicants();
     const updateInfo = await appCollection.findOneAndUpdate(
-        {_id: ObjectId(id)},
+        {_id: new ObjectId(id)},
         {$set: updatedApp},
         {returnDocument: 'after'}
     );
@@ -112,19 +119,75 @@ const update = async (
 const applyJob = async (
     applicantId,
     jobId) => {
-    //TODO
+    /*when someone applies to a job, 2 things happen:
+    the applicant id gets added to the job object
+    and the job id gets added to the applicant object
+    */
+    applicantId = validation.checkId(applicantId);
+    let applicant = await get(applicantId); // will throw if not found
+    let jobIdArray = applicant.jobsApplied;
+    // should probably check that jobId is not already in the array
+    if (jobIdArray.includes(jobId)) throw 'Error: applicant has already applied for this job';
+    await jobData.addJobApplicant(jobId,applicantId);
+    jobIdArray.push(jobId);
+    return update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.state, applicant.gradYr, jobIdArray, applicant.jobsFavorited);
 };
-/*when someone applies to a job, 2 things happen:
-the applicant id gets added to the job object
-and the job id gets added to the applicant object
-*/
 
 const favoriteJob = async (
     applicantId,
     jobId) => {
-    //TODO
+    applicantId = validation.checkId(applicantId);
+    let applicant = await get(applicantId); // will throw if not found
+    let jobIdArray = applicant.jobsFavorited;
+    let job = await jobData.get(jobId);
+    // should probably check that jobId is not already in the array
+    if (jobIdArray.includes(jobId)) throw 'Error: applicant has already applied for this job';
+    jobIdArray.push(jobId);
+    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.state, applicant.gradYr, applicant.jobsApplied, jobIdArray);
 };
 //users need to be able to filter jobs based on a favorites list
+
+const getJobsApplied = async(applicantId) => {
+    //allows applicants to view jobs that they have applied to
+    /*
+    validate the applicant id
+    await the jobs collection
+    then, traverse the jobsApplied array in the applicant object,
+    and get jobs by those ids
+    */
+    applicantId = validation.checkId(applicantId);
+    let applicant = await get(applicantId); // will throw if not found
+    let jobIdArray = applicant.jobsApplied;
+    let jobsArray = [];
+    //const jobsCollection = await jobs();
+    for (let jobId of jobIdArray)
+    {
+        let job = await jobData.get(jobId);
+        jobsArray.push(job);
+    }
+    return jobsArray;   
+};
+
+const getJobsFavorited = async(applicantId) => {
+    //allows applicants to view jobs that they have favorited
+    /*
+    validate the applicant id
+    await the jobs collection
+    then, traverse the jobsApplied array in the applicant object,
+    and get jobs by those ids
+    */
+    applicantId = validation.checkId(applicantId);
+    let applicant = await get(applicantId); // will throw if not found
+    let jobIdArray = applicant.jobsFavorited;
+    let jobsArray = [];
+    //const jobsCollection = await jobData();
+    for (let jobId of jobIdArray)
+    {
+        let job = await jobData.get(jobId);
+        jobsArray.push(job);
+    }
+   return jobsArray;
+};
 
 const exportedMethods = {
     create,
@@ -133,6 +196,8 @@ const exportedMethods = {
     remove,
     update,
     applyJob,
-    favoriteJob
+    favoriteJob,
+    getJobsApplied,
+    getJobsFavorited
 };
 export default exportedMethods;

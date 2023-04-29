@@ -1,12 +1,12 @@
-import {validation} from 'validation.js';
-import {recruiters} from '../config/mongoCollections.js';
-
+import {emailValidation} from '../helper.js';
+import { recruiters } from '../config/mongoCollections.js';
 const create = async (
     firstName,
     lastName,
     email,
     company,
     jobListings) => {
+        //TODO
         //note, might need to change params, recruiters may need different properties
         if(!firstName || !lastName || !email || !company || !jobListings){
             throw 'All fields are required';
@@ -23,7 +23,7 @@ const create = async (
         if(typeof company !== 'string' || company.trim().length === 0){
             throw 'Company must be a non-empty string';
         }
-        email = validation.checkEmail(email);
+        emailValidation(email);
         const newRecruiter = {
             firstName: firstName.trim(),
             lastName: lastName.trim(),
@@ -87,6 +87,7 @@ const update = async (
     lastName,
     email,
     company) => {
+        //TODO
         if(!recruitersId || !firstName || !lastName || !email || !company){
             throw 'All fields are required';
         }
@@ -99,7 +100,7 @@ const update = async (
         if(typeof email !== 'string' || email.trim().length === 0){
             throw 'Email must be a non-empty string';
         }
-        email = validation.checkEmail(email);
+        emailValidation(email);
         if(typeof company !== 'string' || company.trim().length === 0){
             throw 'Company must be a non-empty string';
         }

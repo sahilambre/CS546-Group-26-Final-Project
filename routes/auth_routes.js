@@ -97,6 +97,11 @@ router.route('/').get(async (req, res) => {
 
     
 
+<<<<<<< HEAD
+=======
+    
+
+>>>>>>> aa3d3a1 (little bit of auth_routes in)
    
 
   });

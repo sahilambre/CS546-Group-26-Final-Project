@@ -1,6 +1,6 @@
 import {applicants} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
-import validation from 'validation.js';
+import validation from './validation.js';
 import jobData from '../data/jobs.js';
 
 const create = async (

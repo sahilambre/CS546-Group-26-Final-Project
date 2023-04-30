@@ -1,7 +1,7 @@
 import {validation} from 'validation.js';
 import {recruiters} from '../config/mongoCollections.js';
 
-const create = async (
+const createRecruiter = async (
     firstName,
     lastName,
     email,
@@ -36,7 +36,10 @@ const create = async (
         if(insertInfo.insertedCount === 0) throw 'Could not add recruiter';
         const newId = insertInfo.insertedId.toString();
         const rec = await this.get(newId);
-        return rec;
+        return {
+            rec: rec,
+            insertedRecruiter: true
+        };
 
     };
 
@@ -118,7 +121,7 @@ const update = async (
     };
 
 const exportedMethods = {
-    create,
+    createRecruiter,
     getAll,
     get,
     remove,

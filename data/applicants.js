@@ -3,7 +3,7 @@ import {ObjectId} from 'mongodb';
 import validation from './validation.js';
 import jobData from '../data/jobs.js';
 
-const create = async (
+const createApplicant = async (
     firstName,
     lastName,
     email,
@@ -193,7 +193,7 @@ const getJobsFavorited = async(applicantId) => {
 };
 
 const exportedMethods = {
-    create,
+    createApplicant,
     getAll,
     get,
     remove,

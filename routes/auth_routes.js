@@ -1,5 +1,7 @@
 import {Router} from 'express';
 import {emailValidation} from '../helper.js';
+import {create} from '../data/applicants.js';
+import {createUser, checkUser} from '../data/users.js';
 const router = Router();
 
 
@@ -95,13 +97,20 @@ router.route('/').get(async (req, res) => {
       res.status(400).render("studentregister", {title: "Student Reigstration" ,error: wrongParams});
     }
 
+    try{
+      const newUser = await createUser(nEmailAddress, passwordInput);
+      if(newUser.insertedUser === true ){
+        const newApplicant = await create(firstNameInput, lastNameInput, nEmailAddress, ageInput, stateInput, gradYearInput);
+        if(newApplicant.insertedApplicant === true) {
+          res.status(201).render("login", {title: "Student Login"});
+        }else{
+          res.status(400).render("studentregister", {title: "Student Reigstration" ,error: "Registration Failed"});
+        }
+      }
+    }catch(e){
+      res.status(400).render("studentregister", {title: "Student Reigstration" ,error: e});
+    }
     
-
-<<<<<<< HEAD
-=======
     
-
->>>>>>> aa3d3a1 (little bit of auth_routes in)
-   
 
   });

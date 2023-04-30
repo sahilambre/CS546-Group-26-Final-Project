@@ -49,7 +49,10 @@ const create = async (
 
     const newId = insertInfo.insertedId.toString();
     const applicant = await get(newId);
-    return applicant;
+    return {
+        applicant: applicant,
+        insertedApplicant: true
+    };
 };
 
 const getAll = async () => {

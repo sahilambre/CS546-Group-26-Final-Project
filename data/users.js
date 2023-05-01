@@ -81,6 +81,6 @@ export async function checkUser(email, password) {
     throw "Either the email address or password is invalid";
   }
 
-  return {emailAddress: email.emailAddress};
+  return {userFound:true ,emailAddress: email.emailAddress};
 }
 

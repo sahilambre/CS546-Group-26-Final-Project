@@ -65,6 +65,17 @@ const get = async (recruiterId) => {
     return rec;
 };
 
+const getByEmailRecruiter = async (recruiterEmail) => {
+    if (!recruiterEmail) throw 'You must provide an email to search for';
+    if (typeof recruiterId !== 'string') throw 'email must be a string';
+    if (recruiterId.trim().length === 0) throw 'email must be a non-empty string';
+    const recsCollection = await recruiters();
+    const rec = await recsCollection.findOne({ email: recruiterEmail });
+    if (rec === null) throw 'No recruiter with that email found';
+    rec._id = rec._id.toString();
+    return rec;
+};
+
 const remove = async (recruiterId) => {
     if(!recruiterId){
         throw 'You must provide an id to search for';
@@ -124,6 +135,7 @@ const exportedMethods = {
     createRecruiter,
     getAll,
     get,
+    getByEmailRecruiter,
     remove,
     update,
 };

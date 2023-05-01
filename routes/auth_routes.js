@@ -1,7 +1,7 @@
 import {Router} from 'express';
 import {emailValidation} from '../helper.js';
-import {createApplicant} from '../data/applicants.js';
-import {createRecruiter} from '../data/recruiters.js';
+import {createApplicant, getByEmailApplicant} from '../data/applicants.js';
+import {createRecruiter, getByEmailRecruiter} from '../data/recruiters.js';
 import {createUser, checkUser} from '../data/users.js';
 const router = Router();
 
@@ -200,5 +200,57 @@ router.route('/').get(async (req, res) => {
     }catch(e){
       res.status(400).render("recruiterregister", {title: "Recruiter Reigstration" ,error: e});
     }
+
+  });
+
+  router
+  .route('/login')
+  .get(async (req, res) => {
+    //code here for GET
+    res.render("login", { title : "Login"});
+  })
+  .post(async (req, res) => { 
+    const {emailAddressInput, passwordInput} = req.body;
+
+    if(!emailAddressInput || !passwordInput){
+      let missingInputs = [];
+      if (!emailAddressInput) {
+        missingInputs.push("Email Address");
+      }
+      if (!passwordInput) {
+        missingInputs.push("Password");
+      }
+      res.status(400).render("login", {title: "Login" ,error: missingInputs});
+    }
+    let nEmailAddress;
+    if(!emailValidation(emailAddressInput)){
+      res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
+    }else{
+        nEmailAddress = emailAddressInput.toLowerCase();
+    }
+    const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
+    const passwordReg = new RegExp(passwordPattern);
+    if( !(passwordReg.test(passwordInput))){
+      missingInputs.push("Either email or password is wrong");
+    }
+
+    try{
+      const user = await checkUser(nEmailAddress, passwordInput);
+      if(user.userFound === true ){
+          let correctEmail = user.emailAddress;
+          let isRecruiter = getByEmailRecruiter(correctEmail);
+          let isApplicant = getByEmailApplicant(correctEmail);
+          if(isRecruiter){
+            res.status(201).render("landingPage", {title: "Recruiter Home"});
+          }else if(isApplicant){
+            res.status(201).render("landingPage", {title: "Student Home"});
+          }
+      }else{
+        res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
+      }
+    }catch(e){
+      res.status(400).render("login", {title: "Login" ,error: e});
+    }
+
 
   });

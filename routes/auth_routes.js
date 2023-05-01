@@ -8,7 +8,7 @@ const router = Router();
 
 router.route('/').get(async (req, res) => {
     //code here for GET THIS ROUTE SHOULD NEVER FIRE BECAUSE OF MIDDLEWARE #1 IN SPECS.
-    return res.json({error: 'YOU SHOULD NOT BE HERE!'});
+    return res.status(201).render("landingpage", {title: "Landing Page"});
   }); 
 
   router
@@ -252,5 +252,6 @@ router.route('/').get(async (req, res) => {
       res.status(400).render("login", {title: "Login" ,error: e});
     }
 
-
   });
+
+  export default router;

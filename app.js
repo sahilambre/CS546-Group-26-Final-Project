@@ -4,7 +4,6 @@ import express from 'express';
 const app = express();
 import configRoutes from './routes/index.js';
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {

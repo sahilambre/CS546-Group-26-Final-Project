@@ -1,21 +1,12 @@
-<<<<<<< HEAD
 import {validation} from 'validation.js';
 import {recruiters} from '../config/mongoCollections.js';
 
-=======
-import {emailValidation} from '../helper.js';
-import { recruiters } from '../config/mongoCollections.js';
->>>>>>> main
-const create = async (
+const createRecruiter = async (
     firstName,
     lastName,
     email,
     company,
     jobListings) => {
-<<<<<<< HEAD
-=======
-        //TODO
->>>>>>> main
         //note, might need to change params, recruiters may need different properties
         if(!firstName || !lastName || !email || !company || !jobListings){
             throw 'All fields are required';
@@ -32,11 +23,7 @@ const create = async (
         if(typeof company !== 'string' || company.trim().length === 0){
             throw 'Company must be a non-empty string';
         }
-<<<<<<< HEAD
         email = validation.checkEmail(email);
-=======
-        emailValidation(email);
->>>>>>> main
         const newRecruiter = {
             firstName: firstName.trim(),
             lastName: lastName.trim(),
@@ -49,7 +36,10 @@ const create = async (
         if(insertInfo.insertedCount === 0) throw 'Could not add recruiter';
         const newId = insertInfo.insertedId.toString();
         const rec = await this.get(newId);
-        return rec;
+        return {
+            rec: rec,
+            insertedRecruiter: true
+        };
 
     };
 
@@ -71,6 +61,17 @@ const get = async (recruiterId) => {
     const recsCollection = await recruiters();
     const rec = await recsCollection.findOne({ _id: ObjectId(recruiterId) });
     if (rec === null) throw 'No recruiter with that id';
+    rec._id = rec._id.toString();
+    return rec;
+};
+
+const getByEmailRecruiter = async (recruiterEmail) => {
+    if (!recruiterEmail) throw 'You must provide an email to search for';
+    if (typeof recruiterId !== 'string') throw 'email must be a string';
+    if (recruiterId.trim().length === 0) throw 'email must be a non-empty string';
+    const recsCollection = await recruiters();
+    const rec = await recsCollection.findOne({ email: recruiterEmail });
+    if (rec === null) throw 'No recruiter with that email found';
     rec._id = rec._id.toString();
     return rec;
 };
@@ -100,10 +101,6 @@ const update = async (
     lastName,
     email,
     company) => {
-<<<<<<< HEAD
-=======
-        //TODO
->>>>>>> main
         if(!recruitersId || !firstName || !lastName || !email || !company){
             throw 'All fields are required';
         }
@@ -116,11 +113,7 @@ const update = async (
         if(typeof email !== 'string' || email.trim().length === 0){
             throw 'Email must be a non-empty string';
         }
-<<<<<<< HEAD
         email = validation.checkEmail(email);
-=======
-        emailValidation(email);
->>>>>>> main
         if(typeof company !== 'string' || company.trim().length === 0){
             throw 'Company must be a non-empty string';
         }
@@ -139,9 +132,10 @@ const update = async (
     };
 
 const exportedMethods = {
-    create,
+    createRecruiter,
     getAll,
     get,
+    getByEmailRecruiter,
     remove,
     update,
 };

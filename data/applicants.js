@@ -3,7 +3,7 @@ import {ObjectId} from 'mongodb';
 import validation from './validation.js';
 import jobData from '../data/jobs.js';
 
-const create = async (
+const createApplicant = async (
     firstName,
     lastName,
     email,
@@ -49,7 +49,10 @@ const create = async (
 
     const newId = insertInfo.insertedId.toString();
     const applicant = await get(newId);
-    return applicant;
+    return {
+        applicant: applicant,
+        insertedApplicant: true
+    };
 };
 
 const getAll = async () => {
@@ -67,6 +70,15 @@ const get = async (applicantId) => {
     applicantId = validation.checkId(applicantId);
     const applicantCollection = await applicants();
     const applicantW = await applicantCollection.findOne({_id: new ObjectId(applicantId)});
+    if (applicantW === null) throw 'No job listings with that id';
+    applicantW._id = applicantW._id.toString();
+    return applicantW;
+};
+
+const getByEmailApplicant = async (applicantEmail) => {
+   // applicantId = validation.checkId(applicantId);
+    const applicantCollection = await applicants();
+    const applicantW = await applicantCollection.findOne({email: applicantEmail});
     if (applicantW === null) throw 'No job listings with that id';
     applicantW._id = applicantW._id.toString();
     return applicantW;
@@ -190,11 +202,12 @@ const getJobsFavorited = async(applicantId) => {
 };
 
 const exportedMethods = {
-    create,
+    createApplicant,
     getAll,
     get,
     remove,
     update,
+    getByEmailApplicant,
     applyJob,
     favoriteJob,
     getJobsApplied,

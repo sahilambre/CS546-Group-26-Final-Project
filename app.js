@@ -4,7 +4,6 @@ import express from 'express';
 const app = express();
 import configRoutes from './routes/index.js';
 
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
@@ -67,10 +66,8 @@ let job1 = undefined;
 // middleware added to all routes, at this point the routes aren't all coded in yet so not sure what to name all these redirects to yet lol
 app.get('/', async (req, res, next) => {
     if(req.session.user){
-        return res.redirect("/homepage");
-    }else{
-        return res.redirect("/login");
-    }
+        // needs to be redirected to job feed
+     }
     next();
   });
 
@@ -101,8 +98,12 @@ app.get('/logout', async (req, res, next) => {
 
 });
 
+configRoutes(app);
 
-
+app.listen(3000, () => {
+  console.log("We've now got a server!");
+  console.log('Your routes will be running on http://localhost:3000');
+});
 
 
 //finally to close up shop,, get back to the terminal after doing what u need to do in the db

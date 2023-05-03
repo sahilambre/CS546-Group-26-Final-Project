@@ -3,7 +3,7 @@ import {ObjectId} from 'mongodb';
 import validation from './validation.js';
 import jobData from '../data/jobs.js';
 
-const createApplicant = async (
+export const createApplicant = async (
     firstName,
     lastName,
     email,
@@ -75,7 +75,7 @@ const get = async (applicantId) => {
     return applicantW;
 };
 
-const getByEmailApplicant = async (applicantEmail) => {
+export const getByEmailApplicant = async (applicantEmail) => {
    // applicantId = validation.checkId(applicantId);
     const applicantCollection = await applicants();
     const applicantW = await applicantCollection.findOne({email: applicantEmail});

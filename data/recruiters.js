@@ -1,7 +1,7 @@
-import {validation} from 'validation.js';
+import * as validation from './validation.js';
 import {recruiters} from '../config/mongoCollections.js';
 
-const createRecruiter = async (
+export const createRecruiter = async (
     firstName,
     lastName,
     email,
@@ -65,7 +65,7 @@ const get = async (recruiterId) => {
     return rec;
 };
 
-const getByEmailRecruiter = async (recruiterEmail) => {
+export const getByEmailRecruiter = async (recruiterEmail) => {
     if (!recruiterEmail) throw 'You must provide an email to search for';
     if (typeof recruiterId !== 'string') throw 'email must be a string';
     if (recruiterId.trim().length === 0) throw 'email must be a non-empty string';

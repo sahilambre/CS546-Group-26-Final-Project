@@ -1,5 +1,5 @@
 import {Router} from 'express';
-import {emailValidation} from '../helper.js';
+import {validEmail} from '../helpers.js';
 import {createApplicant, getByEmailApplicant} from '../data/applicants.js';
 import {createRecruiter, getByEmailRecruiter} from '../data/recruiters.js';
 import {createUser, checkUser} from '../data/users.js';
@@ -58,7 +58,7 @@ router.route('/').get(async (req, res) => {
       wrongParams.push("Last Name wrong");
     }
     let nEmailAddress;
-    if(!emailValidation(emailAddressInput)){
+    if(!validEmail(emailAddressInput)){
       wrongParams.push("Email wrong");
     }else{
        nEmailAddress = emailAddressInput.toLowerCase();

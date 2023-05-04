@@ -9,13 +9,13 @@ const router = Router();
 
 router.route('/').get(async (req, res) => {
     //code here for GET THIS ROUTE SHOULD NEVER FIRE BECAUSE OF MIDDLEWARE #1 IN SPECS.
-    try {
-      if (!req.session.user) return res.render('login',{})
-      if (req.session.user.role === 'admin') return res.redirect('/admin')
-      return res.redirect('/protected')
-    } catch (error) {
-      res.render('error',{title: "Error", message: error.message || error})
-    }
+    // try {
+    //   if (!req.session.user) return res.render('login',{})
+    //   if (req.session.user.role === 'admin') return res.redirect('/admin')
+    //   return res.redirect('/protected')
+    // } catch (error) {
+    //   res.render('error',{title: "Error", message: error.message || error})
+    // }
     return res.status(201).render("landingpage", {title: "Landing Page"});
   }); 
 

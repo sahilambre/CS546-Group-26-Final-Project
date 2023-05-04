@@ -1,0 +1,16 @@
+Inside recruiter -> Jobslist = []
+
+job = {
+_id: "Dont' worry",
+title: "SDE",
+description: "fiyuewagfugeawuf4aw",
+min_experience: 6,
+skills: ["Java",""], (optional)
+applicants: [ userApplicant ],
+}
+
+
+userApplicant = { 
+_id: "UserID",+
+status: "Rejected",  (default -> Applied, rejected, accepted)
+}

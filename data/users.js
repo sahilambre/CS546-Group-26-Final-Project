@@ -72,8 +72,8 @@ export async function checkUser(email, password) {
   }
 
   const userCollections = await users();
-  const email = await userCollections.findOne({ emailAddress: nEmailAddress });
-  if (email === null) {
+  const user = await userCollections.findOne({ emailAddress: nEmailAddress });
+  if (user === null) {
     throw "Either the email address or password is invalid ";
   }
   let compareToSherlock = await bcrypt.compare(password, email.password);

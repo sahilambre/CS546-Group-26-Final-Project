@@ -3,15 +3,23 @@ import {validEmail} from '../helpers.js';
 import {createApplicant, getByEmailApplicant} from '../data/applicants.js';
 import {createRecruiter, getByEmailRecruiter} from '../data/recruiters.js';
 import {createUser, checkUser} from '../data/users.js';
+// import * as dataUsers from "../data/users.js"
 const router = Router();
 
 
 router.route('/').get(async (req, res) => {
     //code here for GET THIS ROUTE SHOULD NEVER FIRE BECAUSE OF MIDDLEWARE #1 IN SPECS.
+    try {
+      if (!req.session.user) return res.render('login',{})
+      if (req.session.user.role === 'admin') return res.redirect('/admin')
+      return res.redirect('/protected')
+    } catch (error) {
+      res.render('error',{title: "Error", message: error.message || error})
+    }
     return res.status(201).render("landingpage", {title: "Landing Page"});
   }); 
 
-  router
+router
   .route('/registerStudents')
   .get(async (req, res) => {
     //code here for GET
@@ -207,6 +215,7 @@ router.route('/').get(async (req, res) => {
   .route('/login')
   .get(async (req, res) => {
     //code here for GET
+    if (req.session.user) { return res.redirect('/protected')}
     res.render("login", { title : "Login"});
   })
   .post(async (req, res) => { 

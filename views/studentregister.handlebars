@@ -21,17 +21,15 @@
     <option value="">Select a year</option>
   </select>
 
+  <label for="password">Password:</label>
+  <input type="password" id="password" name="password" required />
+
+  <label for="confirmPassword">Confirm Password:</label>
+  <input type="password" id="confirmPassword" name="confirmPassword" required />
+
   <input class="btn btn-success" type="submit" value="Register" />
   <button
     class="btn btn-primary"
     onclick="location.href='/login'"
   >Login</button>
 </form>
-
-<script>
-  const selectElement = document.getElementById("gradYr"); const currentYear =
-  new Date().getFullYear(); const minYear = 1970; const maxYear = 2050; for (let
-  year = minYear; year <= maxYear; year++) { const option =
-  document.createElement("option"); option.value = year; option.text = year;
-  selectElement.appendChild(option); }
-</script>

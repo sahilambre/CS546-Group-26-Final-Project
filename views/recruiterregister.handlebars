@@ -1,18 +1,26 @@
 <h1>Recruiters' Registration</h1>
-
+<br>
 <form action="/register" method="POST">
-  <label for="firstName">First Name:</label>
-  <input type="text" id="firstName" name="firstName" required />
+  <div class="mb-3">
+    <label class="form-label" for="firstName">First Name:</label>
+    <input class="form-control" type="text" id="firstName" name="firstName" required />
+  </div>
+  
+  <div class="mb-3">
+    <label class="form-label" for="lastName">Last Name:</label>
+    <input class="form-control" type="text" id="lastName" name="lastName" required />
+  </div>
 
-  <label for="lastName">Last Name:</label>
-  <input type="text" id="lastName" name="lastName" required />
+  <div class="mb-3">
+    <label class="form-label" for="email">Email:</label>
+    <input class="form-control" type="email" id="email" name="email" required />
+  </div>
+  
+  <div class="mb-3">
+    <label class="form-label" for="company">Company:</label>
+    <input class="form-control" type="text" id="company" name="company" required />
+  </div>
 
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required />
-
-  <label for="company">Company:</label>
-  <input type="text" id="company" name="company" required />
-
-  {{! <input type="submit" value="Register" /> }}
-  <button class="btn btn-primary"  onclick="location.href='/login'">Login</button>
+  {{! <input class="form-control" type="submit" value="Register" /> }}
+  <button class="btn btn-primary" onclick="location.href='/login'">Login</button>
 </form>

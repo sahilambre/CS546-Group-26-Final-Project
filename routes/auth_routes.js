@@ -3,6 +3,7 @@ import {validEmail} from '../helpers.js';
 import {createApplicant, getByEmailApplicant} from '../data/applicants.js';
 import {createRecruiter, getByEmailRecruiter} from '../data/recruiters.js';
 import {createUser, checkUser} from '../data/users.js';
+import xss from 'xss';
 // import * as dataUsers from "../data/users.js"
 const router = Router();
 
@@ -27,7 +28,17 @@ router
   })
   .post(async (req, res) => {
     //code here for POST
-    const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput,gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
+    //const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput, gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
+    const firstNameInput = xss(req.body.firstNameInput)
+    const lastNameInput = xss(req.body.lastNameInput) 
+    const emailAddressInput = xss(req.body.emailAddressInput)
+    let ageInput = xss(req.body.ageInput)
+    const stateInput = xss(req.body.stateInput)
+    const gradYearInput = xss(req.body.gradYearInput)
+    const passwordInput = xss(req.body.passwordInput)
+    const confirmPasswordInput = xss(req.body.confirmPasswordInput)
+    
+    
     if(!firstNameInput || !lastNameInput || !emailAddressInput || !ageInput || !stateInput || !gradYearInput || !passwordInput || !confirmPasswordInput){
       let missingInputs = [];
       if (!firstNameInput) {
@@ -72,7 +83,7 @@ router
        nEmailAddress = emailAddressInput.toLowerCase();
     }
 
-    if(typeof ageInput !== 'number' ||  ageInput < 0){
+    if(isNaN(ageInput) ||  ageInput < 0){  //Don't forget to convert into Number from String
       wrongParams.push("Age wrong");
     }
     
@@ -130,7 +141,13 @@ router
     return res.render("recruiterregister", { title : "Employer Registration"});
   })
   .post(async (req, res) => {
-    const {firstNameInput,lastNameInput, emailAddressInput, companyInput, passwordInput, confirmPasswordInput  } = req.body;
+    // const {firstNameInput,lastNameInput, emailAddressInput, companyInput, passwordInput, confirmPasswordInput  } = req.body;
+    const firstNameInput = xss(req.body.firstNameInput)
+    const lastNameInput = xss(req.body.lastNameInput)
+    const emailAddressInput = xss(req.body.emailAddressInput)
+    const companyInput = xss(req.body.companyInput)
+    const passwordInput = xss(req.body.passwordInput)
+    const confirmPasswordInput = xss(req.body.confirmPasswordInput)
     if(!firstNameInput || !lastNameInput || !emailAddressInput || !companyInput || !passwordInput || !confirmPasswordInput){
       let missingInputs = [];
       if (!firstNameInput) {
@@ -220,8 +237,8 @@ router
     return res.render("login", { title : "Login"});
   })
   .post(async (req, res) => { 
-    const emailAddressInput = req.body.username
-    const passwordInput = req.body.password
+    const emailAddressInput = xss(req.body.username)
+    const passwordInput = xss(req.body.password)
     // const {emailAddressInput, passwordInput} = req.body
     let missingInputs = []
     if(!emailAddressInput || !passwordInput){

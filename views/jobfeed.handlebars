@@ -1,0 +1,14 @@
+{{#each cards}}
+  <div class="card" style="width: 18rem;">
+    <div class="card-body">
+      {{! Job Title }}
+      <h5 class="card-title">{{title}}</h5>
+      {{! company }}
+      <h6 class="card-subtitle mb-2 text-muted">{{company}}</h6>
+      {{! add job description }}
+      {{!-- <p class="card-text">{{content}}</p> --}}
+      <a href="{{link1}}" class="btn card-link">Apply</a>
+      <a href="{{link2}}" class="card-link">Favourite</a>
+    </div>
+  </div>
+{{/each}}

@@ -1,4 +1,4 @@
-<h1>Recruiters' Registration</h1>
+<h1>Recruiter's Registration</h1>
 
 <form action="/register" method="POST">
   <label for="firstName">First Name:</label>
@@ -13,6 +13,12 @@
   <label for="company">Company:</label>
   <input type="text" id="company" name="company" required />
 
-  {{! <input type="submit" value="Register" /> }}
-  <button class="btn btn-primary"  onclick="location.href='/login'">Login</button>
+  <label for="jobListings">Job Listings:</label>
+  <textarea id="jobListings" name="jobListings" required></textarea>
+
+  <input class="btn btn-success" type="submit" value="Register" />
+  <button
+    class="btn btn-primary"
+    onclick="location.href='/login'"
+  >Login</button>
 </form>

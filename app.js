@@ -3,6 +3,9 @@ import jobData from './data/jobs.js';
 import express from 'express';
 const app = express();
 import configRoutes from './routes/index.js';
+import multer from 'multer';
+import fs from 'fs';
+
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -97,6 +100,39 @@ app.get('/logout', async (req, res, next) => {
     next();
 
 });
+
+// Set up storage engine for multer
+const storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+      cb(null, 'uploads/')
+  },
+  filename: function (req, file, cb) {
+      cb(null, file.originalname)
+  }
+});
+const upload = multer({ storage: storage });
+
+// Route to display the form
+app.get('/', (req, res) => {
+  res.render('index');
+});
+
+// Route to handle the file upload
+app.post('/upload', upload.single('resume'), (req, res) => {
+  const resumePath = req.file.path;
+  const resumeData = fs.readFileSync(resumePath);
+  const resumeBase64 = Buffer.from(resumeData).toString('base64');
+  const resumeMimeType = req.file.mimetype;
+  const resumeFilename = req.file.originalname;
+  const resumeUrl = `data:${resumeMimeType};base64,${resumeBase64}`;
+
+  // Render the uploaded resume
+  res.render('resume', {
+      resumeUrl: resumeUrl,
+      resumeFilename: resumeFilename
+  });
+});
+
 
 configRoutes(app);
 

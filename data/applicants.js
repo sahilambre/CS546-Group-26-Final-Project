@@ -41,7 +41,8 @@ export const createApplicant = async (
         state: state,
         gradYr: gradYr,
         jobsApplied: [],
-        jobsFavorited: []
+        jobsFavorited: [],
+        resume: null
     };
     const applicantCollection = await applicants();
     const insertInfo = await applicantCollection.insertOne(newApp);

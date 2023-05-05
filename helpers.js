@@ -9,9 +9,12 @@ export const validName = (name) => {
 }
 
 export const validEmail = (email) => {
-    if(!email) throw `400No email was provided!`
+    if(!email) return false//throw `400No email was provided!`
     email = email.trim().toLowerCase()
-    if (!email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) throw `400Given email id is invalid!`
+    if (!email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)) {
+        // throw `400Given email id is invalid!`
+        return false
+    }
     return email
 }
 

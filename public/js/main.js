@@ -2,18 +2,18 @@
 
 (window.onload = () => {
 
-    const form = document.getElementById("registration-form");
+    // const form = document.getElementById("registration-form");
   
-    if(form){
-        form.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const password = document.getElementById("passwordInput").value;
-            const confirmPass = document.getElementById("confirmPasswordInput").value;
-            if(password !== confirmPass) {
-                alert("Passwords do not match!")
-            } else {
-                form.submit()
-            }
-        })
-    }
+    // if(form){
+    //     form.addEventListener("submit", (event) => {
+    //         event.preventDefault();
+    //         const password = document.getElementById("passwordInput").value;
+    //         const confirmPass = document.getElementById("confirmPasswordInput").value;
+    //         if(password !== confirmPass) {
+    //             alert("Passwords do not match!")
+    //         } else {
+    //             form.submit()
+    //         }
+    //     })
+    // }
   })();

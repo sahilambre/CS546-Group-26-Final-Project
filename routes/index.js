@@ -4,7 +4,7 @@
 
 //   app.use('/', auth_routes);
 //   app.use('*', (req, res) => {
-//     res.status(404).render('error');
+//     return res.status(404).render('error');
 //   });
 // };
 

@@ -14,7 +14,7 @@ router.route('/').get(async (req, res) => {
     //   if (req.session.user.role === 'admin') return res.redirect('/admin')
     //   return res.redirect('/protected')
     // } catch (error) {
-    //   res.render('error',{title: "Error", message: error.message || error})
+    //   return res.render('error',{title: "Error", message: error.message || error})
     // }
     return res.status(201).render("landingpage", {title: "Landing Page"});
   }); 
@@ -23,7 +23,7 @@ router
   .route('/registerStudents')
   .get(async (req, res) => {
     //code here for GET
-    res.render("studentregister", { title : "Student Register"});
+    return res.render("studentregister", { title : "Student Register"});
   })
   .post(async (req, res) => {
     //code here for POST
@@ -54,7 +54,7 @@ router
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
       }
-      res.status(400).render("studentregister", {title: "Student Reigstration" ,error: missingInputs});
+      return res.status(400).render("studentregister", {title: "Student Reigstration" ,error: missingInputs});
     }
 
     const wrongParams = [];
@@ -90,7 +90,7 @@ router
     const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
     const passwordReg = new RegExp(passwordPattern);
     if( !passwordReg.test(passwordInput)){
-      //throw res.status(400).send({error: 'This is an error!'});
+      //throw return res.status(400).send({error: 'This is an error!'});
       wrongParams.push("Password wrong");
     }
 
@@ -103,7 +103,7 @@ router
     }
 
     if(wrongParams.length > 0){
-      res.status(400).render("studentregister", {title: "Student Reigstration" ,error: wrongParams});
+      return res.status(400).render("studentregister", {title: "Student Reigstration" ,error: wrongParams});
     }
 
     try{
@@ -111,13 +111,13 @@ router
       if(newUser.insertedUser === true ){
         const newApplicant = await createApplicant(firstNameInput, lastNameInput, nEmailAddress, ageInput, stateInput, gradYearInput);
         if(newApplicant.insertedApplicant === true) {
-          res.status(201).render("login", {title: "Student Login"});
+          return res.status(201).render("login", {title: "Student Login"});
         }else{
-          res.status(400).render("studentregister", {title: "Student Reigstration" ,error: "Registration Failed"});
+          return res.status(400).render("studentregister", {title: "Student Reigstration" ,error: "Registration Failed"});
         }
       }
     }catch(e){
-      res.status(400).render("studentregister", {title: "Student Reigstration" ,error: e});
+      return res.status(400).render("studentregister", {title: "Student Reigstration" ,error: e});
     }
     
 
@@ -127,7 +127,7 @@ router
   .route('/registerRecruiters')
   .get(async (req, res) => {
     //code here for GET
-    res.render("recruiterregister", { title : "Employer Registration"});
+    return res.render("recruiterregister", { title : "Employer Registration"});
   })
   .post(async (req, res) => {
     const {firstNameInput,lastNameInput, emailAddressInput, companyInput, passwordInput, confirmPasswordInput  } = req.body;
@@ -151,7 +151,7 @@ router
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
       }
-      res.status(400).render("recruiterregister", {title: "Employer Registration" ,error: missingInputs});
+      return res.status(400).render("recruiterregister", {title: "Employer Registration" ,error: missingInputs});
     }
 
     const wrongParams = [];
@@ -163,7 +163,8 @@ router
       wrongParams.push("Last Name wrong");
     }
     let nEmailAddress;
-    if(!emailValidation(emailAddressInput)){
+//    if(!emailValidation(emailAddressInput)){ // >>>  EmialValidation wasn't imported!!!!!
+    if(!validEmail(emailAddressInput)){
       wrongParams.push("Email wrong");
     }else{
         nEmailAddress = emailAddressInput.toLowerCase();
@@ -192,7 +193,7 @@ router
     }
 
     if(wrongParams.length > 0){
-      res.status(400).render("recruiterregister", {title: "Employer Registration" ,error: wrongParams});
+      return res.status(400).render("recruiterregister", {title: "Employer Registration" ,error: wrongParams});
     }
 
     try{
@@ -200,13 +201,13 @@ router
       if(newUser.insertedUser === true ){
         const newApplicant = await createRecruiter(firstNameInput, lastNameInput, nEmailAddress, companyInput, []);
         if(newApplicant.insertedApplicant === true) {
-          res.status(201).render("login", {title: "Recruiter Login"});
+          return res.status(201).render("login", {title: "Recruiter Login"});
         }else{
-          res.status(400).render("recruiterregister", {title: "Recruiter Reigstration" ,error: "Registration Failed"});
+          return res.status(400).render("recruiterregister", {title: "Recruiter Reigstration" ,error: "Registration Failed"});
         }
       }
     }catch(e){
-      res.status(400).render("recruiterregister", {title: "Recruiter Reigstration" ,error: e});
+      return res.status(400).render("recruiterregister", {title: "Recruiter Reigstration" ,error: e});
     }
 
   });
@@ -216,11 +217,11 @@ router
   .get(async (req, res) => {
     //code here for GET
     if (req.session.user) { return res.redirect('/protected')}
-    res.render("login", { title : "Login"});
+    return res.render("login", { title : "Login"});
   })
   .post(async (req, res) => { 
     const {emailAddressInput, passwordInput} = req.body;
-
+    let missingInputs = []
     if(!emailAddressInput || !passwordInput){
       let missingInputs = [];
       if (!emailAddressInput) {
@@ -229,11 +230,11 @@ router
       if (!passwordInput) {
         missingInputs.push("Password");
       }
-      res.status(400).render("login", {title: "Login" ,error: missingInputs});
+      return res.status(400).render("login", {title: "Login" ,error: missingInputs});
     }
     let nEmailAddress;
-    if(!emailValidation(emailAddressInput)){
-      res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
+    if(!validEmail(emailAddressInput)){//if(!emailValidation(emailAddressInput)){
+      return res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
     }else{
         nEmailAddress = emailAddressInput.toLowerCase();
     }
@@ -250,15 +251,15 @@ router
           let isRecruiter = getByEmailRecruiter(correctEmail);
           let isApplicant = getByEmailApplicant(correctEmail);
           if(isRecruiter){
-            res.status(201).render("landingPage", {title: "Recruiter Home"});
+            return res.status(201).render("landingPage", {title: "Recruiter Home"});
           }else if(isApplicant){
-            res.status(201).render("landingPage", {title: "Student Home"});
+            return res.status(201).render("landingPage", {title: "Student Home"});
           }
       }else{
-        res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
+        return res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
       }
     }catch(e){
-      res.status(400).render("login", {title: "Login" ,error: e});
+      return res.status(400).render("login", {title: "Login" ,error: e});
     }
 
   });

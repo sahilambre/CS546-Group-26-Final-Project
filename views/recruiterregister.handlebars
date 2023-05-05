@@ -1,17 +1,25 @@
-<h1>Recruiter's Registration</h1>
-
+<h1>Recruiters' Registration</h1>
+<br>
 <form action="/register" method="POST">
-  <label for="firstName">First Name:</label>
-  <input type="text" id="firstName" name="firstName" required />
+  <div class="mb-3">
+    <label class="form-label" for="firstName">First Name:</label>
+    <input class="form-control" type="text" id="firstName" name="firstName" required />
+  </div>
+  
+  <div class="mb-3">
+    <label class="form-label" for="lastName">Last Name:</label>
+    <input class="form-control" type="text" id="lastName" name="lastName" required />
+  </div>
 
-  <label for="lastName">Last Name:</label>
-  <input type="text" id="lastName" name="lastName" required />
-
-  <label for="email">Email:</label>
-  <input type="email" id="email" name="email" required />
-
-  <label for="company">Company:</label>
-  <input type="text" id="company" name="company" required />
+  <div class="mb-3">
+    <label class="form-label" for="email">Email:</label>
+    <input class="form-control" type="email" id="email" name="email" required />
+  </div>
+  
+  <div class="mb-3">
+    <label class="form-label" for="company">Company:</label>
+    <input class="form-control" type="text" id="company" name="company" required />
+  </div>
 
   <label for="jobListings">Job Listings:</label>
   <textarea id="jobListings" name="jobListings" required></textarea>

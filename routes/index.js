@@ -1,11 +1,11 @@
-import routes from './routes/index.js';
+import auth_routes from './auth_routes.js';
 
 const constructorMethod = (app) => {
 
-    app.use('/', routes);
-    app.use('*', (req, res) => {
-      res.status(404).render('error');
-    });
-  };
-  
-  export default constructorMethod;
+  app.use('/', auth_routes);
+  app.use('*', (req, res) => {
+    res.status(404).render('error');
+  });
+};
+
+export default constructorMethod;

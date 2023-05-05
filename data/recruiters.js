@@ -1,21 +1,13 @@
-<<<<<<< HEAD
-import {validation} from 'validation.js';
+import validation from './validation.js';
 import {recruiters} from '../config/mongoCollections.js';
+import {ObjectId} from 'mongodb';
 
-=======
-import {emailValidation} from '../helper.js';
-import { recruiters } from '../config/mongoCollections.js';
->>>>>>> main
-const create = async (
+export const createRecruiter = async (
     firstName,
     lastName,
     email,
     company,
-    jobListings) => {
-<<<<<<< HEAD
-=======
-        //TODO
->>>>>>> main
+    jobListings=[]) => {
         //note, might need to change params, recruiters may need different properties
         if(!firstName || !lastName || !email || !company || !jobListings){
             throw 'All fields are required';
@@ -32,11 +24,7 @@ const create = async (
         if(typeof company !== 'string' || company.trim().length === 0){
             throw 'Company must be a non-empty string';
         }
-<<<<<<< HEAD
         email = validation.checkEmail(email);
-=======
-        emailValidation(email);
->>>>>>> main
         const newRecruiter = {
             firstName: firstName.trim(),
             lastName: lastName.trim(),
@@ -48,8 +36,11 @@ const create = async (
         const insertInfo = await recsCollection.insertOne(newRecruiter);
         if(insertInfo.insertedCount === 0) throw 'Could not add recruiter';
         const newId = insertInfo.insertedId.toString();
-        const rec = await this.get(newId);
-        return rec;
+        const rec = await get(newId);
+        return {
+            rec: rec,
+            insertedRecruiter: true
+        };
 
     };
 
@@ -69,8 +60,19 @@ const get = async (recruiterId) => {
     if (typeof recruiterId !== 'string') throw 'Id must be a string';
     if (recruiterId.trim().length === 0) throw 'Id must be a non-empty string';
     const recsCollection = await recruiters();
-    const rec = await recsCollection.findOne({ _id: ObjectId(recruiterId) });
+    const rec = await recsCollection.findOne({ _id: new ObjectId(recruiterId) });
     if (rec === null) throw 'No recruiter with that id';
+    rec._id = rec._id.toString();
+    return rec;
+};
+
+export const getByEmailRecruiter = async (recruiterEmail) => {
+    if (!recruiterEmail) throw 'You must provide an email to search for';
+    if (typeof recruiterEmail !== 'string') throw 'email must be a string';
+    if (recruiterEmail.trim().length === 0) throw 'email must be a non-empty string';
+    const recsCollection = await recruiters();
+    const rec = await recsCollection.findOne({ email: recruiterEmail });
+    if (rec === null) throw 'No recruiter with that email found';
     rec._id = rec._id.toString();
     return rec;
 };
@@ -87,7 +89,7 @@ const remove = async (recruiterId) => {
     }
     recruiterId = recruiterId.trim();
     const recsCollection = await recruiters();
-    const deletionInfo = await recsCollection.findOneAndDelete({_id: ObjectId(recruiterId)});
+    const deletionInfo = await recsCollection.findOneAndDelete({_id: new ObjectId(recruiterId)});
     if(deletionInfo.lastErrorObject.n === 0){
         throw `Could not delete recruiter with id of ${recruiterId}`;
     }
@@ -100,10 +102,6 @@ const update = async (
     lastName,
     email,
     company) => {
-<<<<<<< HEAD
-=======
-        //TODO
->>>>>>> main
         if(!recruitersId || !firstName || !lastName || !email || !company){
             throw 'All fields are required';
         }
@@ -116,11 +114,7 @@ const update = async (
         if(typeof email !== 'string' || email.trim().length === 0){
             throw 'Email must be a non-empty string';
         }
-<<<<<<< HEAD
         email = validation.checkEmail(email);
-=======
-        emailValidation(email);
->>>>>>> main
         if(typeof company !== 'string' || company.trim().length === 0){
             throw 'Company must be a non-empty string';
         }
@@ -131,17 +125,18 @@ const update = async (
             email: email.trim(),
             company: company.trim()
         };
-        const updatedInfo = await recsCollection.updateOne({_id: ObjectId(recruiterId)}, {$set: updatedRec});
+        const updatedInfo = await recsCollection.updateOne({_id: new ObjectId(recruiterId)}, {$set: updatedRec});
         if(updatedInfo.modifiedCount === 0){
             throw 'Could not update recruiter';
         }
-        return await this.get(recruiterId);
+        return await get(recruiterId);
     };
 
 const exportedMethods = {
-    create,
+    createRecruiter,
     getAll,
     get,
+    getByEmailRecruiter,
     remove,
     update,
 };

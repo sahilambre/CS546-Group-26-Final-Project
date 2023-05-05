@@ -1,0 +1,29 @@
+<h1>Job Search</h1>
+
+    <br>
+    <h2>Job Search</h2>
+    <h3>Job Search Result</h3>
+     <table>
+    <tr>
+    <th>Title</th>
+    <th>Company</th>
+    <th>Web Site</th>
+    <th>Tags</th>
+    </tr>
+     {{#each jobs}}  
+    <tr>
+        <td><a href="/jobdetails/{{_id}}">{{title}}</a></td>
+        <td>{{company}}</td>
+        <td>{{website}}</td>
+        <td>{{tags}}</td>
+    </tr>
+    {{/each}}
+    </table>
+  {{#if recruiter}}
+  <br>
+  <a href="/jobCreate">Create New Job</a>
+  <br>
+  {{/if}}
+ 
+<br>
+<button onclick="location.href='/logout'">Logout</button>

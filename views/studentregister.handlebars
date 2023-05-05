@@ -1,35 +1,56 @@
 <h1>Applicant's Registration</h1>
 
 <form action="/register" method="POST">
+  <div class="mb-3">
   <label class="form-label" for="firstName">First Name:</label>
   <input class="form-control" type="text" id="firstName" name="firstName" required />
+  </div>
 
+  <div class="mb-3">
   <label class="form-label" for="lastName">Last Name:</label>
   <input class="form-control" type="text" id="lastName" name="lastName" required />
+  </div>
 
+  <div class="mb-3">
   <label class="form-label" for="email">Email:</label>
   <input class="form-control" type="email" id="email" name="email" required />
+  </div>
 
-  <label for="age">Age:</label>
-  <input type="number" id="age" name="age" required />
+  <div class="mb-3">
+  <label class="form-label" for="age">Age:</label>
+  <input class="form-control" type="number" id="age" name="age" required />
+  </div>
 
-  <label for="state">State:</label>
-  <input type="text" id="state" name="state" required />
+  <div class="mb-3">
+  <label class="form-label" for="state">State:</label>
+  <input class="form-control" type="text" id="state" name="state" required />
+  </div>
 
-  <label for="gradYr">Graduation Year:</label>
+  <div class="mb-3">
+  <label class="form-label" for="gradYr">Graduation Year:</label>
   <select id="gradYr" name="gradYr" required>
     <option value="">Select a year</option>
   </select>
+  </div>
 
-  <label for="password">Password:</label>
-  <input type="password" id="password" name="password" required />
+  <div class="mb-3">
+  <label class="form-label" for="password">Password:</label>
+  <input class="form-control" type="password" id="password" name="password" required />
+  </div>
 
-  <label for="confirmPassword">Confirm Password:</label>
-  <input type="password" id="confirmPassword" name="confirmPassword" required />
+  <div class="mb-3">
+  <label class="form-label" for="confirmPassword">Confirm Password:</label>
+  <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" required />
+  </div>
 
-  <input class="btn btn-success" type="submit" value="Register" />
-  <button
-    class="btn btn-primary"
-    onclick="location.href='/login'"
-  >Login</button>
+  <button class="btn btn-success mb-5" type="submit" value="Register">Register</button>
+
+  <div class="mb-3">
+    <p>Already have an account? Click on Login button</p>
+    <button class="btn btn-primary" onclick="location.href='/login'">Login</button>
+  </div>
 </form>
+<br>
+<br>
+<br>
+<br>

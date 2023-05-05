@@ -220,7 +220,9 @@ router
     return res.render("login", { title : "Login"});
   })
   .post(async (req, res) => { 
-    const {emailAddressInput, passwordInput} = req.body;
+    const emailAddressInput = req.body.username
+    const passwordInput = req.body.password
+    // const {emailAddressInput, passwordInput} = req.body
     let missingInputs = []
     if(!emailAddressInput || !passwordInput){
       let missingInputs = [];
@@ -256,10 +258,12 @@ router
             return res.status(201).render("landingPage", {title: "Student Home"});
           }
       }else{
+        // return alert("Either email or password is wrong");
         return res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
       }
     }catch(e){
-      return res.status(400).render("login", {title: "Login" ,error: e});
+      // return alert(e.message || e);
+      return res.status(400).render("login", {title: "Login" ,error: e.message || e});
     }
 
   });

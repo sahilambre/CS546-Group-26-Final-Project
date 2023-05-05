@@ -57,7 +57,7 @@ export async function createUser(newEmail, newPassword) {
    return { insertedUser: true };
 }
 
-export async function checkUser(email, password) {
+export async function checkUser(emailAddress, password) {
   if(!emailAddress || !password){
     throw "Email Address and password must be supplied";
   }

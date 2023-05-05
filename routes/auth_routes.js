@@ -91,7 +91,7 @@ router
       wrongParams.push("State wrong");
     }
 
-    if(typeof gradYearInput !== 'number' ||  gradYearInput < 0 || /^\d{4}$/.test(gradYearInput) === false){  
+    if(typeof gradYearInput !== 'number' ||  gradYearInput < 0 || /^\d{4}$/.test(gradYearInput) === false){  //Convert into number
       wrongParams.push("Graduation Year wrong");
     }
 
@@ -118,7 +118,7 @@ router
     }
 
     try{
-      const newUser = await createUser(nEmailAddress, passwordInput);
+      const newUser = await createUser(nEmailAddress, passwordInput);//Update to take more params
       if(newUser.insertedUser === true ){
         const newApplicant = await createApplicant(firstNameInput, lastNameInput, nEmailAddress, ageInput, stateInput, gradYearInput);
         if(newApplicant.insertedApplicant === true) {
@@ -142,12 +142,12 @@ router
   })
   .post(async (req, res) => {
     // const {firstNameInput,lastNameInput, emailAddressInput, companyInput, passwordInput, confirmPasswordInput  } = req.body;
-    const firstNameInput = xss(req.body.firstNameInput)
-    const lastNameInput = xss(req.body.lastNameInput)
-    const emailAddressInput = xss(req.body.emailAddressInput)
-    const companyInput = xss(req.body.companyInput)
-    const passwordInput = xss(req.body.passwordInput)
-    const confirmPasswordInput = xss(req.body.confirmPasswordInput)
+    const firstNameInput = xss(req.body.recruiterFirstName)// Make these id's unique -> recruiterFirstName, Don't forget to change id and name in the respective handlebars too
+    const lastNameInput = xss(req.body.recruiterLastName)
+    const emailAddressInput = xss(req.body.recruiterEmail)
+    const companyInput = xss(req.body.recruiterCompany)
+    const passwordInput = xss(req.body.recruiterPassword)
+    const confirmPasswordInput = xss(req.body.recruiterConfirmPassword)
     if(!firstNameInput || !lastNameInput || !emailAddressInput || !companyInput || !passwordInput || !confirmPasswordInput){
       let missingInputs = [];
       if (!firstNameInput) {

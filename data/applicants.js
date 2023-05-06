@@ -152,12 +152,27 @@ const favoriteJob = async (
     let applicant = await get(applicantId); // will throw if not found
     let jobIdArray = applicant.jobsFavorited;
     let job = await jobData.getJob(jobId);
-    // should probably check that jobId is not already in the array
+    //should probably check that jobId is not already in the array
     if (jobIdArray.includes(jobId)) throw 'Error: applicant has already applied for this job';
     jobIdArray.push(jobId);
     update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.state, applicant.gradYr, applicant.jobsApplied, jobIdArray);
 };
 //users need to be able to filter jobs based on a favorites list
+
+const unfavoriteJob = async (
+    applicantId,
+    jobId) => {
+    applicantId = validation.checkId(applicantId);
+    let applicant = await get(applicantId); // will throw if not found
+    let jobIdArray = applicant.jobsFavorited;
+    let job = await jobData.getJob(jobId);
+    //gotta check that job id is already in the favorite jobs array
+    let j_index = jobIdArray.indexOf(jobId);
+    if (j_index<0) throw 'Error: applicant has not favorited this job';
+    jobIdArray.splice(j_index, 1);
+    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email,
+    applicant.age, applicant.state, applicant.gradYr, applicant.jobsApplied, jobIdArray);
+};
 
 const getJobsApplied = async(applicantId) => {
     //allows applicants to view jobs that they have applied to
@@ -210,6 +225,7 @@ const exportedMethods = {
     getByEmailApplicant,
     applyJob,
     favoriteJob,
+    unfavoriteJob,
     getJobsApplied,
     getJobsFavorited
 };

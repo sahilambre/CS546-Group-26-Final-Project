@@ -1,16 +1,49 @@
+<script src="/public/js/login.js"></script>
+<div class="container border-bottom">
 <h1>Login</h1>
+</div>
+<br>
+<div class="container border-bottom">
+  <form  id="login-form"  action="/login" method="POST">
+    <div id="loginEmailGroup" class="mb-3">
+    <label class="form-label" for="emailAddressInput">Username:</label>
+    <input class="form-control" type="text" id="emailAddressInput" name="emailAddressInput" required />
+    </div>
 
-<form action="/login" method="POST">
-  <label for="emailAddressInput">Username:</label>
-  <input type="text" id="emailAddressInput" name="emailAddressInput" required />
+    <div id="loginPasswordGroup" class="mb-3">
+    <label class="form-label" for="passwordInput">Password:</label>
+    <input class="form-control" type="password" id="passwordInput" name="passwordInput" required />
+    </div>
 
-  <label for="passwordInput">Password:</label>
-  <input type="password" id="passwordInput" name="passwordInput" required />
+    <button id="loginFormSubmit" type="submit" class="btn btn-primary">Login</button>
 
-  <input type="submit" value="Submit" />
+    <br>
+    <div class="mb-3"> 
+      <p class="error-text">{{error}}</p>
+    </div>
+    <br>
+  </form>
+</div>
 
-<p>Don't have a login yet?</p>
-<br><a href="/registerRecruiters">Register as a Recruiter</a>
-<br><a href="/registerStudents">Register as a Job Applicant</a>
+<br>
 
-</form>
+<div class="container border-top border-bottom p-2">
+  <p class="">Are you a new job seeker? Register here:</p>
+  <button
+    class="btn btn-success mb-3"
+    onclick="location.href='/registerStudents'"
+  >Applicant Register</button> 
+</div>
+
+<br>
+
+<div class="container border-top border-bottom p-2">
+  <p class="">Are you a new recruiter? Register here:</p>
+  <button
+    class="btn btn-warning mb-3"
+    onclick="location.href='/registerRecruiters'"
+  >Recruiter Register</button>
+</div>
+
+<br>
+<br>

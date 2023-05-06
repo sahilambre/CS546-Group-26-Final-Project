@@ -225,20 +225,20 @@ router.route('/').get(async (req, res) => {
   })
   .post(async (req, res) => { 
     const {emailAddressInput, passwordInput} = req.body;
-
+    let missingInputs = [];
     if(!emailAddressInput || !passwordInput){
-      let missingInputs = [];
       if (!emailAddressInput) {
         missingInputs.push("Email Address");
       }
       if (!passwordInput) {
         missingInputs.push("Password");
       }
-      res.status(400).render("error", {title: "Login" ,error: missingInputs});
+      let message = missingInputs+" missing!"
+      res.status(400).render("login", {title: "Login" ,error: message});
     }
     let nEmailAddress;
     if(!validEmail(emailAddressInput)){
-      res.status(400).render("error", {title: "Login Error" ,error: "Either email or password is wrong"});
+      res.status(400).render("login", {title: "Login" ,error: `"${emailAddressInput}" is invalid email!`});
     }else{
         nEmailAddress = emailAddressInput.toLowerCase();
     }
@@ -269,7 +269,7 @@ router.route('/').get(async (req, res) => {
           */
          res.redirect('/homepage');
       }else{
-        res.status(400).render("error", {title: "Login Error" ,error: "Either email or password is wrong"});
+        res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
       }
     }catch(e){
       res.status(400).render("error", {title: "Login Failure" ,error: e});

@@ -7,9 +7,14 @@
   <label class="form-label" for="lastNameInput">Last Name:</label>
   <input class="form-control" type="text" id="lastNameInput" name="lastNameInput" required />
 
-  <br>
-  <label class="form-label" for="emailAddressInput">Email:</label>
-  <input class="form-control" type="email" id="emailAddressInput" name="emailAddressInput" required />
+  <br />
+  <label for="emailAddressInput">Email:</label>
+  <input
+    type="email"
+    id="emailAddressInput"
+    name="emailAddressInput"
+    required
+  />
 
   <label class="form-label" for="ageInput">Age:</label>
   <input class="form-control" type="number" id="ageInput" name="ageInput" required />
@@ -20,15 +25,31 @@
   <label class="form-label" for="gradYearInput">Graduation Year:</label>
   <input class="form-control" type="number" id="gradYearInput" name="gradYearInput" required />
 
-  <br>
-  <label class="form-label" for="passwordInput">Password:</label>
-  <input class="form-control" type="password" name="passwordInput" value="" id="passwordInput"> 
-  <br>
-  <label class="form-label" for="passwordInput">Confirm Password:</label>
-  <input class="form-control" type="password" name="confirmPasswordInput" value="" id="confirmPasswordInput"> 
+  <br />
+  <label for="passwordInput">Password:</label>
+  <input type="password" name="passwordInput" value="" id="passwordInput" />
+  <br />
+  <label for="passwordInput">Confirm Password:</label>
+  <input
+    type="password"
+    name="confirmPasswordInput"
+    value=""
+    id="confirmPasswordInput"
+  />
 
-  <input class="form-control" type="submit" value="Register" /> 
+  <div class="mb-3">
+    <label class="form-label" for="resume">Resume:</label>
+    <input
+      class="form-control"
+      type="file"
+      id="resume"
+      name="resume"
+      accept=".pdf"
+    />
+  </div>
 
-<br>
-    <a href="/login">Already have an account? Click here to login</a>
+  <input type="submit" value="Register" />
+
+  <br />
+  <a href="/login">Already have an account? Click here to login</a>
 </form>

@@ -136,11 +136,3 @@ label {
   border-radius: 10px;
 }
 
-button{
-	width: 5cm;
-}
-
-.error-text{
-	color: red;
-	font-weight: bold;
-}

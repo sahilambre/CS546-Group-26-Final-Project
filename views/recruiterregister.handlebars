@@ -1,53 +1,5 @@
 <h1>Recruiters' Registration</h1>
-<br>
-<form action="/registerRecruiters" method="POST">
-  <div class="mb-3">
-    <label class="form-label" for="recruiterFirstName">First Name:</label>
-    <input class="form-control" type="text" id="recruiterFirstName" name="recruiterFirstName" required />
-  </div>
-  
-  <div class="mb-3">
-    <label class="form-label" for="recruiterLastName">Last Name:</label>
-    <input class="form-control" type="text" id="recruiterLastName" name="recruiterLastName" required />
-  </div>
 
-  <div class="mb-3">
-    <label class="form-label" for="recruiterEmail">Email:</label>
-    <input class="form-control" type="email" id="recruiterEmail" name="recruiterEmail" required />
-  </div>
-  
-  <div class="mb-3">
-    <label class="form-label" for="recruiterCompany">Company:</label>
-    <input class="form-control" type="text" id="recruiterCompany" name="recruiterCompany" required />
-  </div>
-
-  {{!-- <div class="mb-3">
-    <label for="recruiterJobListings">Job Listings:</label>
-    <textarea class="form-control" id="recruiterJobListings" name="recruiterJobListings" required></textarea>
-  </div> --}}
-
-  <div class="mb-3">
-    <label class="form-label" for="recruiterPassword">Password:</label>
-    <input class="form-control" type="password" id="recruiterPassword" name="recruiterPassword" required />
-  </div>
-
-  <div class="mb-3">
-    <label class="form-label" for="recruiterConfirmPassword">Confirm Password:</label>
-    <input class="form-control" type="password" id="recruiterConfirmPassword" name="recruiterConfirmPassword" required />
-  </div>
-
-  <button class="btn btn-success mb-5" type="submit" value="Register">Register</button>
-
-  <div class="mb-3">
-    <p>Already have an account? Click on Login button</p>
-    <button class="btn btn-primary" onclick="location.href='/login'">Login</button>
-  </div>
-</form>
-<br>
-<br>
-<br>
-<br>
-{{!-- 
 <form action="/registerRecruiters" method="POST">
   <label for="firstNameInput">First Name:</label>
   <input type="text" id="firstNameInput" name="firstNameInput" required />
@@ -73,4 +25,4 @@
   <br>
     <a href="/login">Already have an account? Click here to login</a>
   {{!<button onclick="location.href='/login'">Login</button>}}
-</form> --}}
+</form>

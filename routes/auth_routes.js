@@ -5,6 +5,8 @@ import recruiterData from '../data/recruiters.js';
 import applicantData from '../data/applicants.js';
 import jobData from '../data/jobs.js';
 const router = Router();
+import multer from 'multer';
+const upload = multer({ dest: 'uploads/' });
 
 
 router.route('/').get(async (req, res) => {
@@ -18,9 +20,10 @@ router.route('/').get(async (req, res) => {
     //code here for GET
     res.render("studentregister", { title : "Student Register"});
   })
-  .post(async (req, res) => {
+  .post(upload.single('resumeInput'),async (req, res) => {
     //code here for POST
     const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput,gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
+    const resumeInput = req.file ? req.file.filename : undefined;
     if(!firstNameInput || !lastNameInput || !emailAddressInput || !ageInput || !stateInput || !gradYearInput || !passwordInput || !confirmPasswordInput){
       let missingInputs = [];
       if (!firstNameInput) {
@@ -103,7 +106,7 @@ router.route('/').get(async (req, res) => {
     try{
       const newUser = await createUser(nEmailAddress, passwordInput);
       if(newUser.insertedUser === true ){
-        const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, ageInputNum, stateInput, gradYearInputNum);
+        const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, ageInputNum, stateInput, gradYearInputNum, resumeInput ? [resumeInput] : []);
         if(newApplicant.insertedApplicant === true) {
           res.status(201).render("login", {title: "Student Login"});
         }else{
@@ -125,8 +128,9 @@ router.route('/').get(async (req, res) => {
     //code here for GET
     res.render("recruiterregister", { title : "Employer Registration"});
   })
-  .post(async (req, res) => {
-    const {firstNameInput,lastNameInput, emailAddressInput, companyInput, passwordInput, confirmPasswordInput  } = req.body;
+  .post(upload.single('resumeInput'),async (req, res) => {
+    const {firstNameInput,lastNameInput, emailAddressInput, companyInput, passwordInput, confirmPasswordInput } = req.body;
+    const resumeInput = req.file ? req.file.filename : undefined;
     if(!firstNameInput || !lastNameInput || !emailAddressInput || !companyInput || !passwordInput || !confirmPasswordInput){
       let missingInputs = [];
       if (!firstNameInput) {
@@ -146,6 +150,9 @@ router.route('/').get(async (req, res) => {
       }
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
+      }
+      if (resumeInput){
+        missingInputs.push("Resume");
       }
       if (missingInputs.length > 0)
       {
@@ -196,10 +203,12 @@ router.route('/').get(async (req, res) => {
       return;
     }
 
+
+
     try{
       const newUser = await createUser(nEmailAddress, passwordInput);
       if(newUser.insertedUser === true ){
-        const newRecruiter = await recruiterData.createRecruiter(firstNameInput, lastNameInput, nEmailAddress, companyInput, []);
+        const newRecruiter = await recruiterData.createRecruiter(firstNameInput, lastNameInput, nEmailAddress, companyInput,  []);
         if(newRecruiter.insertedRecruiter === true) {
           res.status(201).render("regsuccess", {title: "Recruiter Registration Successful"});
         }else{

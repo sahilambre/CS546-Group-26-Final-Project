@@ -1,8 +1,8 @@
 <h1>Job Seeker Registration</h1>
 
-<form action="/registerStudents" method="POST">
-  <label class="form-label" for="firstNameInput">First Name:</label>
-  <input class="form-control" type="text" id="firstNameInput" name="firstNameInput" required />
+<form action="/registerStudents" method="POST" enctype="multipart/form-data">
+  <label for="firstNameInput">First Name:</label>
+  <input type="text" id="firstNameInput" name="firstNameInput" required />
 
   <label class="form-label" for="lastNameInput">Last Name:</label>
   <input class="form-control" type="text" id="lastNameInput" name="lastNameInput" required />
@@ -15,16 +15,18 @@
     name="emailAddressInput"
     required
   />
+  <br />
 
-  <label class="form-label" for="ageInput">Age:</label>
-  <input class="form-control" type="number" id="ageInput" name="ageInput" required />
+  <label for="birthDateInput">Birth Date (mm-dd-yyyy):</label>
+  <input type="date" id="birthDateInput" name="birthDateInput" required />
+  <br />
 
-  <label class="form-label" for="stateInput">State:</label>
-  <input class="form-control" type="text" id="stateInput" name="stateInput" required />
+  <label for="stateInput">State:</label>
+  <input type="text" id="stateInput" name="stateInput" required />
+  <br />
 
-  <label class="form-label" for="gradYearInput">Graduation Year:</label>
-  <input class="form-control" type="number" id="gradYearInput" name="gradYearInput" required />
-
+  <label for="gradYearInput">Graduation Year:</label>
+  <input type="number" id="gradYearInput" name="gradYearInput" required />
   <br />
   <label for="passwordInput">Password:</label>
   <input type="password" name="passwordInput" value="" id="passwordInput" />
@@ -38,7 +40,7 @@
   />
 
   <div class="mb-3">
-    <label class="form-label" for="resume">Resume:</label>
+    <label class="form-label" for="resume">Upload Resume:</label>
     <input
       class="form-control"
       type="file"

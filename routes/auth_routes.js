@@ -4,8 +4,6 @@ import {createUser, checkUser} from '../data/users.js';
 import recruiterData from '../data/recruiters.js';
 import applicantData from '../data/applicants.js';
 import jobData from '../data/jobs.js';
-import xss from 'xss';
-
 const router = Router();
 
 

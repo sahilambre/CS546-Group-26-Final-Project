@@ -1,4 +1,4 @@
-import * as validation from './validation.js';
+import validation from './validation.js';
 import {recruiters} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 
@@ -7,7 +7,7 @@ export const createRecruiter = async (
     lastName,
     email,
     company,
-    jobListings) => {
+    jobListings=[]) => {
         //note, might need to change params, recruiters may need different properties
         if(!firstName || !lastName || !email || !company || !jobListings){
             throw 'All fields are required';

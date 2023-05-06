@@ -1,4 +1,13 @@
-Inside recruiter -> Jobslist = []
+Recruiter = {
+    _id: "Dont' worry",
+    firstName: "Name",
+    lastName: "lastName",
+    email: "email",
+    company: "Company Name",
+    jobListings: []
+};
+
+jobListings = []
 
 job = {
 _id: "Dont' worry",
@@ -14,3 +23,14 @@ userApplicant = {
 _id: "UserID",+
 status: "Rejected",  (default -> Applied, rejected, accepted)
 }
+
+User: {
+_id: "Dont' worry",
+firstName: "John",
+lastName: "Lincoln",
+email: "johnLincoln@gmail.com",
+birthday: "date",
+gradYear: number,
+resume: "doc"
+}
+

@@ -18,7 +18,15 @@ router.route('/').get(async (req, res) => {
   .route('/registerStudents')
   .get(async (req, res) => {
     //code here for GET
-    return res.render("studentregister", { title : "Student Register"});
+    //return res.render("studentregister", { title : "Student Register"});
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year - 14}-${month}-${day}`;
+
+    return res.render("studentregister", { title: "Student Register", todayDate: formattedDate });
+
   })
   .post(upload.single('resumeInput'),async (req, res) => {
     //code here for POST
@@ -53,7 +61,14 @@ router.route('/').get(async (req, res) => {
       if (!resumeInput) {
         missingInputs.push("Resume");
       }
-      return res.status(400).render("studentregister", {title: "Student Registration" ,error: missingInputs});
+      // return res.status(400).render("studentregister", {title: "Student Registration" ,error: missingInputs});
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year - 14}-${month}-${day}`;
+  
+      return res.render("studentregister", { title: "Student Register", todayDate: formattedDate , error: missingInputs });
     }
 
     const wrongParams = [];

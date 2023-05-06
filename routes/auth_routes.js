@@ -50,7 +50,7 @@ router.route('/').get(async (req, res) => {
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
       }
-      res.status(400).render("studentregister", {title: "Student Registration" ,error: missingInputs});
+      return res.status(400).render("studentregister", {title: "Student Registration" ,error: missingInputs});
     }
 
     const wrongParams = [];
@@ -87,7 +87,7 @@ router.route('/').get(async (req, res) => {
     const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
     const passwordReg = new RegExp(passwordPattern);
     if( !passwordReg.test(passwordInput)){
-      //throw res.status(400).send({error: 'This is an error!'});
+      //throw return res.status(400).send({error: 'This is an error!'});
       wrongParams.push("Password wrong");
     }
 
@@ -100,7 +100,7 @@ router.route('/').get(async (req, res) => {
     }
 
     if(wrongParams.length > 0){
-      res.status(400).render("error", {title: "Student Registration Error" ,error: wrongParams});
+      return res.status(400).render("error", {title: "Student Registration Error" ,error: wrongParams});
     }
 
     try{
@@ -108,13 +108,13 @@ router.route('/').get(async (req, res) => {
       if(newUser.insertedUser === true ){
         const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, ageInputNum, stateInput, gradYearInputNum, resumeInput ? [resumeInput] : []);
         if(newApplicant.insertedApplicant === true) {
-          res.status(201).render("login", {title: "Student Login"});
+          return res.status(201).render("login", {title: "Student Login"});
         }else{
-          res.status(400).render("error", {title: "Applicant Registration" ,error: "Registration Failed"});
+          return res.status(400).render("error", {title: "Applicant Registration" ,error: "Registration Failed"});
         }
       }
     }catch(e){
-      res.status(400).render("error", {title: "Appilcant Registration" ,error: e});
+      return res.status(400).render("error", {title: "Appilcant Registration" ,error: e});
     }
     
 
@@ -156,7 +156,7 @@ router.route('/').get(async (req, res) => {
       }
       if (missingInputs.length > 0)
       {
-        res.status(400).render("recruiterregister", {title: "Employer Registration" ,error: missingInputs});
+        return res.status(400).render("recruiterregister", {title: "Employer Registration" ,error: missingInputs});
         return;
       }
     }
@@ -199,7 +199,7 @@ router.route('/').get(async (req, res) => {
     }
 
     if(wrongParams.length > 0){
-      res.status(400).render("error", {title: "Recruiter Registration Error", error: wrongParams});
+      return res.status(400).render("error", {title: "Recruiter Registration Error", error: wrongParams});
       return;
     }
 
@@ -210,18 +210,18 @@ router.route('/').get(async (req, res) => {
       if(newUser.insertedUser === true ){
         const newRecruiter = await recruiterData.createRecruiter(firstNameInput, lastNameInput, nEmailAddress, companyInput,  []);
         if(newRecruiter.insertedRecruiter === true) {
-          res.status(201).render("regsuccess", {title: "Recruiter Registration Successful"});
+          return res.status(201).render("regsuccess", {title: "Recruiter Registration Successful"});
         }else{
-          res.status(400).render("error", {title: "Recruiter Registration Error" ,error: "Registration Failed"});
+          return res.status(400).render("error", {title: "Recruiter Registration Error" ,error: "Registration Failed"});
         }
       }
       else
       {
-        res.status(400).render("error", {title: "Recruiter Registration Error" ,error: "User Creation Failed"});
+        return res.status(400).render("error", {title: "Recruiter Registration Error" ,error: "User Creation Failed"});
 
       }
     }catch(e){
-      res.status(400).render("error", {title: "Recruiter Registration Error" ,error: e});
+      return res.status(400).render("error", {title: "Recruiter Registration Error" ,error: e});
     }
     
   });
@@ -243,11 +243,11 @@ router.route('/').get(async (req, res) => {
         missingInputs.push("Password");
       }
       let message = missingInputs+" missing!"
-      res.status(400).render("login", {title: "Login" ,error: message});
+      return res.status(400).render("login", {title: "Login" ,error: message});
     }
     let nEmailAddress;
     if(!validEmail(emailAddressInput)){
-      res.status(400).render("login", {title: "Login" ,error: `"${emailAddressInput}" is invalid email!`});
+      return res.status(400).render("login", {title: "Login" ,error: `"${emailAddressInput}" is invalid email!`});
     }else{
         nEmailAddress = emailAddressInput.toLowerCase();
     }
@@ -269,19 +269,19 @@ router.route('/').get(async (req, res) => {
           req.session.user = {emailAddress: user.emailAddress, recruiter:isRecruiter, applicant:isApplicant};
           /*
           if(isRecruiter){
-            res.status(201).render("homepage", {title: "Recruiter Home", recruiter:isRecruiter, applicant:isApplicant});
+            return res.status(201).render("homepage", {title: "Recruiter Home", recruiter:isRecruiter, applicant:isApplicant});
           }else if(isApplicant){
-            res.status(201).render("homepage", {title: "Student Home", recruiter:isRecruiter, applicant:isApplicant});
+            return res.status(201).render("homepage", {title: "Student Home", recruiter:isRecruiter, applicant:isApplicant});
           } else {
-            res.status(500).render("error", {title:'User Role Error', error:'User is neither an applicant nor a recruiter'});
+            return res.status(500).render("error", {title:'User Role Error', error:'User is neither an applicant nor a recruiter'});
           }
           */
          res.redirect('/homepage');
       }else{
-        res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
+        return res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
       }
     }catch(e){
-      res.status(400).render("error", {title: "Login Failure" ,error: e});
+      return res.status(400).render("error", {title: "Login Failure" ,error: e});
     }
 
   });
@@ -329,7 +329,7 @@ router.route('/').get(async (req, res) => {
       
       
     } catch (e) {
-      res.status(400).render('error', {title:'Error In Job Details', error:e});
+      return res.status(400).render('error', {title:'Error In Job Details', error:e});
     }
   });
 
@@ -345,7 +345,7 @@ router.route('/').get(async (req, res) => {
         jobs: jobsreturned});
 
   } catch (e) {
-    res.status(400).render('error', {title:'Error In Job Search', error:e});
+    return res.status(400).render('error', {title:'Error In Job Search', error:e});
   }
 
   });
@@ -376,7 +376,7 @@ router.route('/').get(async (req, res) => {
       
       if (missingInputs.length > 0)
       {
-        res.status(400).render("jobcreate", {title: "Job Create" ,error: missingInputs});
+        return res.status(400).render("jobcreate", {title: "Job Create" ,error: missingInputs});
         return;
       }
     }
@@ -393,11 +393,11 @@ router.route('/').get(async (req, res) => {
       }
       else
       {
-        res.status(400).render("error", {title: "Create Job Error" ,error: "Job Creation Failed"});
+        return res.status(400).render("error", {title: "Create Job Error" ,error: "Job Creation Failed"});
 
       }
     }catch(e){
-      res.status(400).render("error", {title: "Job Creation Error" ,error: e});
+      return res.status(400).render("error", {title: "Job Creation Error" ,error: e});
     }
     
   });
@@ -418,7 +418,7 @@ router.route('/').get(async (req, res) => {
       
       
     } catch (e) {
-      res.status(400).render('error', {title:'Error In Apply Job Operation', error:e});
+      return res.status(400).render('error', {title:'Error In Apply Job Operation', error:e});
     }
   });
 
@@ -437,7 +437,7 @@ router.route('/').get(async (req, res) => {
       res.redirect('/homepage');      
       
     } catch (e) {
-      res.status(400).render('error', {title:'Error In Favorite Job Operation', error:e});
+      return res.status(400).render('error', {title:'Error In Favorite Job Operation', error:e});
     }
   });
  

@@ -8,13 +8,14 @@ function validID(id) {
   if (!ObjectId.isValid(id)) { throw "id is invalid"; }
 }
 
-// function validUsername(username) {
-//   if (!username) { throw "username is not defined"; }
-//   if (username.constructor !== String) { throw "username must be a string"; }
-//   if (username.length < 6) { throw "username length must be at least 6 characters"; }
-//   let letterNumber = /^[0-9a-zA-Z]+$/;
-//   if (!username.match(letterNumber)) { throw "username can only contain letters and numbers"; }
-// }
+function validUsername(username) {
+  if (!username) { throw "username is not defined"; }
+  if (username.constructor !== String) { throw "username must be a string"; }
+  if (username.length < 6) { throw "username length must be at least 6 characters"; }
+  //let letterNumber = /^[0-9a-zA-Z]+$/;
+  //if (!username.match(letterNumber)) { throw "username can only contain letters and numbers"; }
+  // maybe check for email address instead
+}
 
 export function validPassword(password) {
   if (!password) { throw "password is not defined"; }
@@ -72,15 +73,15 @@ export async function checkUser(emailAddress, password) {
   }
 
   const userCollections = await users();
-  const user = await userCollections.findOne({ emailAddress: nEmailAddress });
+  const user = await userCollections.findOne({ email: nEmailAddress });
   if (user === null) {
     throw "Either the email address or password is invalid ";
   }
-  let compareToSherlock = await bcrypt.compare(password, email.password);
+  let compareToSherlock = await bcryptjs.compare(password, user.password);
   if (!compareToSherlock){
     throw "Either the email address or password is invalid";
   }
 
-  return {userFound:true ,emailAddress: email.emailAddress};
+  return {userFound:true ,emailAddress: nEmailAddress};
 }
 

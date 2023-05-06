@@ -1,0 +1,33 @@
+<h1>Welcome to the job details page</h1>
+
+ {{#if recruiter}}
+    <br>
+    <h2>Welcome Recruiter!</h2>
+ {{/if}}
+ {{#if applicant}}
+    <br>
+    <h2>Welcome Job Seeker!</h2>
+ {{/if}}
+
+  <h2>{{job.title}}</h2>
+   <br>Company: {{job.company}}
+   <br>URL:<a href="{{job.website}}">{{job.website}}</a>
+   <br>Tags: {{job.tags}}
+
+{{#if applicants}}
+   <h3>Applicants</h3>
+    <br>
+     {{#each applicants}} 
+      <li>{{firstName}} {{lastName}}: {{email}} Age: {{age}}, State: {{state}}, Class of {{gradYr}}</li>
+       {{/each}}
+ {{/if}}
+<br><br>
+ {{#if applicant}}
+    <br>
+   <a href="/apply/{{job._id}}">Apply to Job</a>
+   <br>
+   <a href="/favorite/{{job._id}}">Favorite Job</a>
+   <br><br>
+ {{/if}}
+
+<button onclick="location.href='/logout'">Logout</button>

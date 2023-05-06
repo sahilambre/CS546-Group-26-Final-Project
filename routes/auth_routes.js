@@ -18,7 +18,7 @@ router.route('/').get(async (req, res) => {
   .route('/registerStudents')
   .get(async (req, res) => {
     //code here for GET
-    res.render("studentregister", { title : "Student Register"});
+    return res.render("studentregister", { title : "Student Register"});
   })
   .post(upload.single('resumeInput'),async (req, res) => {
     //code here for POST
@@ -129,7 +129,7 @@ router.route('/').get(async (req, res) => {
   .route('/registerRecruiters')
   .get(async (req, res) => {
     //code here for GET
-    res.render("recruiterregister", { title : "Employer Registration"});
+    return res.render("recruiterregister", { title : "Employer Registration"});
   })
   .post(upload.single('resumeInput'),async (req, res) => {
     const {firstNameInput,lastNameInput, emailAddressInput, companyInput, passwordInput, confirmPasswordInput } = req.body;
@@ -233,7 +233,7 @@ router.route('/').get(async (req, res) => {
   .route('/login')
   .get(async (req, res) => {
     //code here for GET
-    res.render("login", { title : "Login"});
+    return res.render("login", { title : "Login"});
   })
   .post(async (req, res) => { 
     const {emailAddressInput, passwordInput} = req.body;
@@ -279,7 +279,7 @@ router.route('/').get(async (req, res) => {
             return res.status(500).render("error", {title:'User Role Error', error:'User is neither an applicant nor a recruiter'});
           }
           */
-         res.redirect('/homepage');
+         return res.redirect('/homepage');
       }else{
         return res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
       }
@@ -303,7 +303,7 @@ router.route('/').get(async (req, res) => {
     {
       try { jobslisted = await jobData.getJobsByRecruiterId(req.session.user.recruiter._id); } catch(e) {};
     }
-    res.render('homepage', {title: 'Home Page', emailAddress: req.session.user.emailAddress, 
+    return res.render('homepage', {title: 'Home Page', emailAddress: req.session.user.emailAddress, 
       recruiter:req.session.user.recruiter, applicant:req.session.user.applicant,
       jobsApplied: jobsapplied, jobsFavorited: jobsfavorited, jobsListed: jobslisted 
     });
@@ -322,11 +322,11 @@ router.route('/').get(async (req, res) => {
       {
         try { applicants = await jobData.getJobApplicants(req.params.id); 
         } catch(e) {};
-        res.render('jobdetails', {title:"Job Details", job:job, applicants:applicants, emailAddress: req.session.user.emailAddress, 
+        return res.render('jobdetails', {title:"Job Details", job:job, applicants:applicants, emailAddress: req.session.user.emailAddress, 
         recruiter:req.session.user.recruiter, applicant:req.session.user.applicant});
       }
       else{
-        res.render('jobdetails', {title:"Job Details", job:job, emailAddress: req.session.user.emailAddress, 
+        return res.render('jobdetails', {title:"Job Details", job:job, emailAddress: req.session.user.emailAddress, 
         recruiter:req.session.user.recruiter, applicant:req.session.user.applicant});
       }
       
@@ -343,7 +343,7 @@ router.route('/').get(async (req, res) => {
       jobsreturned = await jobData.getAllJobs();
       
          
-      res.render('jobsearch', {title: 'Job Search', emailAddress: req.session.user.emailAddress, 
+      return res.render('jobsearch', {title: 'Job Search', emailAddress: req.session.user.emailAddress, 
         recruiter:req.session.user.recruiter, applicant:req.session.user.applicant,
         jobs: jobsreturned});
 
@@ -358,7 +358,7 @@ router.route('/').get(async (req, res) => {
   .route('/jobCreate')
   .get(async (req, res) => {
     //code here for GET
-    res.render("jobcreate", { title : "Create Job"});
+    return res.render("jobcreate", { title : "Create Job"});
   })
   .post(async (req, res) => {
     const {titleInput, companyInput, websiteInput, tagsInput} = req.body;
@@ -392,7 +392,7 @@ router.route('/').get(async (req, res) => {
       const newJob = await jobData.create(titleInput, companyInput, websiteInput, convertedTags, req.session.user.recruiter._id);
       if(newJob)
       {
-        res.redirect('/jobdetails/'+newJob._id);
+        return res.redirect('/jobdetails/'+newJob._id);
       }
       else
       {
@@ -417,7 +417,7 @@ router.route('/').get(async (req, res) => {
       
       await applicantData.applyJob(req.session.user.applicant._id, req.params.id);
       
-      res.redirect('/homepage');
+      return res.redirect('/homepage');
       
       
     } catch (e) {
@@ -437,7 +437,7 @@ router.route('/').get(async (req, res) => {
       
       await applicantData.favoriteJob(req.session.user.applicant._id, req.params.id);
       
-      res.redirect('/homepage');      
+      return res.redirect('/homepage');      
       
     } catch (e) {
       return res.status(400).render('error', {title:'Error In Favorite Job Operation', error:e});

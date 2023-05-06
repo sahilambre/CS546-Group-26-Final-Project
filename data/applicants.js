@@ -70,7 +70,7 @@ const get = async (applicantId) => {
     applicantId = validation.checkId(applicantId);
     const applicantCollection = await applicants();
     const applicantW = await applicantCollection.findOne({_id: new ObjectId(applicantId)});
-    if (applicantW === null) throw 'No job listings with that id';
+    if (applicantW === null) throw 'No applicant listings with that id';
     applicantW._id = applicantW._id.toString();
     return applicantW;
 };
@@ -79,10 +79,19 @@ export const getByEmailApplicant = async (applicantEmail) => {
    // applicantId = validation.checkId(applicantId);
     const applicantCollection = await applicants();
     const applicantW = await applicantCollection.findOne({email: applicantEmail});
-    if (applicantW === null) throw 'No job listings with that id';
+    if (applicantW === null) throw 'No applicant listings with that id';
     applicantW._id = applicantW._id.toString();
     return applicantW;
 };
+
+// export const getByEmailApplicant = async (applicantEmail) => {
+//    // applicantId = validation.checkId(applicantId);
+//     const applicantCollection = await applicants();
+//     const applicantW = await applicantCollection.findOne({email: applicantEmail});
+//     if (applicantW === null) throw 'No job listings with that id';
+//     applicantW._id = applicantW._id.toString();
+//     return applicantW;
+// };
 
 const remove = async (applicantId) => {
     applicantId = validation.checkId(applicantId);
@@ -151,7 +160,7 @@ const favoriteJob = async (
     applicantId = validation.checkId(applicantId);
     let applicant = await get(applicantId); // will throw if not found
     let jobIdArray = applicant.jobsFavorited;
-    let job = await jobData.get(jobId);
+    let job = await jobData.getJob(jobId);
     // should probably check that jobId is not already in the array
     if (jobIdArray.includes(jobId)) throw 'Error: applicant has already applied for this job';
     jobIdArray.push(jobId);
@@ -174,7 +183,7 @@ const getJobsApplied = async(applicantId) => {
     //const jobsCollection = await jobs();
     for (let jobId of jobIdArray)
     {
-        let job = await jobData.get(jobId);
+        let job = await jobData.getJob(jobId);
         jobsArray.push(job);
     }
     return jobsArray;   
@@ -195,7 +204,7 @@ const getJobsFavorited = async(applicantId) => {
     //const jobsCollection = await jobData();
     for (let jobId of jobIdArray)
     {
-        let job = await jobData.get(jobId);
+        let job = await jobData.getJob(jobId);
         jobsArray.push(job);
     }
    return jobsArray;

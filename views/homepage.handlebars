@@ -1,0 +1,66 @@
+<h1>Welcome to your homepage</h1>
+ {{#if recruiter}}
+    <br>
+    <h2>Welcome Recruiter!</h2>
+    <h3>Jobs you have listed</h3>
+     <table>
+    <tr>
+    <th>Title</th>
+    <th>Company</th>
+    <th>Web Site</th>
+    <th>Tags</th>
+    </tr>
+     {{#each jobsListed}}  
+    <tr>
+        <td><a href="/jobdetails/{{_id}}">{{title}}</a></td>
+        <td>{{company}}</td>
+        <td>{{website}}</td>
+        <td>{{tags}}</td>
+    </tr>
+    {{/each}}
+    </table>
+ {{/if}}
+ {{#if applicant}}
+    <br>
+    <h2>Welcome Job Seeker!</h2>
+    <h3>Jobs you have applied for</h3>
+    <table>
+    <tr>
+    <th>Title</th>
+    <th>Company</th>
+    <th>Web Site</th>
+    <th>Tags</th>
+    </tr>
+    {{#each jobsApplied}}  
+    <tr>
+        <td><a href="/jobdetails/{{_id}}">{{title}}</a></td>
+        <td>{{company}}</td>
+        <td>{{website}}</td>
+        <td>{{tags}}</td>
+    </tr>
+    {{/each}}
+    </table>
+    <h3>Jobs you have favorited</h3>
+     <table>
+    <tr>
+    <th>Title</th>
+    <th>Company</th>
+    <th>Web Site</th>
+    <th>Tags</th>
+    </tr>
+    {{#each jobsFavorited}}  
+    <tr>
+        <td><a href="/jobdetails/{{_id}}">{{title}}</a></td>
+        <td>{{company}}</td>
+        <td>{{website}}</td>
+        <td>{{tags}}</td>
+    </tr>
+    {{/each}}
+    </table>
+ {{/if}}
+<br>
+<br>
+<a href="/jobSearch">Job Search</a>
+<br>
+<br>
+<button onclick="location.href='/logout'">Logout</button>

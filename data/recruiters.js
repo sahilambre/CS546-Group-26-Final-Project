@@ -1,5 +1,6 @@
 import * as validation from './validation.js';
 import {recruiters} from '../config/mongoCollections.js';
+import {ObjectId} from 'mongodb';
 
 export const createRecruiter = async (
     firstName,
@@ -35,7 +36,7 @@ export const createRecruiter = async (
         const insertInfo = await recsCollection.insertOne(newRecruiter);
         if(insertInfo.insertedCount === 0) throw 'Could not add recruiter';
         const newId = insertInfo.insertedId.toString();
-        const rec = await this.get(newId);
+        const rec = await get(newId);
         return {
             rec: rec,
             insertedRecruiter: true
@@ -59,7 +60,7 @@ const get = async (recruiterId) => {
     if (typeof recruiterId !== 'string') throw 'Id must be a string';
     if (recruiterId.trim().length === 0) throw 'Id must be a non-empty string';
     const recsCollection = await recruiters();
-    const rec = await recsCollection.findOne({ _id: ObjectId(recruiterId) });
+    const rec = await recsCollection.findOne({ _id: new ObjectId(recruiterId) });
     if (rec === null) throw 'No recruiter with that id';
     rec._id = rec._id.toString();
     return rec;
@@ -67,8 +68,8 @@ const get = async (recruiterId) => {
 
 export const getByEmailRecruiter = async (recruiterEmail) => {
     if (!recruiterEmail) throw 'You must provide an email to search for';
-    if (typeof recruiterId !== 'string') throw 'email must be a string';
-    if (recruiterId.trim().length === 0) throw 'email must be a non-empty string';
+    if (typeof recruiterEmail !== 'string') throw 'email must be a string';
+    if (recruiterEmail.trim().length === 0) throw 'email must be a non-empty string';
     const recsCollection = await recruiters();
     const rec = await recsCollection.findOne({ email: recruiterEmail });
     if (rec === null) throw 'No recruiter with that email found';
@@ -88,7 +89,7 @@ const remove = async (recruiterId) => {
     }
     recruiterId = recruiterId.trim();
     const recsCollection = await recruiters();
-    const deletionInfo = await recsCollection.findOneAndDelete({_id: ObjectId(recruiterId)});
+    const deletionInfo = await recsCollection.findOneAndDelete({_id: new ObjectId(recruiterId)});
     if(deletionInfo.lastErrorObject.n === 0){
         throw `Could not delete recruiter with id of ${recruiterId}`;
     }
@@ -124,11 +125,11 @@ const update = async (
             email: email.trim(),
             company: company.trim()
         };
-        const updatedInfo = await recsCollection.updateOne({_id: ObjectId(recruiterId)}, {$set: updatedRec});
+        const updatedInfo = await recsCollection.updateOne({_id: new ObjectId(recruiterId)}, {$set: updatedRec});
         if(updatedInfo.modifiedCount === 0){
             throw 'Could not update recruiter';
         }
-        return await this.get(recruiterId);
+        return await get(recruiterId);
     };
 
 const exportedMethods = {

@@ -1,4 +1,4 @@
-import {jobs} from '../config/mongoCollections.js';
+import {applicants, jobs} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import validation from './validation.js';
 import applicantData from '../data/applicants.js';
@@ -33,7 +33,7 @@ const create = async (
     let index1 = website.indexOf('https://www.');
     let index2 = website.lastIndexOf('.com');
     if (!website.endsWith('.com') || index1 < 0 || index2 <= index1+16)
-        throw 'Website must have http://www. and must end in .com with at least 5 characters in between';
+        throw 'Website must have https://www. and must end in .com with at least 5 characters in between';
     //tags
     if (!tags || !Array.isArray(tags)) throw 'You must provide an array of tags';
     if (tags.length === 0) throw 'You must supply at least one tag';
@@ -61,11 +61,11 @@ const create = async (
     if (!insertInfo.acknowledged || !insertInfo.insertedId) throw 'Unable to add job listing';
     
     const newId = insertInfo.insertedId.toString();
-    const job = await get(newId);
+    const job = await getJob(newId);
     return job;
 };
 
-const get = async (id) => {
+const getJob = async (id) => {
     if (!id) throw 'You must provide an id to search for';
     if (typeof id !== 'string') throw 'Id must be a string';
     if (id.trim().length === 0)
@@ -110,7 +110,7 @@ const remove = async(id) => {
 const getJobsByRecruiterId = async(recruiterId) => {
     recruiterId = validation.checkId(recruiterId);
     const jobsCollection = await jobs();
-    return await jobsCollection.find({recuiterId: recruiterId}).toArray();
+    return await jobsCollection.find({recruiterId: recruiterId}).toArray();
     /*^^this line
     reminded me that the job object needs to include
     the id of the recruiter who posted it
@@ -132,7 +132,7 @@ const getJobApplicants = async(jobId) => {
     then, traverse the applicants array in the job object,
     and get applicants by those ids
     */
-    let job = await get(jobId);
+    let job = await getJob(jobId);
     const jobsCollection = await jobs();
     let applicantIdArray = job.applicants;
     let applicantsArray = [];
@@ -152,7 +152,7 @@ const addJobApplicant = async(jobId, applicantId) => {
     add applicant id to applicants list
     update job
     */
-    let job = await get(jobId);
+    let job = await getJob(jobId);
     const jobsCollection = await jobs();
     let applicantIdArray = job.applicants;
     if (applicantIdArray.includes(applicantId)) throw 'Applicant already applied for job';
@@ -166,13 +166,13 @@ const addJobApplicant = async(jobId, applicantId) => {
     if (updatedInfo.lastErrorObject.n === 0) {
         throw 'could not update job with new applicant successfully';
     }
-    job = await get(jobId);
+    job = await getJob(jobId);
     return job;
 };
 
 const exportedMethods = {
     create,
-    get,
+    getJob,
     getAllJobs,
     remove,
     getJobsByRecruiterId,

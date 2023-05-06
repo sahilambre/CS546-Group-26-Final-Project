@@ -366,7 +366,7 @@ router
     return res.render("login", { title: "Login" });
   })
   .post(async (req, res) => {
-    const emailAddressInput = xss(req.body.username);
+    const emailAddressInput = xss(req.body.emailAddressInput);
     const passwordInput = xss(req.body.password);
     // const {emailAddressInput, passwordInput} = req.body
     let missingInputs = [];

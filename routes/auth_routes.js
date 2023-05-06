@@ -299,7 +299,7 @@ router.route('/').get(async (req, res) => {
         return res.status(400).render("login", {title: "Login" ,error: "Either email or password is wrong"});
       }
     }catch(e){
-      return res.status(400).render("error", {title: "Login Failure" ,error: e});
+      return res.status(400).render("login", {title: "Login Failure" ,error: e});
     }
 
   });

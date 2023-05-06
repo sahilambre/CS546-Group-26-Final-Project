@@ -24,7 +24,7 @@ router.route('/').get(async (req, res) => {
     //code here for POST
     const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput,gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
     const resumeInput = req.file ? req.file.filename : undefined;
-    if(!firstNameInput || !lastNameInput || !emailAddressInput || !ageInput || !stateInput || !gradYearInput || !passwordInput || !confirmPasswordInput){
+    if(!firstNameInput || !lastNameInput || !emailAddressInput || !ageInput || !stateInput || !gradYearInput || !passwordInput || !confirmPasswordInput || !resumeInput){
       let missingInputs = [];
       if (!firstNameInput) {
         missingInputs.push("First Name");
@@ -49,6 +49,9 @@ router.route('/').get(async (req, res) => {
       }
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
+      }
+      if (!resumeInput) {
+        missingInputs.push("Resume");
       }
       return res.status(400).render("studentregister", {title: "Student Registration" ,error: missingInputs});
     }
@@ -106,7 +109,7 @@ router.route('/').get(async (req, res) => {
     try{
       const newUser = await createUser(nEmailAddress, passwordInput);
       if(newUser.insertedUser === true ){
-        const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, ageInputNum, stateInput, gradYearInputNum, resumeInput ? [resumeInput] : []);
+        const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, ageInputNum, stateInput, gradYearInputNum,[resumeInput]);
         if(newApplicant.insertedApplicant === true) {
           return res.status(201).render("login", {title: "Student Login"});
         }else{

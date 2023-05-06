@@ -2,6 +2,21 @@ import {applicants} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import validation from './validation.js';
 import jobData from '../data/jobs.js';
+import multer from 'multer';
+import fs from 'fs/promises';
+import path from 'path'
+
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, './uploads');
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    }
+  });
+  
+const upload = multer({ storage });
 
 export const createApplicant = async (
     firstName,
@@ -9,7 +24,8 @@ export const createApplicant = async (
     email,
     age,
     state,
-    gradYr
+    gradYr,
+    resume
 ) => {
     firstName = validation.checkString(firstName, 'first name');
     lastName = validation.checkString(lastName, 'last name');
@@ -33,6 +49,16 @@ export const createApplicant = async (
     if (typeof gradYr !== 'number' || gradYr == NaN) throw 'Graduation year must be a number';
     if (gradYr < 1950 || gradYr > 2030) throw 'Invalid graduation year';
 
+    if (resume) {
+        const file = await upload.single('resume')(req, res, (err) => {
+          if (err) {
+            console.log(err);
+            throw 'Error uploading file';
+          }
+        });
+        newApp.resume = file.filename;
+      }
+
     let newApp = {
         firstName: firstName,
         lastName: lastName,
@@ -41,7 +67,8 @@ export const createApplicant = async (
         state: state,
         gradYr: gradYr,
         jobsApplied: [],
-        jobsFavorited: []
+        jobsFavorited: [],
+        resume: resume
     };
     const applicantCollection = await applicants();
     const insertInfo = await applicantCollection.insertOne(newApp);
@@ -74,6 +101,17 @@ const get = async (applicantId) => {
     applicantW._id = applicantW._id.toString();
     return applicantW;
 };
+
+export const getApplicantResume = async (applicantId) => {
+    const applicant = await get(applicantId);
+    const resumePath = path.join('./uploads', applicant.resume);
+    try {
+      return await fs.readFile(resumePath, 'utf8');
+    } catch (err) {
+      console.log(err);
+      throw 'Error reading file';
+    }
+  };
 
 export const getByEmailApplicant = async (applicantEmail) => {
    // applicantId = validation.checkId(applicantId);

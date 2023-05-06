@@ -84,6 +84,15 @@ export const getByEmailApplicant = async (applicantEmail) => {
     return applicantW;
 };
 
+// export const getByEmailApplicant = async (applicantEmail) => {
+//    // applicantId = validation.checkId(applicantId);
+//     const applicantCollection = await applicants();
+//     const applicantW = await applicantCollection.findOne({email: applicantEmail});
+//     if (applicantW === null) throw 'No job listings with that id';
+//     applicantW._id = applicantW._id.toString();
+//     return applicantW;
+// };
+
 const remove = async (applicantId) => {
     applicantId = validation.checkId(applicantId);
     const applicantCollection = await applicants();

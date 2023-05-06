@@ -1,16 +1,21 @@
+<script src="/public/js/login.js"></script>
 <h1>Login</h1>
-
-<form action="/login" method="POST">
-  <label for="emailAddressInput">Username:</label>
-  <input type="text" id="emailAddressInput" name="emailAddressInput" required />
-
-  <label for="passwordInput">Password:</label>
-  <input type="password" id="passwordInput" name="passwordInput" required />
-
-  <input type="submit" value="Submit" />
-
-<p>Don't have a login yet?</p>
-<br><a href="/registerRecruiters">Register as a Recruiter</a>
-<br><a href="/registerStudents">Register as a Job Applicant</a>
-
+<br>
+<form id="login-form" action="/login" method="POST">
+  <div id="loginEmailGroup" class="mb-3">
+    <label class="form-label" for="username">Email: </label>
+    <input class="form-control" type="text" id="username" name="username" required />
+  </div>
+  <div id="loginPasswordGroup" class="mb-3">
+    <label class="form-label" for="password">Password: </label>
+    <input class="form-control" type="password" id="password" name="password" required />
+  </div>
+  <button id="loginFormSubmit" type="submit" class="btn btn-primary">Login</button>
 </form>
+
+<button class="btn btn-success" onclick="location.href='/'">Register</button>
+<br>
+<br>
+<div class="mb-3"> 
+  <p class="error-text">{{error}}</p>
+</div>

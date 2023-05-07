@@ -351,7 +351,8 @@ router.route('/').get(async (req, res) => {
     }
   });
 
-  router.route('/jobSearch').get(async (req, res) => {
+  router.route('/jobSearch')
+  .get(async (req, res) => {
     let jobsreturned = [];
     try
     {
@@ -366,7 +367,23 @@ router.route('/').get(async (req, res) => {
     return res.status(400).render('error', {title:'Error In Job Search', error:e});
   }
 
-  });
+  })
+  .post(async (req, res) => {
+    const {tagInput} = req.body;
+    let jobsreturned = [];
+    try
+    {
+      if (!tagInput) throw 'Error: no tag given to search on';
+      jobsreturned = await jobData.getJobsByTag(tagInput);
+        
+      res.render('jobsearch', {title: 'Job Search', emailAddress: req.session.user.emailAddress, 
+        recruiter:req.session.user.recruiter, applicant:req.session.user.applicant,
+        jobs: jobsreturned});
+
+  } catch (e) {
+    res.status(400).render('error', {title:'Error In Job Search by Tag', error:e});
+  }
+});
   
 
   router
@@ -403,7 +420,11 @@ router.route('/').get(async (req, res) => {
     try{
       if (!req.session.user.recruiter) throw 'Non-recruiter cannot create a job';
       //isRecruiter = await recruiterData.get(req.session.user.recruiter.recruiterId);
-      let convertedTags = eval('(' + tagsInput + ')');
+      let convertedTags = tagsInput.split(',');
+      for (let i=0;i<convertedTags.length;i++)
+      {
+        convertedTags[i] = convertedTags[i].trim();
+      }
       const newJob = await jobData.create(titleInput, companyInput, websiteInput, convertedTags, req.session.user.recruiter._id);
       if(newJob)
       {
@@ -459,4 +480,22 @@ router.route('/').get(async (req, res) => {
     }
   });
  
+  router.route('/unfavorite/:id').get(async (req, res) => {
+    //code here for GET
+   
+    try {
+      if (!req.session.user.applicant) throw 'Must be applicant to apply for job';
+      let job = await jobData.getJob(req.params.id);
+      let updated_applicant = await applicantData.get(req.session.user.applicant._id);
+
+      if (!updated_applicant.jobsFavorited.includes(job._id)) throw 'User has not favorited this job';
+      
+      await applicantData.unfavoriteJob(req.session.user.applicant._id, req.params.id);
+      
+      res.redirect('/homepage');      
+      
+    } catch (e) {
+      res.status(400).render('error', {title:'Error In Unfavorite Job Operation', error:e});
+    }
+  });
   export default router;

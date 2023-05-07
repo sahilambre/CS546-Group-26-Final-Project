@@ -1,15 +1,19 @@
 <h1>Recruiters' Registration</h1>
 
 <form action="/registerRecruiters" method="POST">
-  <label class="form-label" for="firstNameInput">First Name:</label>
-  <input
-    class="form-control"
-    type="text"
-    id="firstNameInput"
-    name="firstNameInput"
-    required
-  />
 
+  <div class="mb-3" id="rrFirstNameGroup">
+    <label class="form-label" for="firstNameInput">First Name:</label>
+    <input
+      class="form-control"
+      type="text"
+      id="firstNameInput"
+      name="firstNameInput"
+      required
+    />
+  </div>
+
+  <div class="mb-3" id="rrLastNameGroup"></div>
   <label class="form-label" for="lastNameInput">Last Name:</label>
   <input
     class="form-control"
@@ -19,47 +23,57 @@
     required
   />
 
-  <label class="form-label" for="emailAddressInput">Email:</label>
-  <input
-    class="form-control"
-    type="email"
-    id="emailAddressInput"
-    name="emailAddressInput"
-    required
-  />
+  <div class="mb-3" id="rrEmailGroup">
+    <label class="form-label" for="emailAddressInput">Email:</label>
+    <input
+      class="form-control"
+      type="email"
+      id="emailAddressInput"
+      name="emailAddressInput"
+      required
+    />
+  </div>
 
-  <label class="form-label" for="companyInput">Company:</label>
-  <input
-    class="form-control"
-    type="text"
-    id="companyInput"
-    name="companyInput"
-    required
-  />
+  <div class="mb-3" id="rrCompanyGroup">
+    <label class="form-label" for="companyInput">Company:</label>
+    <input
+      class="form-control"
+      type="text"
+      id="companyInput"
+      name="companyInput"
+      required
+    />
+  </div>
 
-  <br />
-  <label class="form-label" for="passwordInput">Password:</label>
-  <input
-    class="form-control"
-    type="password"
-    name="passwordInput"
-    value=""
-    id="passwordInput"
-  />
-  <br />
-  <label class="form-label" for="passwordInput">Confirm Password:</label>
-  <input
-    class="form-control"
-    type="password"
-    name="confirmPasswordInput"
-    value=""
-    id="confirmPasswordInput"
-  />
-  <br />
+  <div class="mb-3" id="rrPasswordGroup">
+    <label class="form-label" for="passwordInput">Password:</label>
+    <input
+      class="form-control"
+      type="password"
+      name="passwordInput"
+      value=""
+      id="passwordInput"
+    />
+  </div>
 
+  <div class="mb-3" id="rrConfirmPassword">
+    <label class="form-label" for="passwordInput">Confirm Password:</label>
+    <input
+      class="form-control"
+      type="password"
+      name="confirmPasswordInput"
+      value=""
+      id="confirmPasswordInput"
+    />
+
+  </div>
+
+  {{! <button class="btn btn-" type="submit">Register</button> }}
   <input class="form-control btn btn-primary" type="submit" value="Register" />
 
-  <br />
-  <a id="login-link" href="/login">Already have an account? Click here to login</a>
-  {{!<button onclick="location.href='/login'">Login</button>}}
 </form>
+
+<div class="mb-3">
+  <a id="login-link" href="/login">Already have an account? Click here to login</a>
+
+</div>

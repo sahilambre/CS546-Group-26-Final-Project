@@ -170,16 +170,24 @@ try {
 
 // middleware added to all routes, at this point the routes aren't all coded in yet so not sure what to name all these redirects to yet lol
 app.get('/', async (req, res, next) => {
+  console.log('GET '+req.path);
     if(req.session.user){
         // needs to be redirected to job feed
         return res.redirect("/homepage");
-
      }
-     else{
-       return res.redirect("/login");
-     }
+    //  else{
+    //    return res.redirect("/");
+    //  }
     next();
   });
+
+// app.post('*', async (req,res,next) => {
+//   console.log('GET '+req.path);
+//   if(!req.session.user){
+//     return res.redirect("/");
+//   }
+//   next();
+// })
 
 app.get('/login', async (req, res, next) => {
   /*

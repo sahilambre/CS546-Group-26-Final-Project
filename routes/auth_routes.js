@@ -11,7 +11,7 @@ const upload = multer({ dest: 'uploads/' });
 
 router.route('/').get(async (req, res) => {
     //code here for GET THIS ROUTE SHOULD NEVER FIRE BECAUSE OF MIDDLEWARE #1 IN SPECS.
-    return res.status(201).render("homepage", {title: "Home Page"});
+    return res.status(201).render("landingpage", {title: "Home Page"});
   }); 
 
 router

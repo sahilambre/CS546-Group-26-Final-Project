@@ -105,7 +105,7 @@ router
     // if(typeof stateInput !== 'string' ||  /\d/.test(stateInput) || (stateInput.length < 2) || stateInput.length > 25){
     //   wrongParams.push("State wrong");
     // }
-    if (birthDateInput !== 'string'){
+    if (typeof birthDateInput !== 'string'){
       wrongParams.push("Birth Date is in wrong format");  //<<<<<<<<<<<<<<<<<<<<<<<<<< Review further to add age validation at least 14 years!
     }
 
@@ -134,7 +134,7 @@ router
       wrongParams.push("Password and Confirm Password do not match");
     }
 
-    
+
 
     if(wrongParams.length > 0){
       return res.status(400).render("error", {title: "Student Registration Error" ,error: wrongParams});

@@ -35,21 +35,20 @@ export const createApplicant = async (
     email = validation.checkEmail(email);
 
     //age
-    if (!birthDate) throw 'You must enter your age';
-    if (typeof birthDate !== 'string' || birthDate == NaN) throw 'Age must be a number';
-    //we gotta restrict the age, users must be 12 and up
+    if (!birthDate) throw 'You must enter your birth date';
+    if (typeof birthDate !== 'string') throw 'Birth date is not a string';
+    //we gotta restrict the age, users must be 14 and up
     //also if ur over 80 please retire or smth
     //if (age < 12 || age > 80) throw 'Invalid age';
-    if(birthDate.length != 10) throw 'Invalid age';
-    let age = new Date().getFullYear() - parseInt(birthDate.substring(6, 10));
-    if(age < 14) throw 'Invalid age';
+    if(birthDate.length != 10) throw 'Invalid birth date format';
+    if ( Math.floor((new Date() - Date.parse(birthDate))/(1000*60*60*24*365.25)) < 14) throw 'Must be at least 14 years old!'
 
     // state = validation.checkString(state, 'state');
 
     //gradYr
     if (!gradYr) throw 'You must enter your graduation year';
     if (typeof gradYr !== 'number' || gradYr == NaN) throw 'Graduation year must be a number';
-    if (gradYr < 1950 || gradYr > 2030) throw 'Invalid graduation year';
+    if (gradYr < 1950 || gradYr > new Date().getFullYear()+30) throw 'Invalid graduation year';
 
     if (resume) {
         const file = await upload.single('resume')(req, res, (err) => {
@@ -65,7 +64,7 @@ export const createApplicant = async (
         firstName: firstName,
         lastName: lastName,
         email: email,
-        age: age,
+        birthDate: birthDate,
         // state: state,
         gradYr: gradYr,
         jobsApplied: [],
@@ -135,16 +134,18 @@ const remove = async (applicantId) => {
     return {deleted: true};
 };
 
+
 const update = async (
     id,
     firstName,
     lastName,
     email,
-    age,
+    birthDate,
     // state,
     gradYr,
     jobsApplied,
-    jobsFavorited
+    jobsFavorited,
+    resume
 ) => {
     id = validation.checkId(id);
     //TODO: more error handling
@@ -152,11 +153,12 @@ const update = async (
         firstName: firstName,
         lastName: lastName,
         email: email,
-        age: age,
+        birthDate: birthDate,
         // state: state,
         gradYr: gradYr,
         jobsApplied: jobsApplied,
-        jobsFavorited: jobsFavorited
+        jobsFavorited: jobsFavorited,
+        resume: resume
     };
     const appCollection = await applicants();
     const updateInfo = await appCollection.findOneAndUpdate(

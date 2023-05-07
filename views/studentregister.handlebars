@@ -81,7 +81,6 @@
     name="resumeInput"
     accept=".pdf"
     value="upload"
-    required
   />
 
   <br/>
@@ -89,8 +88,18 @@
 
  <button class="btn btn-success" type="submit">Register</button>
   
-
+  <br>
+  <div class="mb-3"> 
+    <p class="error-text">{{error}}</p>
+  </div>
+  <br>
   
 </form>
-<br />
-  <a href="/login">Already have an account? Click here to login</a>
+
+<div class="container border-top border-bottom p-2">
+  <p class="">Already have an account? Login here:</p>
+  <button
+    class="btn btn-primary mb-3"
+    onclick="location.href='/login'"
+  >Login</button>
+</div>

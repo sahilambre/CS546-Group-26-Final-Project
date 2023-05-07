@@ -44,7 +44,7 @@ router
     const confirmPasswordInput = xss(req.body.confirmPasswordInput);
     const resumeInput = req.file;
 
-    if(!firstNameInput || !lastNameInput || !emailAddressInput || !birthDateInput || !gradYearInput || !passwordInput || !confirmPasswordInput || !resumeInput){
+    if(!firstNameInput || !lastNameInput || !emailAddressInput || !birthDateInput || !gradYearInput || !passwordInput || !confirmPasswordInput ){//|| !resumeInput){
       let missingInputs = [];
       if (!firstNameInput) {
         missingInputs.push("First Name");
@@ -70,9 +70,9 @@ router
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
       }
-      if (!resumeInput) {
-        missingInputs.push("Resume");
-      }
+      // if (!resumeInput) {
+      //   missingInputs.push("Resume");
+      // }
       // return res.status(400).render("studentregister", {title: "Student Registration" ,error: missingInputs});
       const currentDate = new Date();
       const year = currentDate.getFullYear();
@@ -80,7 +80,7 @@ router
       const day = String(currentDate.getDate()).padStart(2, '0');
       const formattedDate = `${year - 14}-${month}-${day}`;
   
-      return res.render("studentregister", { title: "Student Register", todayDate: formattedDate , error: missingInputs });
+      return res.render("studentregister", { title: "Student Register", todayDate: formattedDate , error: "Missing some are more of "+missingInputs });
     }
 
     const wrongParams = [];
@@ -105,7 +105,7 @@ router
     // if(typeof stateInput !== 'string' ||  /\d/.test(stateInput) || (stateInput.length < 2) || stateInput.length > 25){
     //   wrongParams.push("State wrong");
     // }
-    if (birthDateInput !== 'string'){
+    if (typeof birthDateInput !== 'string'){
       wrongParams.push("Birth Date is in wrong format");  //<<<<<<<<<<<<<<<<<<<<<<<<<< Review further to add age validation at least 14 years!
     }
 
@@ -141,7 +141,7 @@ router
     try{
       const newUser = await createUser(nEmailAddress, passwordInput);
       if(newUser.insertedUser === true ){
-        const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, ageInputNum, stateInput, gradYearInputNum,[resumeInput]);
+        const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, birthDateInput, gradYearInputNum, resumeInput);
         if(newApplicant.insertedApplicant === true) {
           return res.status(201).render("login", {title: "Student Login"});
         }else{
@@ -163,9 +163,10 @@ router
     //code here for GET
     return res.render("recruiterregister", { title : "Employer Registration"});
   })
-  .post(upload.single('resumeInput'),async (req, res) => {
+  // .post(upload.single('resumeInput'),async (req, res) => {
+  .post( upload.none(), async (req, res) => {
     const {firstNameInput,lastNameInput, emailAddressInput, companyInput, passwordInput, confirmPasswordInput } = req.body;
-    const resumeInput = req.file ? req.file.filename : undefined;
+    // const resumeInput = req.file ? req.file.filename : undefined;
     if(!firstNameInput || !lastNameInput || !emailAddressInput || !companyInput || !passwordInput || !confirmPasswordInput){
       let missingInputs = [];
       if (!firstNameInput) {
@@ -186,13 +187,12 @@ router
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
       }
-      if (resumeInput){
-        missingInputs.push("Resume");
-      }
+      // if (resumeInput){
+      //   missingInputs.push("Resume");
+      // }
       if (missingInputs.length > 0)
       {
-        return res.status(400).render("recruiterregister", {title: "Employer Registration" ,error: missingInputs});
-        return;
+        return res.status(400).render("recruiterregister", {title: "Employer Registration" ,error: "Missing some are more of "+missingInputs});
       }
     }
 

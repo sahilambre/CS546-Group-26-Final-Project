@@ -35,11 +35,14 @@ export const createApplicant = async (
     email = validation.checkEmail(email);
 
     //age
-    if (!age) throw 'You must enter your age';
-    if (typeof age !== 'number' || age == NaN) throw 'Age must be a number';
+    if (!birthDate) throw 'You must enter your age';
+    if (typeof birthDate !== 'string' || birthDate == NaN) throw 'Age must be a number';
     //we gotta restrict the age, users must be 12 and up
     //also if ur over 80 please retire or smth
-    if (age < 12 || age > 80) throw 'Invalid age';
+    //if (age < 12 || age > 80) throw 'Invalid age';
+    if(birthDate.length != 10) throw 'Invalid age';
+    let age = new Date().getFullYear() - parseInt(birthDate.substring(6, 10));
+    if(age < 14) throw 'Invalid age';
 
     // state = validation.checkString(state, 'state');
 

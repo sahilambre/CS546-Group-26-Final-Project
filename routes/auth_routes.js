@@ -30,10 +30,10 @@ router
     return res.render("studentregister", { title: "Student Register", todayDate: formattedDate });
 
   })
-  // .post(async (req, res) => {
-  .post(upload.single('resumeInput'), async (req, res) => {
+  .post(upload.single('resumeInput'),async (req, res) => {
     //code here for POST    
     //const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput, gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
+
     const firstNameInput = xss(req.body.firstNameInput);
     const lastNameInput = xss(req.body.lastNameInput);
     const emailAddressInput = xss(req.body.emailAddressInput);
@@ -105,7 +105,7 @@ router
     // if(typeof stateInput !== 'string' ||  /\d/.test(stateInput) || (stateInput.length < 2) || stateInput.length > 25){
     //   wrongParams.push("State wrong");
     // }
-    if (typeof birthDateInput !== 'string'){
+    if (birthDateInput !== 'string'){
       wrongParams.push("Birth Date is in wrong format");  //<<<<<<<<<<<<<<<<<<<<<<<<<< Review further to add age validation at least 14 years!
     }
 
@@ -133,8 +133,6 @@ router
     if(passwordInput !== confirmPasswordInput){
       wrongParams.push("Password and Confirm Password do not match");
     }
-
-
 
     if(wrongParams.length > 0){
       return res.status(400).render("error", {title: "Student Registration Error" ,error: wrongParams});

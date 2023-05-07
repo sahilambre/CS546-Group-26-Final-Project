@@ -1,3 +1,7 @@
+<div class="mb-3">
+  <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
+
+</div>
 <h1>Create Job</h1>
 
 <form action="/jobs" method="POST">
@@ -5,10 +9,22 @@
   <input class="form-control" type="text" id="title" name="title" required />
 
   <label class="form-label" for="company">Company:</label>
-  <input class="form-control" type="text" id="company" name="company" required />
+  <input
+    class="form-control"
+    type="text"
+    id="company"
+    name="company"
+    required
+  />
 
   <label class="form-label" for="website">Website:</label>
-  <input class="form-control" type="text" id="website" name="website" required />
+  <input
+    class="form-control"
+    type="text"
+    id="website"
+    name="website"
+    required
+  />
 
   <label class="form-label" for="tags">Tags:</label>
   <input class="form-control" type="text" id="tags" name="tags" required />
@@ -23,5 +39,10 @@
     value="{{recruiterId}}"
   />
 
-  <input class="form-control" class="btn btn-success" type="submit" value="Create Job" />
+  <input
+    class="form-control"
+    class="btn btn-success"
+    type="submit"
+    value="Create Job"
+  />
 </form>

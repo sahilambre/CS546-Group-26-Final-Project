@@ -1,28 +1,26 @@
 /* You will create a CSS stylesheet in /public/css/lab10.css; this file should have at least 10 rulesets.  You will need to utilize all 10 rulesets on each of the pages (not every page has to use all 10 rulesets each but all 10 rulesets must be utilized by the various pages in your application).  So you can have some rulesets for one page, some for another page but there needs to be at least 10 total rulesets that are used between all the pages.  */
 
-
-
 * {
-	box-sizing: border-box;
+  box-sizing: border-box;
 }
 
 html,
 body {
-	font-size: 14pt;
+  font-size: 14pt;
 }
 
 body {
-	background: #dedede;
-	font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  background: #dedede;
+  font-family: Georgia, Cambria, "Times New Roman", Times, serif;
 }
 
 main {
-	max-width: 75%;
-	margin: auto;
+  max-width: 75%;
+  margin: auto;
 }
 
 header {
-	border-bottom: 1px solid #afafaf;
+  border-bottom: 1px solid #afafaf;
 }
 
 h1,
@@ -31,98 +29,98 @@ h3,
 h4,
 h5,
 h6 {
-	color: #222;
-	margin-bottom: 5px;
+  color: #222;
+  margin-bottom: 5px;
 }
 
 h1 {
-	font-size: 2rem;
+  font-size: 2rem;
 }
 
 h2 {
-	font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 h3 {
-	font-size: 1.5rem;
+  font-size: 1.5rem;
 }
 
 h4 {
-	font-size: 1.25rem;
+  font-size: 1.25rem;
 }
 
 h5 {
-	font-size: 1.15rem;
+  font-size: 1.15rem;
 }
 
 h6 {
-	font-size: 1.05rem;
+  font-size: 1.05rem;
 }
 
 p {
-	font-size: 1rem;
-	line-height: 2;
+  font-size: 1rem;
+  line-height: 2;
 }
 
 .post {
-	width: 75%;
-	border-bottom: 1px dashed #333;
+  width: 75%;
+  border-bottom: 1px dashed #333;
 }
 
 .new-post-form {
-	max-width: 300px;
+  max-width: 300px;
 }
 
 .new-post-form .full-width-input {
-	display: block;
-	min-height: 3em;
-	margin: 10px 0;
-	width: 100%;
+  display: block;
+  min-height: 3em;
+  margin: 10px 0;
+  width: 100%;
 }
 
 .not-found {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 label {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 .error-list li {
-	color: #ff0000;
+  color: #ff0000;
 }
 
-.error{
-	color: red;
-	font-weight: bolder;
+.error {
+  color: red;
+  font-weight: bolder;
 }
 
 .author-link,
 .author-link:link {
-	color: #228b22;
+  color: #228b22;
 }
 
 .author-link:visited {
-	font-style: italic;
-	color: saddlebrown;
+  font-style: italic;
+  color: saddlebrown;
 }
 
 .author-link:hover {
-	font-style: normal;
-	font-weight: 700;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .author-link:active {
-	color: #ff0000;
+  color: #ff0000;
 }
 
-.show-not-found{
-	font-style: normal;
-	font-weight: bold;
-	color: red;
+.show-not-found {
+  font-style: normal;
+  font-weight: bold;
+  color: red;
 }
 
-.button{
+.button {
   background-color: rgb(184, 16, 16);
   color: white;
   padding: 20px;
@@ -136,11 +134,24 @@ label {
   border-radius: 10px;
 }
 
-button{
-	width: 5cm;
+button {
+  width: 5cm;
 }
 
-.error-text{
-	color: red;
-	font-weight: bold;
+.error-text {
+  color: red;
+  font-weight: bold;
+}
+
+#login-link {
+  display: block;
+  margin-top: 20px;
+  font-size: 16px;
+  color: blue;
+  text-decoration: underline;
+  text-align: center;
+}
+
+#login-link:hover {
+  color: navy;
 }

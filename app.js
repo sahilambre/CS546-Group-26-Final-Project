@@ -237,6 +237,80 @@ app.get('/registerRecruiters', async (req, res, next) => {
   next();
 });
 
+app.get('/jobdetails/:id', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  next()
+})
+
+app.get('/jobSearch', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  next()
+})
+
+app.get('/jobCreate', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.recruiter){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.get('/apply/:id', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.applicant){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.get('/favorite/:id', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.applicant){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.get('/unfavorite/:id', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.applicant){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.get('/jobApplicant/:superid', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.recruiter){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.post('/jobApplicant', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.recruiter){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
 app.get('/logout', async (req, res, next) => {
   
   if(req.method === "GET"){

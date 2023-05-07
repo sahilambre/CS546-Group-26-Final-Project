@@ -4,6 +4,8 @@ import {createUser, checkUser} from '../data/users.js';
 import recruiterData from '../data/recruiters.js';
 import applicantData from '../data/applicants.js';
 import jobData from '../data/jobs.js';
+import xss from 'xss';
+
 const router = Router();
 import multer from 'multer';
 const upload = multer({ dest: 'uploads/' });
@@ -29,10 +31,19 @@ router
 
   })
   .post(upload.single('resumeInput'),async (req, res) => {
-    //code here for POST
-    const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput,gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
-    const resumeInput = req.file ? req.file.filename : undefined;
-    if(!firstNameInput || !lastNameInput || !emailAddressInput || !ageInput || !stateInput || !gradYearInput || !passwordInput || !confirmPasswordInput || !resumeInput){
+    //code here for POST    
+    //const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput, gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
+    const firstNameInput = xss(req.body.firstNameInput);
+    const lastNameInput = xss(req.body.lastNameInput);
+    const emailAddressInput = xss(req.body.emailAddressInput);
+    const birthDateInput = xss(req.body.birthDateInput);
+    // const stateInput = xss(req.body.state);
+    const gradYearInput = xss(req.body.gradYearInput);
+    const passwordInput = xss(req.body.passwordInput);
+    const confirmPasswordInput = xss(req.body.confirmPasswordInput);
+    const resumeInput = req.file;
+
+    if(!firstNameInput || !lastNameInput || !emailAddressInput || !birthDateInput || !gradYearInput || !passwordInput || !confirmPasswordInput || !resumeInput){
       let missingInputs = [];
       if (!firstNameInput) {
         missingInputs.push("First Name");
@@ -43,12 +54,12 @@ router
       if (!emailAddressInput) {
         missingInputs.push("Email Address");
       }
-      if (!ageInput) {
-        missingInputs.push("Age");
+      if (!birthDateInput) {
+        missingInputs.push("Birth Date");
       }
-      if (!stateInput) {
-        missingInputs.push("State");
-      }
+      // if (!stateInput) {
+      //   missingInputs.push("State");
+      // }
       if (!gradYearInput) {
         missingInputs.push("Graduation Year");
       }
@@ -85,16 +96,21 @@ router
     }else{
        nEmailAddress = emailAddressInput.toLowerCase();
     }
-    let ageInputNum = parseInt(ageInput);
-    if(typeof ageInputNum !== 'number' ||  ageInputNum < 0){
-      wrongParams.push("Age wrong");
-    }
+    // let ageInputNum = parseInt(ageInput);
+    // if(typeof ageInputNum !== 'number' ||  ageInputNum < 0){
+    //   wrongParams.push("Age wrong");
+    // }
     
-    if(typeof stateInput !== 'string' ||  /\d/.test(stateInput) || (stateInput.length < 2) || stateInput.length > 25){
-      wrongParams.push("State wrong");
+    // if(typeof stateInput !== 'string' ||  /\d/.test(stateInput) || (stateInput.length < 2) || stateInput.length > 25){
+    //   wrongParams.push("State wrong");
+    // }
+    if (birthDateInput !== 'string'){
+      wrongParams.push("Birth Date is in wrong format");  //<<<<<<<<<<<<<<<<<<<<<<<<<< Review further to add age validation at least 14 years!
     }
 
-    let gradYearInputNum = parseInt(gradYearInput);
+
+    let gradYearInputNum = "";
+    if (!isNaN(gradYearInput)) {gradYearInputNum = parseInt(gradYearInput);}
     if(typeof gradYearInputNum !== 'number' ||  gradYearInputNum < 0 || /^\d{4}$/.test(gradYearInput) === false){  
       wrongParams.push("Graduation Year wrong");
     }

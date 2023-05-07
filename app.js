@@ -223,11 +223,18 @@ app.get('/homepage', async (req, res, next) => {
   }
 });
 
-app.get('/signup', async (req, res, next) => {
+app.get('/registerStudents', async (req, res, next) => {
     if(req.session.user){
         return res.redirect("/homepage");
     }
     next();
+});
+
+app.get('/registerRecruiters', async (req, res, next) => {
+  if(req.session.user){
+      return res.redirect("/homepage");
+  }
+  next();
 });
 
 app.get('/logout', async (req, res, next) => {

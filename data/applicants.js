@@ -22,8 +22,7 @@ export const createApplicant = async (
     firstName,
     lastName,
     email,
-    age,
-    state,
+    birthDate,
     gradYr,
     resume
 ) => {
@@ -42,7 +41,7 @@ export const createApplicant = async (
     //also if ur over 80 please retire or smth
     if (age < 12 || age > 80) throw 'Invalid age';
 
-    state = validation.checkString(state, 'state');
+    // state = validation.checkString(state, 'state');
 
     //gradYr
     if (!gradYr) throw 'You must enter your graduation year';
@@ -64,7 +63,7 @@ export const createApplicant = async (
         lastName: lastName,
         email: email,
         age: age,
-        state: state,
+        // state: state,
         gradYr: gradYr,
         jobsApplied: [],
         jobsFavorited: [],
@@ -139,7 +138,7 @@ const update = async (
     lastName,
     email,
     age,
-    state,
+    // state,
     gradYr,
     jobsApplied,
     jobsFavorited
@@ -151,7 +150,7 @@ const update = async (
         lastName: lastName,
         email: email,
         age: age,
-        state: state,
+        // state: state,
         gradYr: gradYr,
         jobsApplied: jobsApplied,
         jobsFavorited: jobsFavorited
@@ -180,7 +179,7 @@ const applyJob = async (
     if (jobIdArray.includes(jobId)) throw 'Error: applicant has already applied for this job';
     await jobData.addJobApplicant(jobId,applicantId);
     jobIdArray.push(jobId);
-    return update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.state, applicant.gradYr, jobIdArray, applicant.jobsFavorited);
+    return update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.gradYr, jobIdArray, applicant.jobsFavorited);
 };
 
 const favoriteJob = async (
@@ -193,7 +192,7 @@ const favoriteJob = async (
     //should probably check that jobId is not already in the array
     if (jobIdArray.includes(jobId)) throw 'Error: applicant has already favorited for this job';
     jobIdArray.push(jobId);
-    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.state, applicant.gradYr, applicant.jobsApplied, jobIdArray);
+    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.gradYr, applicant.jobsApplied, jobIdArray);
 };
 //users need to be able to filter jobs based on a favorites list
 
@@ -209,7 +208,7 @@ const unfavoriteJob = async (
     if (j_index<0) throw 'Error: applicant has not favorited this job';
     jobIdArray.splice(j_index, 1);
     update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email,
-    applicant.age, applicant.state, applicant.gradYr, applicant.jobsApplied, jobIdArray);
+    applicant.age, applicant.gradYr, applicant.jobsApplied, jobIdArray);
 };
 
 const getJobsApplied = async(applicantId) => {

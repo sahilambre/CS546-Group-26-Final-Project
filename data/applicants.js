@@ -191,7 +191,7 @@ const favoriteJob = async (
     let jobIdArray = applicant.jobsFavorited;
     let job = await jobData.getJob(jobId);
     //should probably check that jobId is not already in the array
-    if (jobIdArray.includes(jobId)) throw 'Error: applicant has already applied for this job';
+    if (jobIdArray.includes(jobId)) throw 'Error: applicant has already favorited for this job';
     jobIdArray.push(jobId);
     update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.state, applicant.gradYr, applicant.jobsApplied, jobIdArray);
 };

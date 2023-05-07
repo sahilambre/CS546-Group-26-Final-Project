@@ -1,11 +1,7 @@
-<div class="mb-3">
-  <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
-
-</div>
-
+<script src="/public/js/userRegister.js"></script>
 <h1>Job Seeker Registration</h1>
 
-<form action="/registerStudents" method="POST" enctype="multipart/form-data">
+<form id="user-registration-form" action="/registerStudents" method="POST" enctype="multipart/form-data">
   <div id="srFirstNamegroup" class="mb-3">
     <label class="form-label" for="firstNameInput">First Name:</label>
     <input
@@ -71,18 +67,16 @@
       class="form-control"
       type="password"
       name="passwordInput"
-      value=""
       id="passwordInput"
     />
   </div>
 
   <div class="mb-3" id="srConfirmPasswordGroup">
-    <label class="form-label" for="passwordInput">Confirm Password:</label>
+    <label class="form-label" for="confirmPasswordInput">Confirm Password:</label>
     <input
       class="form-control"
       type="password"
       name="confirmPasswordInput"
-      value=""
       id="confirmPasswordInput"
     />
   </div>
@@ -118,4 +112,12 @@
 </div> }}
 <div class="mb-3">
   <a id="login-link" href="/login">Already have an account? Click here to login</a>
+</div>
+
+<br>
+<br>
+
+
+<div class="mb-3">
+  <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
 </div>

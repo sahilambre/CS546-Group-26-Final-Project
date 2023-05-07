@@ -36,9 +36,15 @@ const handlebarsInstance = exphbs.create({
           return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
   
         return new Handlebars.SafeString(JSON.stringify(obj));
+      },
+      select: (selected, options) => {
+        return options.fn(this).replace(
+          new RegExp(' value=\"' + selected + '\"'),
+          '$& selected="selected"');
       }
     }
   });
+
 
 app.use('/public', staticDir);
 app.engine('handlebars', handlebarsInstance.engine);

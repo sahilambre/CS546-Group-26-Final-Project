@@ -13,14 +13,35 @@
    <br>Company: {{job.company}}
    <br>URL:<a href="{{job.website}}">{{job.website}}</a>
    <br>Tags: {{job.tags}}
-
+<br>
 {{#if applicants}}
    <h3>Applicants</h3>
     <br>
-     {{#each applicants}} 
-      <li>{{firstName}} {{lastName}}: {{email}} Age: {{age}}, State: {{state}}, Class of {{gradYr}}</li>
+     <table>
+    <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Age</th>
+    <th>State</th>
+    <th>Class Of</th>
+    <th>Resume</th>
+    <th>Status</th>
+    <th>Notes</th>
+    </tr>
+     {{#each applicants}}
+     <tr>
+      <td><a href="/jobApplicant/{{superid}}">{{firstName}} {{lastName}}</a></td>
+      <td>{{email}}</td>
+      <td>{{age}}</td>
+      <td>{{state}}</td>
+      <td>{{gradYr}}</td>
+      <td>resume</td>
+      <td><a href="/jobApplicant/{{superid}}">{{status}}</a></td>
+      <td><a href="/jobApplicant/{{superid}}">{{notes}}</a></td>
+     </tr>
        {{/each}}
  {{/if}}
+ </table>
 <br><br>
  {{#if applicant}}
     <br>

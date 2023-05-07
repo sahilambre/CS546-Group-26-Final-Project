@@ -1,0 +1,42 @@
+<h1>Job Applicant Details</h1>
+
+<h2>Applicant for Job: {{job.title}}</h2>
+
+<h3>{{applicant.firstName}} {{applicant.lastName}}</h3>
+<br>
+Email: {{applicant.emailAddress}}
+<br>
+Age: {{applicant.age}}
+<br>
+State: {{applicant.state}}
+<br>
+Graduation Year: {{applicant.gradYr}}
+<br>
+Resume: Need link
+
+<form action="/jobApplicant" method="POST" >
+ 
+  <label for="statusInput">Application Status:</label>
+
+  <select id="statusInput" name="statusInput" >
+    {{#select status}}
+    <option value="New">New</option>
+    <option value="Reviewing">Reviewing</option>
+    <option value="Contacted">Contacted</option>
+    <option value="Interviewed">Interviewed</option>
+    <option value="Rejected">Rejected</option>
+    <option value="Finalist">Finalist</option>
+    <option value="Offer Made">Offer Made</option>
+    <option value="Accepted">Accepted</option>
+    {{/select}}
+  </select>
+<br>
+  <label class="form-label" for="notesInput">Notes:</label>
+  <input class="form-control" type="text" id="notesInput" name="notesInput" value="{{notes}}" />
+
+  <input type="hidden" id="superid" name="superid" value="{{superid}}"/>
+
+  <input type="submit" value="Update" />
+
+  
+</form>

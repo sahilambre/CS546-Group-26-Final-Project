@@ -14,7 +14,7 @@ router.route('/').get(async (req, res) => {
     return res.status(201).render("homepage", {title: "Home Page"});
   }); 
 
-  router
+router
   .route('/registerStudents')
   .get(async (req, res) => {
     //code here for GET
@@ -132,7 +132,7 @@ router.route('/').get(async (req, res) => {
         }
       }
     }catch(e){
-      return res.status(400).render("error", {title: "Appilcant Registration" ,error: e});
+      return res.status(400).render("error", {title: "Applicant Registration" ,error: e});
     }
     
 
@@ -498,4 +498,76 @@ router.route('/').get(async (req, res) => {
       res.status(400).render('error', {title:'Error In Unfavorite Job Operation', error:e});
     }
   });
+
+router
+  .route('/jobApplicant/:superid')
+  .get(async (req, res) => {
+    //code here for GET
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year - 14}-${month}-${day}`;
+
+    try {
+      let idArray = req.params.superid.split('_',2);
+
+      let jobId = idArray[0];
+      let applicantId = idArray[1];
+      let job = await jobData.getJob(jobId);
+      let applicant = await applicantData.get(applicantId);
+      let index = job.applicants.indexOf(applicantId);
+      if (index < 0) throw 'Error: Applicant has not applied for job';
+      let status = job.appl_status[index];
+      let notes = job.appl_notes[index];
+
+      return res.render("jobapplicant", { title: "Job Applicant", superid:req.params.superid, job:job, applicant:applicant, status:status, notes:notes, todayDate: formattedDate });
+    } catch (e) {
+      res.status(400).render('error', {title:'Error In Job Applicant View', error:e});
+
+    }
+  });
+
+router
+  .route('/jobApplicant')
+  .post(async (req, res) => {
+    //code here for POST
+    const {statusInput, notesInput, superid} = req.body;
+    if(!statusInput || !notesInput )
+    {
+      let missingInputs = [];
+      if (!statusInput) {
+        missingInputs.push("Status");
+      }
+      if (!notesInput) {
+        missingInputs.push("Notes");
+      }
+    }   
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year - 14}-${month}-${day}`;
+
+
+    try {
+      let idArray = superid.split('_',2);
+
+      let jobId = idArray[0];
+      let applicantId = idArray[1];
+      let job = await jobData.getJob(jobId);
+      let applicant = await applicantData.get(applicantId);
+      let index = job.applicants.indexOf(applicantId);
+      if (index < 0) throw 'Error: Applicant has not applied for job';
+      jobData.updateJobApplicant(jobId, applicantId, statusInput, notesInput);
+
+      //return res.render("jobapplicant", { title: "Job Applicant", superid:superid, job:job, applicant:applicant, status:status, notes:notes, todayDate: formattedDate });
+      return res.redirect('/jobapplicant/'+superid);   
+    } catch (e) {
+      res.status(400).render('error', {title:'Error In Job Applicant Post', error:e});
+
+    }
+   
+  });
+
   export default router;

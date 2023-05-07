@@ -2,27 +2,64 @@
 
 <form action="/registerRecruiters" method="POST">
   <label class="form-label" for="firstNameInput">First Name:</label>
-  <input class="form-control" type="text" id="firstNameInput" name="firstNameInput" required />
+  <input
+    class="form-control"
+    type="text"
+    id="firstNameInput"
+    name="firstNameInput"
+    required
+  />
 
   <label class="form-label" for="lastNameInput">Last Name:</label>
-  <input class="form-control" type="text" id="lastNameInput" name="lastNameInput" required />
+  <input
+    class="form-control"
+    type="text"
+    id="lastNameInput"
+    name="lastNameInput"
+    required
+  />
 
   <label class="form-label" for="emailAddressInput">Email:</label>
-  <input class="form-control" type="email" id="emailAddressInput" name="emailAddressInput" required />
+  <input
+    class="form-control"
+    type="email"
+    id="emailAddressInput"
+    name="emailAddressInput"
+    required
+  />
 
   <label class="form-label" for="companyInput">Company:</label>
-  <input class="form-control" type="text" id="companyInput" name="companyInput" required />
+  <input
+    class="form-control"
+    type="text"
+    id="companyInput"
+    name="companyInput"
+    required
+  />
 
-  <br>
+  <br />
   <label class="form-label" for="passwordInput">Password:</label>
-  <input class="form-control" type="password" name="passwordInput" value="" id="passwordInput"> 
-  <br>
+  <input
+    class="form-control"
+    type="password"
+    name="passwordInput"
+    value=""
+    id="passwordInput"
+  />
+  <br />
   <label class="form-label" for="passwordInput">Confirm Password:</label>
-  <input class="form-control" type="password" name="confirmPasswordInput" value="" id="confirmPasswordInput"> 
+  <input
+    class="form-control"
+    type="password"
+    name="confirmPasswordInput"
+    value=""
+    id="confirmPasswordInput"
+  />
+  <br />
 
-  <input class="form-control" type="submit" value="Register" /> 
+  <input class="form-control btn btn-primary" type="submit" value="Register" />
 
-  <br>
-    <a href="/login">Already have an account? Click here to login</a>
+  <br />
+  <a id="login-link" href="/login">Already have an account? Click here to login</a>
   {{!<button onclick="location.href='/login'">Login</button>}}
 </form>

@@ -1,24 +1,49 @@
+<div class="mb-3">
+  <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
+
+</div>
 <h1>Job Create</h1>
 
 <form action="/jobCreate" method="POST">
   <label class="form-label" for="titleInput">Title:</label>
-  <input class="form-control" type="text" id="titleInput" name="titleInput" required />
+  <input
+    class="form-control"
+    type="text"
+    id="titleInput"
+    name="titleInput"
+    required
+  />
 
-  <br>
+  <br />
   <label class="form-label" for="companyInput">Company:</label>
-  <input class="form-control" type="text" id="companyInput" name="companyInput" required />
+  <input
+    class="form-control"
+    type="text"
+    id="companyInput"
+    name="companyInput"
+    required
+  />
 
-  <br>
+  <br />
   <label class="form-label" for="websiteInput">URL:</label>
-  <input class="form-control" type="text" id="websiteInput" name="websiteInput" required />
+  <input
+    class="form-control"
+    type="text"
+    id="websiteInput"
+    name="websiteInput"
+    required
+  />
 
-  
-  <br>
+  <br />
   <label class="form-label" for="tagsInput">Tags (comma-separated list):</label>
-  <input class="form-control" type="text" id="tagsInput" name="tagsInput" required />
+  <input
+    class="form-control"
+    type="text"
+    id="tagsInput"
+    name="tagsInput"
+    required
+  />
 
-  <input class="form-control" type="submit" value="Create" /> 
-
-
+  <input class="form-control" type="submit" value="Create" />
 
 </form>

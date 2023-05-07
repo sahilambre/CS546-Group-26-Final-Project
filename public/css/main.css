@@ -7,11 +7,13 @@
 html,
 body {
   font-size: 14pt;
+  font-family: "Times New Roman", Times, serif;
 }
 
 body {
   background: #dedede;
   font-family: Georgia, Cambria, "Times New Roman", Times, serif;
+  /* font-family: "Times New Roman", Times, serif; */
 }
 
 main {
@@ -31,6 +33,7 @@ h5,
 h6 {
   color: #222;
   margin-bottom: 5px;
+  font-family: "Times New Roman", Times, serif;
 }
 
 h1 {

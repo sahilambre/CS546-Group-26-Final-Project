@@ -5,6 +5,7 @@ import recruiterData from '../data/recruiters.js';
 import applicantData from '../data/applicants.js';
 import jobData from '../data/jobs.js';
 import xss from 'xss';
+import { promises as fs } from 'fs';
 
 const router = Router();
 import multer from 'multer';
@@ -30,7 +31,9 @@ router
     return res.render("studentregister", { title: "Student Register", todayDate: formattedDate });
 
   })
-  .post(upload.single('resumeInput'),async (req, res) => {
+  // .post(upload.single('resumeInput'),async (req, res) => {
+  .post(async (req, res) => {
+  
     //code here for POST    
     //const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput, gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
 
@@ -42,9 +45,9 @@ router
     const gradYearInput = xss(req.body.gradYearInput);
     const passwordInput = xss(req.body.passwordInput);
     const confirmPasswordInput = xss(req.body.confirmPasswordInput);
-    const resumeInput = req.file;
+    const resumeInput = req.body.resumeInput;
 
-    if(!firstNameInput || !lastNameInput || !emailAddressInput || !birthDateInput || !gradYearInput || !passwordInput || !confirmPasswordInput ){//|| !resumeInput){
+    if(!firstNameInput || !lastNameInput || !emailAddressInput || !birthDateInput || !gradYearInput || !passwordInput || !confirmPasswordInput || !resumeInput){
       let missingInputs = [];
       if (!firstNameInput) {
         missingInputs.push("First Name");
@@ -70,9 +73,9 @@ router
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
       }
-      // if (!resumeInput) {
-      //   missingInputs.push("Resume");
-      // }
+      if (!resumeInput) {
+        missingInputs.push("Resume");
+      }
       // return res.status(400).render("studentregister", {title: "Student Registration" ,error: missingInputs});
       const currentDate = new Date();
       const year = currentDate.getFullYear();
@@ -138,14 +141,34 @@ router
       return res.status(400).render("error", {title: "Student Registration Error" ,error: wrongParams});
     }
 
+
+    // Store to local storage
+    let pdfFilename = ""
+    try {
+      // Decode the Base64 string and write the PDF file to disk
+      const pdfBuffer = Buffer.from(resumeInput, 'base64');
+      pdfFilename = `${nEmailAddress}_${Date.now()}.pdf`;
+      // const pdfFilename = `nEmailAddress_${Date.now()}_${Math.floor(Math.random() * max)}.pdf`;
+      await fs.writeFile(`uploads/${pdfFilename}`, pdfBuffer);
+    } catch (err) {
+      console.error(err);
+      return res.status(500).render('error',  {title: "Applicant Registration" ,error: "Resume is too big, Could not save pdf"});
+    }    
+
+
     try{
       const newUser = await createUser(nEmailAddress, passwordInput);
       if(newUser.insertedUser === true ){
-        const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, birthDateInput, gradYearInputNum, resumeInput);
-        if(newApplicant.insertedApplicant === true) {
-          return res.status(201).render("login", {title: "Student Login"});
-        }else{
-          return res.status(400).render("error", {title: "Applicant Registration" ,error: "Registration Failed"});
+          try {
+            const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, birthDateInput, gradYearInputNum, pdfFilename);
+          if(newApplicant.insertedApplicant === true) {
+            return res.status(201).render("login", {title: "Student Login"});
+          }else{
+            return res.status(400).render("error", {title: "Applicant Registration" ,error: "Registration Failed"});
+          }
+        } catch (error) {
+          // deleteUserCraetedIfFailed!!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+          return res.status(400).render("error", {title: "Applicant Registration" ,error: e});          
         }
       }
     }catch(e){

@@ -142,25 +142,25 @@ router
     }
 
 
-    // Store to local storage
-    let pdfFilename = ""
-    try {
-      // Decode the Base64 string and write the PDF file to disk
-      const pdfBuffer = Buffer.from(resumeInput, 'base64');
-      pdfFilename = `${nEmailAddress}_${Date.now()}.pdf`;
-      // const pdfFilename = `nEmailAddress_${Date.now()}_${Math.floor(Math.random() * max)}.pdf`;
-      await fs.writeFile(`uploads/${pdfFilename}`, pdfBuffer);
-    } catch (err) {
-      console.error(err);
-      return res.status(500).render('error',  {title: "Applicant Registration" ,error: "Resume is too big, Could not save pdf"});
-    }    
+    // // Store to local storage
+    // let pdfFilename = ""
+    // try {
+    //   // Decode the Base64 string and write the PDF file to disk
+    //   const pdfBuffer = Buffer.from(resumeInput, 'base64');
+    //   pdfFilename = `${nEmailAddress}_${Date.now()}.pdf`;
+    //   // const pdfFilename = `nEmailAddress_${Date.now()}_${Math.floor(Math.random() * max)}.pdf`;
+    //   await fs.writeFile(`uploads/${pdfFilename}`, pdfBuffer);
+    // } catch (err) {
+    //   console.error(err);
+    //   return res.status(500).render('error',  {title: "Applicant Registration" ,error: "Resume is too big, Could not save pdf"});
+    // }    
 
 
     try{
       const newUser = await createUser(nEmailAddress, passwordInput);
       if(newUser.insertedUser === true ){
           try {
-            const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, birthDateInput, gradYearInputNum, pdfFilename);
+            const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, birthDateInput, gradYearInputNum, resumeInput);
           if(newApplicant.insertedApplicant === true) {
             return res.status(201).render("login", {title: "Student Login"});
           }else{
@@ -596,7 +596,7 @@ router
       let jobId = idArray[0];
       let applicantId = idArray[1];
       let job = await jobData.getJob(jobId);
-      let applicant = await applicantData.get(applicantId);
+      // let applicant = await applicantData.get(applicantId);
       let index = job.applicants.indexOf(applicantId);
       if (index < 0) throw 'Error: Applicant has not applied for job';
       jobData.updateJobApplicant(jobId, applicantId, statusInput, notesInput);
@@ -609,5 +609,23 @@ router
     }
    
   });
+
+
+  // router
+  // .route('/resume/:id')
+  // .get( async (req, res) => {
+  //   if(!req.session.user){
+  //     res.redirect("/login")
+  //   }
+  //   if(!req.session.user.recruiter){
+  //     res.redirect("/homepage")
+  //   }
+  //   try {
+  //     if(!req.params.id) throw "No id was provided!"
+  //     let applicant = await applicantData.get(req.params.id);
+  //   } catch (error) {
+  //     res.status(400).render('error', {title:'Error', error:e});
+  //   }
+  // })
 
   export default router;

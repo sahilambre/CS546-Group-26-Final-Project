@@ -51,40 +51,6 @@ Resume:
   <input type="submit" value="Update">
 </form>
 
-{{!-- <script>
-function b64toBlob(dataURI) {
-  const splitIndex = dataURI.indexOf(',') + 1;
-  const base64 = dataURI.substr(splitIndex);
-  console.log('dataURI:', dataURI);
-  console.log('base64:', base64);
-  const binary = atob(base64);
-  const array = [];
-  for (let i = 0; i < binary.length; i++) {
-    array.push(binary.charCodeAt(i));
-  }
-  const mime = dataURI.substr(0, splitIndex - 1);
-  console.log('mime:', mime);
-  const blob = new Blob([new Uint8Array(array)], { type: mime });
-  return blob;
-}
-
-
-
-// Get the iframe element
-const pdfIframe = document.getElementById('pdf-iframe');
-
-// Get the base64 encoded PDF data
-const pdfData = '{{applicant.resume}}';
-// Convert base64 to blob
-const pdfBlob = b64toBlob(pdfData.split(',')[0], 'application/pdf');
-
-// Create a URL for the blob object
-const pdfUrl = URL.createObjectURL(pdfBlob);
-
-// Set the iframe source to the PDF URL
-pdfIframe.src = pdfUrl;
-</script> --}}
-
 <script>
 function b64toBlob(dataURI) {
       const byteString = window.atob(dataURI);

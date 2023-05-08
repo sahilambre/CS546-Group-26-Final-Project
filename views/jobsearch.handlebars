@@ -1,7 +1,19 @@
-<h1>Job Search</h1>
+<div class="mb-3">
+  <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
+
+</div>
+<h1 id="page-heading">Job Search</h1>
 
     <br>
     <h2>Job Search</h2>
+    <form action="/jobSearch" method="POST">
+      <label for="tagInput">Search Tag:</label>:</label>
+      <input type="text" id="tagInput" name="tagInput" required >
+      <input type="submit" value="Search By Tag" > 
+    </form>
+    <br>
+    <a href="/jobSearch">Clear Tag Search (Get All Jobs)</a>
+    <br><br>
     <h3>Job Search Result</h3>
      <table>
     <tr>

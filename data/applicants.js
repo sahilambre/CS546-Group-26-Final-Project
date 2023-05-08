@@ -2,17 +2,33 @@ import {applicants} from '../config/mongoCollections.js';
 import {ObjectId} from 'mongodb';
 import validation from './validation.js';
 import jobData from '../data/jobs.js';
+import multer from 'multer';
+import fs from 'fs/promises';
+import path from 'path'
+
+
+const storage = multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, './uploads');
+    },
+    filename: (req, file, cb) => {
+      cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+    }
+  });
+  
+const upload = multer({ storage });
 
 export const createApplicant = async (
     firstName,
     lastName,
     email,
-    age,
-    state,
-    gradYr
+    birthDate,
+    gradYr,
+    resume
 ) => {
     firstName = validation.checkString(firstName, 'first name');
     lastName = validation.checkString(lastName, 'last name');
+    resume = validation.checkString(resume, 'resume name')
     /*in the name params, i want to add smth that keeps ppl from entering ANY numbers in the string
     no one has numbers in their name
     unless ur like John Doe the fourth, in which case you can use roman numerals
@@ -20,28 +36,33 @@ export const createApplicant = async (
     email = validation.checkEmail(email);
 
     //age
-    if (!age) throw 'You must enter your age';
-    if (typeof age !== 'number' || age == NaN) throw 'Age must be a number';
-    //we gotta restrict the age, users must be 12 and up
+    if (!birthDate) throw 'You must enter your birth date';
+    if (typeof birthDate !== 'string') throw 'Birth date is not a string';
+    //we gotta restrict the age, users must be 14 and up
     //also if ur over 80 please retire or smth
-    if (age < 12 || age > 80) throw 'Invalid age';
+    //if (age < 12 || age > 80) throw 'Invalid age';
+    if(birthDate.length != 10) throw 'Invalid birth date format';
+    if ( Math.floor((new Date() - Date.parse(birthDate))/(1000*60*60*24*365.25)) < 14) throw 'Must be at least 14 years old!'
 
-    state = validation.checkString(state, 'state');
+    // state = validation.checkString(state, 'state');
 
     //gradYr
     if (!gradYr) throw 'You must enter your graduation year';
     if (typeof gradYr !== 'number' || gradYr == NaN) throw 'Graduation year must be a number';
-    if (gradYr < 1950 || gradYr > 2030) throw 'Invalid graduation year';
+    if (gradYr < 1950 || gradYr > new Date().getFullYear()+30) throw 'Invalid graduation year';
+
+
 
     let newApp = {
         firstName: firstName,
         lastName: lastName,
         email: email,
-        age: age,
-        state: state,
+        birthDate: birthDate,
+        // state: state,
         gradYr: gradYr,
         jobsApplied: [],
-        jobsFavorited: []
+        jobsFavorited: [],
+        resume: resume
     };
     const applicantCollection = await applicants();
     const insertInfo = await applicantCollection.insertOne(newApp);
@@ -75,6 +96,17 @@ const get = async (applicantId) => {
     return applicantW;
 };
 
+export const getApplicantResume = async (applicantId) => {
+    const applicant = await get(applicantId);
+    const resumePath = path.join('./uploads', applicant.resume);
+    try {
+      return await fs.readFile(resumePath, 'utf8');
+    } catch (err) {
+      console.log(err);
+      throw 'Error reading file';
+    }
+  };
+
 export const getByEmailApplicant = async (applicantEmail) => {
    // applicantId = validation.checkId(applicantId);
     const applicantCollection = await applicants();
@@ -83,15 +115,6 @@ export const getByEmailApplicant = async (applicantEmail) => {
     applicantW._id = applicantW._id.toString();
     return applicantW;
 };
-
-// export const getByEmailApplicant = async (applicantEmail) => {
-//    // applicantId = validation.checkId(applicantId);
-//     const applicantCollection = await applicants();
-//     const applicantW = await applicantCollection.findOne({email: applicantEmail});
-//     if (applicantW === null) throw 'No job listings with that id';
-//     applicantW._id = applicantW._id.toString();
-//     return applicantW;
-// };
 
 const remove = async (applicantId) => {
     applicantId = validation.checkId(applicantId);
@@ -104,16 +127,18 @@ const remove = async (applicantId) => {
     return {deleted: true};
 };
 
+
 const update = async (
     id,
     firstName,
     lastName,
     email,
-    age,
-    state,
+    birthDate,
+    // state,
     gradYr,
     jobsApplied,
-    jobsFavorited
+    jobsFavorited,
+    resume
 ) => {
     id = validation.checkId(id);
     //TODO: more error handling
@@ -121,11 +146,12 @@ const update = async (
         firstName: firstName,
         lastName: lastName,
         email: email,
-        age: age,
-        state: state,
+        birthDate: birthDate,
+        // state: state,
         gradYr: gradYr,
         jobsApplied: jobsApplied,
-        jobsFavorited: jobsFavorited
+        jobsFavorited: jobsFavorited,
+        resume: resume
     };
     const appCollection = await applicants();
     const updateInfo = await appCollection.findOneAndUpdate(
@@ -151,7 +177,7 @@ const applyJob = async (
     if (jobIdArray.includes(jobId)) throw 'Error: applicant has already applied for this job';
     await jobData.addJobApplicant(jobId,applicantId);
     jobIdArray.push(jobId);
-    return update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.state, applicant.gradYr, jobIdArray, applicant.jobsFavorited);
+    return update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.birthDate, applicant.gradYr, jobIdArray, applicant.jobsFavorited, applicant.resume);
 };
 
 const favoriteJob = async (
@@ -161,12 +187,27 @@ const favoriteJob = async (
     let applicant = await get(applicantId); // will throw if not found
     let jobIdArray = applicant.jobsFavorited;
     let job = await jobData.getJob(jobId);
-    // should probably check that jobId is not already in the array
-    if (jobIdArray.includes(jobId)) throw 'Error: applicant has already applied for this job';
+    //should probably check that jobId is not already in the array
+    if (jobIdArray.includes(jobId)) throw 'Error: applicant has already favorited for this job';
     jobIdArray.push(jobId);
-    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.age, applicant.state, applicant.gradYr, applicant.jobsApplied, jobIdArray);
+    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.birthDate, applicant.gradYr, applicant.jobsApplied, jobIdArray);
 };
 //users need to be able to filter jobs based on a favorites list
+
+const unfavoriteJob = async (
+    applicantId,
+    jobId) => {
+    applicantId = validation.checkId(applicantId);
+    let applicant = await get(applicantId); // will throw if not found
+    let jobIdArray = applicant.jobsFavorited;
+    let job = await jobData.getJob(jobId);
+    //gotta check that job id is already in the favorite jobs array
+    let j_index = jobIdArray.indexOf(jobId);
+    if (j_index<0) throw 'Error: applicant has not favorited this job';
+    jobIdArray.splice(j_index, 1);
+    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email,
+    applicant.birthDate, applicant.gradYr, applicant.jobsApplied, jobIdArray, applicant.resume);
+};
 
 const getJobsApplied = async(applicantId) => {
     //allows applicants to view jobs that they have applied to
@@ -184,6 +225,9 @@ const getJobsApplied = async(applicantId) => {
     for (let jobId of jobIdArray)
     {
         let job = await jobData.getJob(jobId);
+        let index = job.applicants.indexOf(applicantId);
+        if (index >= 0) // should always be true
+            job.applicant_status = job.appl_status[index];
         jobsArray.push(job);
     }
     return jobsArray;   
@@ -219,6 +263,7 @@ const exportedMethods = {
     getByEmailApplicant,
     applyJob,
     favoriteJob,
+    unfavoriteJob,
     getJobsApplied,
     getJobsFavorited
 };

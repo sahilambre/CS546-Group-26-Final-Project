@@ -1,4 +1,8 @@
-<h1>Welcome to the job details page</h1>
+<div class="mb-3">
+  <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
+
+</div>
+<h1 id="page-heading">Welcome to the job details page</h1>
 
  {{#if recruiter}}
     <br>
@@ -13,20 +17,43 @@
    <br>Company: {{job.company}}
    <br>URL:<a href="{{job.website}}">{{job.website}}</a>
    <br>Tags: {{job.tags}}
-
+<br>
 {{#if applicants}}
    <h3>Applicants</h3>
     <br>
-     {{#each applicants}} 
-      <li>{{firstName}} {{lastName}}: {{email}} Age: {{age}}, State: {{state}}, Class of {{gradYr}}</li>
+     <table>
+    <tr>
+    <th>Name</th>
+    <th>Email</th>
+    <th>Age</th>
+    <th>State</th>
+    <th>Class Of</th>
+    <th>Resume</th>
+    <th>Status</th>
+    <th>Notes</th>
+    </tr>
+     {{#each applicants}}
+     <tr>
+      <td><a href="/jobApplicant/{{superid}}">{{firstName}} {{lastName}}</a></td>
+      <td>{{email}}</td>
+      <td>{{age}}</td>
+      <td>{{state}}</td>
+      <td>{{gradYr}}</td>
+      <td>resume</td>
+      <td><a href="/jobApplicant/{{superid}}">{{status}}</a></td>
+      <td><a href="/jobApplicant/{{superid}}">{{notes}}</a></td>
+     </tr>
        {{/each}}
  {{/if}}
+ </table>
 <br><br>
  {{#if applicant}}
     <br>
    <a href="/apply/{{job._id}}">Apply to Job</a>
    <br>
    <a href="/favorite/{{job._id}}">Favorite Job</a>
+   <br>
+   <a href="/unfavorite/{{job._id}}">Unfavorite Job</a>
    <br><br>
  {{/if}}
 

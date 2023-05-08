@@ -54,7 +54,9 @@ const create = async (
         website: website,
         tags: tags,
         recruiterId: recruiterId,
-        applicants: []
+        applicants: [],
+        appl_status: [],
+        appl_notes: []
     };
     const jobCollection = await jobs();
     const insertInfo = await jobCollection.insertOne(newJob);
@@ -137,9 +139,15 @@ const getJobApplicants = async(jobId) => {
     let applicantIdArray = job.applicants;
     let applicantsArray = [];
 
-    for (let applicantId of applicantIdArray)
+    for (let i=0;i<applicantIdArray.length;i++)
     {
+        let applicantId = applicantIdArray[i];
+        let applicantStatus = job.appl_status[i];
+        let applicantNotes = job.appl_notes[i];
         let applicant = await applicantData.get(applicantId);
+        applicant.status = applicantStatus;
+        applicant.notes = applicantNotes;
+        applicant.superid = jobId+'_'+applicant._id;
         applicantsArray.push(applicant);
     }
     return applicantsArray;
@@ -155,12 +163,45 @@ const addJobApplicant = async(jobId, applicantId) => {
     let job = await getJob(jobId);
     const jobsCollection = await jobs();
     let applicantIdArray = job.applicants;
+    let appl_status = job.appl_status;
+    let appl_notes = job.appl_notes;
     if (applicantIdArray.includes(applicantId)) throw 'Applicant already applied for job';
     applicantIdArray.push(applicantId);
+    appl_status.push('New');
+    appl_notes.push('');
 
     let updatedInfo = await jobsCollection.findOneAndUpdate(
         {_id: new ObjectId(jobId)},
-        {$set: {applicants: applicantIdArray}},
+        {$set: {applicants: applicantIdArray, appl_status:appl_status, appl_notes:appl_notes}},
+        {returnDocument: 'after'}
+    );
+    if (updatedInfo.lastErrorObject.n === 0) {
+        throw 'could not update job with new applicant successfully';
+    }
+    job = await getJob(jobId);
+    return job;
+};
+
+const updateJobApplicant = async(jobId, applicantId, status, notes) => {
+    //returns applicants that have applied for this job
+    /*
+    get the job
+    add applicant id to applicants list
+    update job
+    */
+    let job = await getJob(jobId);
+    const jobsCollection = await jobs();
+    let applicantIdArray = job.applicants;
+    let appl_status = job.appl_status;
+    let appl_notes = job.appl_notes;
+    if (!applicantIdArray.includes(applicantId)) throw 'Applicant has not applied for job';
+    let index = applicantIdArray.indexOf(applicantId);
+    appl_status[index] = status;
+    appl_notes[index] = notes;
+
+    let updatedInfo = await jobsCollection.findOneAndUpdate(
+        {_id: new ObjectId(jobId)},
+        {$set: {appl_status:appl_status, appl_notes:appl_notes}},
         {returnDocument: 'after'}
     );
     if (updatedInfo.lastErrorObject.n === 0) {
@@ -178,6 +219,7 @@ const exportedMethods = {
     getJobsByRecruiterId,
     getJobsByTag,
     getJobApplicants,
-    addJobApplicant
+    addJobApplicant,
+    updateJobApplicant
 }
 export default exportedMethods;

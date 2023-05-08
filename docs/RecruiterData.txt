@@ -12,8 +12,10 @@ jobListings = []
 job = {
 _id: "Dont' worry",
 title: "SDE",
+tags: ["Cyber Security","Data Science"], (fixed options)
 description: "fiyuewagfugeawuf4aw",
 min_experience: 6,
+url: "",
 skills: ["Java",""], (optional)
 applicants: [ userApplicant ],
 }

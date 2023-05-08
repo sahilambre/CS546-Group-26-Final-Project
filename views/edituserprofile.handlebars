@@ -1,9 +1,11 @@
-<script src="/public/js/userRegister.js"></script>
-<h1>Job Seeker Registration</h1>
+<div class="mb-3">
+  <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
 
+</div>
+<h1>Edit User Profile</h1>
 
-<form id="user-registration-form" action="/registerStudents" method="POST" enctype="multipart/form-data">
-  <div id="srFirstNamegroup" class="mb-3">
+<form action="" method="POST" enctype="multipart/form-data">
+  <div id="euFirstNamegroup" class="mb-3">
     <label class="form-label" for="firstNameInput">First Name:</label>
     <input
       class="form-control"
@@ -13,7 +15,7 @@
       required
     ></div>
 
-  <div id="srLastNameGroup" class="mb-3">
+  <div id="euLastNameGroup" class="mb-3">
     <label class="form-label" for="lastNameInput">Last Name:</label>
     <input
       class="form-control"
@@ -22,9 +24,10 @@
       name="lastNameInput"
       required
     >
+
   </div>
 
-  <div id="srEmailGroup" class="mb-3">
+  <div id="euEmailGroup" class="mb-3">
     <label class="form-label" for="emailAddressInput">Email:</label>
     <input
       class="form-control"
@@ -33,9 +36,8 @@
       name="emailAddressInput"
       required
     >
-
   </div>
-  <div class="mb-3" id="srBirthDateGroup">
+  <div class="mb-3" id="euBirthDateGroup">
     <label class="form-label" for="birthDateInput">Birth Date (mm-dd-yyyy):</label>
     <input
       class="form-control"
@@ -46,13 +48,12 @@
       required
     >
 
-
   </div>
 
   {{! <label for="stateInput">State:</label>
   <input type="text" id="stateInput" name="stateInput" required >
   <br > }}
-  <div class="mb-3" id="srGraduationYearGroup">
+  <div class="mb-3" id="euGraduationYearGroup">
     <label class="form-label" for="gradYearInput">Graduation Year:</label>
     <input
       class="form-control"
@@ -63,27 +64,29 @@
     >
   </div>
 
-  <div class="mb-3" id="srPasswordGroup">
+  {{! <div class="mb-3" id="srPasswordGroup">
     <label class="form-label" for="passwordInput">Password:</label>
     <input
       class="form-control"
       type="password"
       name="passwordInput"
+      value=""
       id="passwordInput"
     >
   </div>
 
   <div class="mb-3" id="srConfirmPasswordGroup">
-    <label class="form-label" for="confirmPasswordInput">Confirm Password:</label>
+    <label class="form-label" for="passwordInput">Confirm Password:</label>
     <input
       class="form-control"
       type="password"
       name="confirmPasswordInput"
+      value=""
       id="confirmPasswordInput"
     >
-  </div>
+  </div> }}
 
-  <div class="mb-3" id="srUploadResumeGroup">
+  <div class="mb-3" id="euUploadResumeGroup">
     <label class="form-label" for="resumeInput">Upload Resume:</label>
     <input
       class="form-control"
@@ -92,13 +95,10 @@
       name="resumeInput"
       accept=".pdf"
       value="upload"
-      required
     >
   </div>
 
-  {{!-- <input type="hidden" id="base64"> --}}
-
-  <button class="btn btn-primary form-control" type="submit">Register</button>
+  <button class="btn btn-success form-control" type="submit">Save Changes</button>
 
   {{! <button class="btn btn-success" type="submit">Register</button> }}
 
@@ -115,16 +115,6 @@
     onclick="location.href='/login'"
   >Login</button>
 </div> }}
-<div class="mb-3">
+{{! <div class="mb-3">
   <a id="login-link" href="/login">Already have an account? Click here to login</a>
-</div>
-
-<br>
-<br>
-
-
-
-<div class="mb-3">
-  <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
-</div>
-
+</div> }}

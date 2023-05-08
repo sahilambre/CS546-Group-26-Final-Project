@@ -36,9 +36,15 @@ const handlebarsInstance = exphbs.create({
           return new Handlebars.SafeString(JSON.stringify(obj, null, spacing));
   
         return new Handlebars.SafeString(JSON.stringify(obj));
+      },
+      select: (selected, options) => {
+        return options.fn(this).replace(
+          new RegExp(' value=\"' + selected + '\"'),
+          '$& selected="selected"');
       }
     }
   });
+
 
 app.use('/public', staticDir);
 app.engine('handlebars', handlebarsInstance.engine);
@@ -114,13 +120,13 @@ try {
   console.log('Testing Applicant Creation');
   let user1 = await createUser('rmartin@gmail.com', 'RMartin123!');
   if(user1.insertedUser === true ){
-    let applicantOut = await applicantData.createApplicant('Robert', 'Martin', 'rmartin@gmail.com', 21, 'NJ', 2023);
+    let applicantOut = await applicantData.createApplicant('Robert', 'Martin', 'rmartin@gmail.com', '2000-01-01', 2023, 'rmartin@gmail.com_1.pdf');
     appl1 = applicantOut.applicant; 
     console.log('added appl1:'+JSON.stringify(appl1));
   }
   let user2 = await createUser('jwilliams@gmail.com', 'JWilliams123!1!');
   if(user2.insertedUser === true ){
-    let applicantOut = await applicantData.createApplicant('Jane', 'Williams', 'jwilliams@gmail.com', 25, 'NY', 2019); 
+    let applicantOut = await applicantData.createApplicant('Jane', 'Williams', 'jwilliams@gmail.com', '2001-12-01', 2019, 'jwilliams@gmail.com_1.pdf'); 
     appl2 = applicantOut.applicant;
     console.log('added appl2:'+JSON.stringify(appl2));
   }
@@ -164,16 +170,24 @@ try {
 
 // middleware added to all routes, at this point the routes aren't all coded in yet so not sure what to name all these redirects to yet lol
 app.get('/', async (req, res, next) => {
+  console.log('GET '+req.path);
     if(req.session.user){
         // needs to be redirected to job feed
         return res.redirect("/homepage");
-
      }
-     else{
-       return res.redirect("/login");
-     }
+    //  else{
+    //    return res.redirect("/");
+    //  }
     next();
   });
+
+// app.post('*', async (req,res,next) => {
+//   console.log('GET '+req.path);
+//   if(!req.session.user){
+//     return res.redirect("/");
+//   }
+//   next();
+// })
 
 app.get('/login', async (req, res, next) => {
   /*
@@ -209,12 +223,93 @@ app.get('/homepage', async (req, res, next) => {
   }
 });
 
-app.get('/signup', async (req, res, next) => {
+app.get('/registerStudents', async (req, res, next) => {
     if(req.session.user){
         return res.redirect("/homepage");
     }
     next();
 });
+
+app.get('/registerRecruiters', async (req, res, next) => {
+  if(req.session.user){
+      return res.redirect("/homepage");
+  }
+  next();
+});
+
+app.get('/jobdetails/:id', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  next()
+})
+
+app.get('/jobSearch', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  next()
+})
+
+app.get('/jobCreate', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.recruiter){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.get('/apply/:id', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.applicant){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.get('/favorite/:id', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.applicant){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.get('/unfavorite/:id', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.applicant){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.get('/jobApplicant/:superid', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.recruiter){
+    return res.redirect('/homepage')
+  }
+  next()
+})
+
+app.post('/jobApplicant', async (req, res, next) => {
+  if(!req.session.user){
+    return res.redirect('/')
+  }
+  if(!req.session.user.recruiter){
+    return res.redirect('/homepage')
+  }
+  next()
+})
 
 app.get('/logout', async (req, res, next) => {
   

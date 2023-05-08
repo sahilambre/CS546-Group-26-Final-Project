@@ -7,19 +7,19 @@
 <h2>Applicant for Job: {{job.title}}</h2>
 
 <h3>{{applicant.firstName}} {{applicant.lastName}}</h3>
-<br />
+<br >
 Email:
 {{applicant.emailAddress}}
-<br />
+<br >
 Age:
 {{applicant.age}}
-<br />
+<br >
 State:
 {{applicant.state}}
-<br />
+<br >
 Graduation Year:
 {{applicant.gradYr}}
-<br />
+<br >
 Resume: Need link
 
 <form action="/jobApplicant" method="POST">
@@ -38,7 +38,7 @@ Resume: Need link
       <option value="Accepted">Accepted</option>
     {{/select}}
   </select>
-  <br />
+  <br >
   <label class="form-label" for="notesInput">Notes:</label>
   <input
     class="form-control"
@@ -46,10 +46,10 @@ Resume: Need link
     id="notesInput"
     name="notesInput"
     value="{{notes}}"
-  />
+  >
 
-  <input type="hidden" id="superid" name="superid" value="{{superid}}" />
+  <input type="hidden" id="superid" name="superid" value="{{superid}}" >
 
-  <input type="submit" value="Update" />
+  <input type="submit" value="Update" >
 
 </form>

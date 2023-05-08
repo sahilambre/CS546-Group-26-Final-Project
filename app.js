@@ -120,13 +120,13 @@ try {
   console.log('Testing Applicant Creation');
   let user1 = await createUser('rmartin@gmail.com', 'RMartin123!');
   if(user1.insertedUser === true ){
-    let applicantOut = await applicantData.createApplicant('Robert', 'Martin', 'rmartin@gmail.com', '2000-01-01', 2023);
+    let applicantOut = await applicantData.createApplicant('Robert', 'Martin', 'rmartin@gmail.com', '2000-01-01', 2023, 'rmartin@gmail.com_1.pdf');
     appl1 = applicantOut.applicant; 
     console.log('added appl1:'+JSON.stringify(appl1));
   }
   let user2 = await createUser('jwilliams@gmail.com', 'JWilliams123!1!');
   if(user2.insertedUser === true ){
-    let applicantOut = await applicantData.createApplicant('Jane', 'Williams', 'jwilliams@gmail.com', '2001-12-01', 2019); 
+    let applicantOut = await applicantData.createApplicant('Jane', 'Williams', 'jwilliams@gmail.com', '2001-12-01', 2019, 'jwilliams@gmail.com_1.pdf'); 
     appl2 = applicantOut.applicant;
     console.log('added appl2:'+JSON.stringify(appl2));
   }

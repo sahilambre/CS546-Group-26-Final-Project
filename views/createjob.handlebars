@@ -6,7 +6,7 @@
 
 <form action="/jobs" method="POST">
   <label class="form-label" for="title">Title:</label>
-  <input class="form-control" type="text" id="title" name="title" required />
+  <input class="form-control" type="text" id="title" name="title" required >
 
   <label class="form-label" for="company">Company:</label>
   <input
@@ -15,7 +15,7 @@
     id="company"
     name="company"
     required
-  />
+  >
 
   <label class="form-label" for="website">Website:</label>
   <input
@@ -24,10 +24,10 @@
     id="website"
     name="website"
     required
-  />
+  >
 
   <label class="form-label" for="tags">Tags:</label>
-  <input class="form-control" type="text" id="tags" name="tags" required />
+  <input class="form-control" type="text" id="tags" name="tags" required >
 
   <label class="form-label" for="jobDescription">Job Description:</label>
   <textarea id="jobDescription" name="jobDescription" required></textarea>
@@ -37,12 +37,12 @@
     id="recruiterId"
     name="recruiterId"
     value="{{recruiterId}}"
-  />
+  >
 
   <input
     class="form-control"
     class="btn btn-success"
     type="submit"
     value="Create Job"
-  />
+  >
 </form>

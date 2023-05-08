@@ -28,6 +28,7 @@ export const createApplicant = async (
 ) => {
     firstName = validation.checkString(firstName, 'first name');
     lastName = validation.checkString(lastName, 'last name');
+    resume = validation.checkString(resume, 'resume name')
     /*in the name params, i want to add smth that keeps ppl from entering ANY numbers in the string
     no one has numbers in their name
     unless ur like John Doe the fourth, in which case you can use roman numerals
@@ -50,15 +51,7 @@ export const createApplicant = async (
     if (typeof gradYr !== 'number' || gradYr == NaN) throw 'Graduation year must be a number';
     if (gradYr < 1950 || gradYr > new Date().getFullYear()+30) throw 'Invalid graduation year';
 
-    if (resume) {
-        const file = await upload.single('resume')(req, res, (err) => {
-          if (err) {
-            console.log(err);
-            throw 'Error uploading file';
-          }
-        });
-        newApp.resume = file.filename;
-      }
+
 
     let newApp = {
         firstName: firstName,

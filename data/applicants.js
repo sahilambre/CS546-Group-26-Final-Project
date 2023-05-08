@@ -232,6 +232,9 @@ const getJobsApplied = async(applicantId) => {
     for (let jobId of jobIdArray)
     {
         let job = await jobData.getJob(jobId);
+        let index = job.applicants.indexOf(applicantId);
+        if (index >= 0) // should always be true
+            job.applicant_status = job.appl_status[index];
         jobsArray.push(job);
     }
     return jobsArray;   

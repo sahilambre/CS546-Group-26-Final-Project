@@ -478,10 +478,7 @@ router.route("/jobSearch").get(async (req, res) => {
   } catch (e) {
     res.status(400).render("error", { title: "Error In Job Search", error: e });
   }
-});
-
-
-  })
+})
   .post(async (req, res) => {
     const {tagInput} = req.body;
     let jobsreturned = [];

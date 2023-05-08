@@ -96,16 +96,16 @@ const get = async (applicantId) => {
     return applicantW;
 };
 
-export const getApplicantResume = async (applicantId) => {
-    const applicant = await get(applicantId);
-    const resumePath = path.join('./uploads', applicant.resume);
-    try {
-      return await fs.readFile(resumePath, 'utf8');
-    } catch (err) {
-      console.log(err);
-      throw 'Error reading file';
-    }
-  };
+// export const getApplicantResume = async (applicantId) => {
+//     const applicant = await get(applicantId);
+//     const resumePath = path.join('./uploads', applicant.resume);
+//     try {
+//       return await fs.readFile(resumePath, 'utf8');
+//     } catch (err) {
+//       console.log(err);
+//       throw 'Error reading file';
+//     }
+//   };
 
 export const getByEmailApplicant = async (applicantEmail) => {
    // applicantId = validation.checkId(applicantId);

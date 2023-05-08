@@ -1,6 +1,7 @@
 <script src="/public/js/userRegister.js"></script>
 <h1>Job Seeker Registration</h1>
 
+
 <form id="user-registration-form" action="/registerStudents" method="POST" enctype="multipart/form-data">
   <div id="srFirstNamegroup" class="mb-3">
     <label class="form-label" for="firstNameInput">First Name:</label>
@@ -21,7 +22,6 @@
       name="lastNameInput"
       required
     >
-
   </div>
 
   <div id="srEmailGroup" class="mb-3">
@@ -33,6 +33,7 @@
       name="emailAddressInput"
       required
     >
+
   </div>
   <div class="mb-3" id="srBirthDateGroup">
     <label class="form-label" for="birthDateInput">Birth Date (mm-dd-yyyy):</label>
@@ -44,6 +45,7 @@
       max="{{todayDate}}"
       required
     >
+
 
   </div>
 
@@ -121,6 +123,8 @@
 <br>
 
 
+
 <div class="mb-3">
   <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
 </div>
+

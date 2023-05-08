@@ -1,3 +1,4 @@
+
 import {Router} from 'express';
 import {validEmail} from '../helpers.js';
 import {createUser, checkUser, removeUser} from '../data/users.js';
@@ -6,6 +7,7 @@ import applicantData from '../data/applicants.js';
 import jobData from '../data/jobs.js';
 import xss from 'xss';
 import { promises as fs } from 'fs';
+
 
 const router = Router();
 import multer from 'multer';
@@ -18,9 +20,10 @@ router.route('/').get(async (req, res) => {
   }); 
 
 router
-  .route('/registerStudents')
+  .route("/registerStudents")
   .get(async (req, res) => {
     //code here for GET
+
     //return res.render("studentregister", { title : "Student Register"});
     const currentDate = new Date();
     const year = currentDate.getFullYear();
@@ -29,13 +32,13 @@ router
     const formattedDate = `${year - 14}-${month}-${day}`;
 
     return res.render("studentregister", { title: "Student Register", todayDate: formattedDate });
-
   })
   // .post(upload.single('resumeInput'),async (req, res) => {
   .post(async (req, res) => {
   
     //code here for POST    
     //const {firstNameInput, lastNameInput, emailAddressInput, ageInput, stateInput, gradYearInput ,passwordInput, confirmPasswordInput} = req.body;
+
 
     const firstNameInput = xss(req.body.firstNameInput);
     const lastNameInput = xss(req.body.lastNameInput);
@@ -48,6 +51,7 @@ router
     const resumeInput = req.body.resumeInput;
 
     if(!firstNameInput || !lastNameInput || !emailAddressInput || !birthDateInput || !gradYearInput || !passwordInput || !confirmPasswordInput || !resumeInput){
+
       let missingInputs = [];
       if (!firstNameInput) {
         missingInputs.push("First Name");
@@ -73,6 +77,7 @@ router
       if (!confirmPasswordInput) {
         missingInputs.push("Confirm Password");
       }
+
       if (!resumeInput) {
         missingInputs.push("Resume");
       }
@@ -84,22 +89,34 @@ router
       const formattedDate = `${year - 14}-${month}-${day}`;
   
       return res.render("studentregister", { title: "Student Register", todayDate: formattedDate , error: "Missing some are more of "+missingInputs });
+
     }
 
     const wrongParams = [];
-    if(typeof firstNameInput !== 'string' ||  /\d/.test(firstNameInput) || (firstNameInput.length < 2) || firstNameInput.length > 25){
+    if (
+      typeof firstNameInput !== "string" ||
+      /\d/.test(firstNameInput) ||
+      firstNameInput.length < 2 ||
+      firstNameInput.length > 25
+    ) {
       wrongParams.push("First Name wrong");
     }
 
-    if(typeof lastNameInput !== 'string' ||  /\d/.test(lastNameInput) || (lastNameInput.length < 2) || lastNameInput.length > 25){
+    if (
+      typeof lastNameInput !== "string" ||
+      /\d/.test(lastNameInput) ||
+      lastNameInput.length < 2 ||
+      lastNameInput.length > 25
+    ) {
       wrongParams.push("Last Name wrong");
     }
     let nEmailAddress;
-    if(!validEmail(emailAddressInput)){
+    if (!validEmail(emailAddressInput)) {
       wrongParams.push("Email wrong");
-    }else{
-       nEmailAddress = emailAddressInput.toLowerCase();
+    } else {
+      nEmailAddress = emailAddressInput.toLowerCase();
     }
+
     // let ageInputNum = parseInt(ageInput);
     // if(typeof ageInputNum !== 'number' ||  ageInputNum < 0){
     //   wrongParams.push("Age wrong");
@@ -116,26 +133,37 @@ router
     let gradYearInputNum = "";
     if (!isNaN(gradYearInput)) {gradYearInputNum = parseInt(gradYearInput);}
     if(typeof gradYearInputNum !== 'number' ||  gradYearInputNum < 0 || /^\d{4}$/.test(gradYearInput) === false){  
+
       wrongParams.push("Graduation Year wrong");
     }
 
-    if(typeof passwordInput !== 'string' ||  passwordInput.length < 8 || passwordInput.length > 25){
+    if (
+      typeof passwordInput !== "string" ||
+      passwordInput.length < 8 ||
+      passwordInput.length > 25
+    ) {
       wrongParams.push("Password wrong");
     }
-    const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
+    const passwordPattern =
+      "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
     const passwordReg = new RegExp(passwordPattern);
-    if( !passwordReg.test(passwordInput)){
+    if (!passwordReg.test(passwordInput)) {
       //throw return res.status(400).send({error: 'This is an error!'});
       wrongParams.push("Password wrong");
     }
 
-    if(typeof confirmPasswordInput !== 'string' ||  confirmPasswordInput.length < 8 || confirmPasswordInput.length > 25){
+    if (
+      typeof confirmPasswordInput !== "string" ||
+      confirmPasswordInput.length < 8 ||
+      confirmPasswordInput.length > 25
+    ) {
       wrongParams.push("Confirm Password wrong");
     }
 
-    if(passwordInput !== confirmPasswordInput){
+    if (passwordInput !== confirmPasswordInput) {
       wrongParams.push("Password and Confirm Password do not match");
     }
+
 
     if(wrongParams.length > 0){
       return res.status(400).render("error", {title: "Student Registration Error" ,error: wrongParams});
@@ -174,9 +202,8 @@ router
     }catch(e){
       return res.status(400).render("error", {title: "Applicant Registration" ,error: e});
     }
-    
-
   });
+
 
 
 
@@ -184,7 +211,7 @@ router
   .route('/registerRecruiters')
   .get(async (req, res) => {
     //code here for GET
-    return res.render("recruiterregister", { title : "Employer Registration"});
+    return res.render("recruiterregister", { title: "Employer Registration" });
   })
   // .post(upload.single('resumeInput'),async (req, res) => {
   .post( upload.none(), async (req, res) => {
@@ -220,41 +247,65 @@ router
     }
 
     const wrongParams = [];
-    if(typeof firstNameInput !== 'string' ||  /\d/.test(firstNameInput) || (firstNameInput.length < 2) || firstNameInput.length > 25){
+    if (
+      typeof firstNameInput !== "string" ||
+      /\d/.test(firstNameInput) ||
+      firstNameInput.length < 2 ||
+      firstNameInput.length > 25
+    ) {
       wrongParams.push("First Name wrong");
     }
 
-    if(typeof lastNameInput !== 'string' ||  /\d/.test(lastNameInput) || (lastNameInput.length < 2) || lastNameInput.length > 25){
+    if (
+      typeof lastNameInput !== "string" ||
+      /\d/.test(lastNameInput) ||
+      lastNameInput.length < 2 ||
+      lastNameInput.length > 25
+    ) {
       wrongParams.push("Last Name wrong");
     }
     let nEmailAddress;
     if(!validEmail(emailAddressInput)){
       wrongParams.push("Email wrong");
-    }else{
-        nEmailAddress = emailAddressInput.toLowerCase();
+    } else {
+      nEmailAddress = emailAddressInput.toLowerCase();
     }
 
-    if(typeof companyInput !== 'string' ||  /\d/.test(companyInput) || (companyInput.length < 2)){
+    if (
+      typeof companyInput !== "string" ||
+      /\d/.test(companyInput) ||
+      companyInput.length < 2
+    ) {
       wrongParams.push("Company wrong");
     }
 
-    if(typeof passwordInput !== 'string' ||  passwordInput.length < 8 || passwordInput.length > 25){
+    if (
+      typeof passwordInput !== "string" ||
+      passwordInput.length < 8 ||
+      passwordInput.length > 25
+    ) {
       wrongParams.push("Password wrong");
     }
 
-    const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
+    const passwordPattern =
+      "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
     const passwordReg = new RegExp(passwordPattern);
-    if( !passwordReg.test(passwordInput)){
+    if (!passwordReg.test(passwordInput)) {
       wrongParams.push("Password wrong");
     }
 
-    if(typeof confirmPasswordInput !== 'string' ||  confirmPasswordInput.length < 8 || confirmPasswordInput.length > 25){
+    if (
+      typeof confirmPasswordInput !== "string" ||
+      confirmPasswordInput.length < 8 ||
+      confirmPasswordInput.length > 25
+    ) {
       wrongParams.push("Confirm Password wrong");
     }
 
-    if(passwordInput !== confirmPasswordInput){
+    if (passwordInput !== confirmPasswordInput) {
       wrongParams.push("Password and Confirm Password do not match");
     }
+
 
     if(wrongParams.length > 0){
       return res.status(400).render("error", {title: "Recruiter Registration Error", error: wrongParams});
@@ -272,20 +323,23 @@ router
         }else{
           return res.status(400).render("error", {title: "Recruiter Registration Error" ,error: "Registration Failed"});
         }
+      } else {
+        return res
+          .status(400)
+          .render("error", {
+            title: "Recruiter Registration Error",
+            error: "User Creation Failed",
+          });
       }
-      else
-      {
-        return res.status(400).render("error", {title: "Recruiter Registration Error" ,error: "User Creation Failed"});
-
-      }
-    }catch(e){
-      return res.status(400).render("error", {title: "Recruiter Registration Error" ,error: e});
+    } catch (e) {
+      return res
+        .status(400)
+        .render("error", { title: "Recruiter Registration Error", error: e });
     }
-    
   });
 
-  router
-  .route('/login')
+router
+  .route("/login")
   .get(async (req, res) => {
     //code here for GET
     return res.render("login", { title : "Login"});
@@ -311,12 +365,13 @@ router
     }
     const passwordPattern = "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
     const passwordReg = new RegExp(passwordPattern);
-    if( !(passwordReg.test(passwordInput))){
+    if (!passwordReg.test(passwordInput)) {
       missingInputs.push("Either email or password is wrong");
     }
 
-    try{
+    try {
       const user = await checkUser(nEmailAddress, passwordInput);
+
       if(user.userFound === true ){
           let correctEmail = user.emailAddress;
           let isRecruiter = false;
@@ -341,8 +396,8 @@ router
     }catch(e){
       return res.status(400).render("login", {title: "Login Failure" ,error: e});
     }
-
   });
+
 
   router.route('/homepage').get(async (req, res) => {
     let jobsapplied = [];
@@ -406,6 +461,25 @@ router
   } catch (e) {
     return res.status(400).render('error', {title:'Error In Job Search', error:e});
   }
+});
+
+router.route("/jobSearch").get(async (req, res) => {
+  let jobsreturned = [];
+  try {
+    jobsreturned = await jobData.getAllJobs();
+
+    res.render("jobsearch", {
+      title: "Job Search",
+      emailAddress: req.session.user.emailAddress,
+      recruiter: req.session.user.recruiter,
+      applicant: req.session.user.applicant,
+      jobs: jobsreturned,
+    });
+  } catch (e) {
+    res.status(400).render("error", { title: "Error In Job Search", error: e });
+  }
+});
+
 
   })
   .post(async (req, res) => {
@@ -433,8 +507,8 @@ router
     return res.render("jobcreate", { title : "Create Job"});
   })
   .post(async (req, res) => {
-    const {titleInput, companyInput, websiteInput, tagsInput} = req.body;
-    if(!titleInput || !companyInput || !websiteInput || !tagsInput ){
+    const { titleInput, companyInput, websiteInput, tagsInput } = req.body;
+    if (!titleInput || !companyInput || !websiteInput || !tagsInput) {
       let missingInputs = [];
       if (!titleInput) {
         missingInputs.push("Title");
@@ -448,7 +522,7 @@ router
       if (!tagsInput) {
         missingInputs.push("Tags");
       }
-      
+    
       if (missingInputs.length > 0)
       {
         return res.status(400).render("jobcreate", {title: "Job Create" ,error: missingInputs});
@@ -457,8 +531,9 @@ router
     }
 
     // maybe add more data checking
-    try{
-      if (!req.session.user.recruiter) throw 'Non-recruiter cannot create a job';
+    try {
+      if (!req.session.user.recruiter)
+        throw "Non-recruiter cannot create a job";
       //isRecruiter = await recruiterData.get(req.session.user.recruiter.recruiterId);
       let convertedTags = tagsInput.split(',');
       for (let i=0;i<convertedTags.length;i++)

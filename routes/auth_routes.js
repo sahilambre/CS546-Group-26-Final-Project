@@ -1,6 +1,6 @@
 import {Router} from 'express';
 import {validEmail} from '../helpers.js';
-import {createUser, checkUser} from '../data/users.js';
+import {createUser, checkUser, removeUser} from '../data/users.js';
 import recruiterData from '../data/recruiters.js';
 import applicantData from '../data/applicants.js';
 import jobData from '../data/jobs.js';
@@ -167,7 +167,7 @@ router
             return res.status(400).render("error", {title: "Applicant Registration" ,error: "Registration Failed"});
           }
         } catch (error) {
-          // deleteUserCraetedIfFailed!!! <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+          removeUser(nEmailAddress); // remove user if applicant creation failed
           return res.status(400).render("error", {title: "Applicant Registration" ,error: e});          
         }
       }

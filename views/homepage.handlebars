@@ -1,11 +1,11 @@
 {{! <div class="container"></div> }}
 <div class="mb-3">
   <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
-
+  {{!-- <a href="/edituserprofile/{{_id}}">Edit Profile</a> --}}
 </div>
 <h1 id="page-heading" class="text-center">Welcome to your homepage</h1>
 {{#if recruiter}}
-  <br >
+  <br />
   <h2 class="text-center">Welcome Recruiter!</h2>
   <h3 class="text-center">Jobs you have listed</h3>
   <table class="table table-striped">
@@ -30,6 +30,7 @@
   </table>
 {{/if}}
 {{#if applicant}}
+<button class="btn btn-info" onclick="location.href='/profile'">Edit Profile</button>
   <br >
   <h2 class="text-center">Welcome Job Seeker!</h2>
   <h3 class="text-center">Jobs you have applied for</h3>
@@ -77,13 +78,14 @@
     </tbody>
   </table>
 {{/if}}
-<br >
-<br >
+<br />
+<br />
 <div class="text-center">
+  <button onclick="location.href='/'" class="btn btn-success mb-3">Edit Profile</button>
   <a href="/jobSearch" class="btn btn-primary">Job Search</a>
 </div>
-<br >
-<br >
+<br />
+<br />
 <div class="text-center">
   <button
     onclick="location.href='/logout'"

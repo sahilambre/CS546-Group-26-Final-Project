@@ -1,4 +1,4 @@
-<div class="mb-3">
+{{!-- <div class="mb-3">
   <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
 
 </div>
@@ -38,4 +38,75 @@
   {{/if}}
  
 <br>
-<button onclick="location.href='/logout'">Logout</button>
+<button onclick="location.href='/logout'">Logout</button> --}}
+
+<div class="container">
+  <div class="mb-3">
+    <button class="btn btn-warning rounded-pill" onclick="history.back()">Go
+      Back</button>
+  </div>
+
+  <h1 class="my-4" id="page-heading">Job Search</h1>
+
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="my-3">Job Search</h2>
+      <form action="/jobSearch" method="POST">
+        <div class="input-group mb-3">
+          <label for="tagInput" class="input-group-text">Search Tag:</label>
+          <input
+            type="text"
+            id="tagInput"
+            name="tagInput"
+            class="form-control"
+            required
+          />
+          <button type="submit" class="btn btn-primary">Search By Tag</button>
+        </div>
+      </form>
+      <a href="/jobSearch" class="btn btn-secondary mb-3">Clear Tag Search (Get
+        All Jobs)</a>
+    </div>
+  </div>
+
+  <h3 class="my-4">Job Search Result</h3>
+  <div class="table-responsive">
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Title</th>
+          <th>Company</th>
+          <th>Web Site</th>
+          <th>Tags</th>
+        </tr>
+      </thead>
+      <tbody>
+        {{#each jobs}}
+          <tr>
+            <td><a href="/jobdetails/{{_id}}">{{title}}</a></td>
+            <td>{{company}}</td>
+            <td>{{website}}</td>
+            <td>{{tags}}</td>
+          </tr>
+        {{/each}}
+      </tbody>
+    </table>
+  </div>
+
+  {{#if recruiter}}
+    <div class="row justify-content-left">
+      <div class="col-md-6">
+        <a href="/jobCreate" class="btn btn-primary">Create New Job</a>
+      </div>
+    </div>
+  {{/if}}
+
+  <div class="row justify-content-left">
+    <div class="col-md-6">
+      <button
+        onclick="location.href='/logout'"
+        class="btn btn-danger mt-3"
+      >Logout</button>
+    </div>
+  </div>
+</div>

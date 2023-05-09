@@ -1,34 +1,29 @@
-{{!-- Import your client side script heregit  --}}
+<!-- Import your client side script here -->
+<script src="/public/js/jobApplicant.js"></script>
+
 <div class="mb-3">
   <button class="btn btn-warning rounded-pill" onclick="history.back()">Go Back</button>
-
 </div>
+
 <h1>Job Applicant Details</h1>
 
 <h2>Applicant for Job: {{job.title}}</h2>
 
 <h3>{{applicant.firstName}} {{applicant.lastName}}</h3>
-<br >
-Email:
-{{applicant.emailAddress}}
-<br >
-Age:
-{{applicant.birthDate}}
-<br >
-State:
-{{applicant.state}}
-<br >
-Graduation Year:
-{{applicant.gradYr}}
-<br >
-Resume: Need link 
+<br>
+Email: {{applicant.email}}
+<br>
+Birth Date: {{applicant.birthDate}}
+<br>
+Graduation Year: {{applicant.gradYr}}
+<br>
+Resume: 
 
-{{!-- Create an Ifreame to show pdf --}}
-
+{{!-- Create an iframe to show the PDF --}}
+<iframe id="pdf-iframe" width="100%" height="500" frameborder="0"></iframe>
+{{!-- {{applicant.resume}} --}}
 <form action="/jobApplicant" method="POST">
-
   <label for="statusInput">Application Status:</label>
-
   <select id="statusInput" name="statusInput">
     {{#select status}}
       <option value="New">New</option>
@@ -41,7 +36,7 @@ Resume: Need link
       <option value="Accepted">Accepted</option>
     {{/select}}
   </select>
-  <br >
+  <br>
   <label class="form-label" for="notesInput">Notes:</label>
   <input
     class="form-control"
@@ -50,9 +45,27 @@ Resume: Need link
     name="notesInput"
     value="{{notes}}"
   >
-
-  <input type="hidden" id="superid" name="superid" value="{{superid}}" >
-
-  <input type="submit" value="Update" >
-
+  <input type="hidden" id="superid" name="superid" value="{{superid}}">
+  <input type="submit" value="Update">
 </form>
+
+<script>
+function b64toBlob(dataURI) {
+      const byteString = window.atob(dataURI);
+      const arrayBuffer = new ArrayBuffer(byteString.length);
+      const int8Array = new Uint8Array(arrayBuffer);
+      for (let i = 0; i < byteString.length; i++) {
+        int8Array[i] = byteString.charCodeAt(i);
+      }
+      const blob = new Blob([int8Array], { type: 'application/pdf'});
+      return blob;
+}
+
+const pdfIframe = document.getElementById('pdf-iframe');
+const pdfData = '{{applicant.resume}}';
+const pdfBlob = b64toBlob(pdfData);
+const pdfUrl = URL.createObjectURL(pdfBlob);
+pdfIframe.src = pdfUrl;
+</script>
+
+

@@ -122,6 +122,7 @@ const getJobsByRecruiterId = async(recruiterId) => {
 const getJobsByTag = async(tag) => {
     //allows applicants to search jobs by tag
     tag = validation.checkString(tag, 'Tag');
+    tag = tag.toLowerCase();
     const jobCollection = await jobs();
     return await jobCollection.find({tags: tag}).toArray();
     //search will work on a single tag that is contained in jobs' tags

@@ -4,7 +4,7 @@ const constructorMethod = (app) => {
 
   app.use('/', auth_routes);
   app.use('*', (req, res) => {
-    return res.status(404).render('error');
+    return res.status(404).render('error', {error: "Resource does not exist!"});
   });
 };
 

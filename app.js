@@ -9,7 +9,7 @@ import configRoutes from './routes/index.js';
 
 //set a payload limit
 app.use(express.json({limit: '50mb'}));
-app.use(express.urlencoded({limit: '50mb'}));
+app.use(express.urlencoded({limit: '50mb', extended:true}));
 
 const rewriteUnsupportedBrowserMethods = (req, res, next) => {
    if(req.body && req.body._method) {

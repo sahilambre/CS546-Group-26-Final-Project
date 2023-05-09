@@ -103,6 +103,6 @@ export const removeUser = async (emailAddy) => {
       email: emailAddy
   });
   if (deletionInfo.deletedCount === 0)
-      throw `Could not delete user with id of ${id}`;
+      throw `Could not delete user with email of ${emailAddy}`;
   return {deleted: true};
 }

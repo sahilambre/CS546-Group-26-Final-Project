@@ -1,7 +1,7 @@
 
 (window.onload = () => {
 
-    let form = document.getElementById("user-registration-form");
+    const form = document.getElementById("user-registration-form");
     
     if(form){
         form.addEventListener("submit", (event) => {

@@ -48,7 +48,7 @@ router
     const gradYearInput = xss(req.body.gradYearInput);
     const passwordInput = xss(req.body.passwordInput);
     const confirmPasswordInput = xss(req.body.confirmPasswordInput);
-    const resumeInput = req.body.resumeInput;
+    const resumeInput = xss(req.body.resumeInput);
 
     if(!firstNameInput || !lastNameInput || !emailAddressInput || !birthDateInput || !gradYearInput || !passwordInput || !confirmPasswordInput || !resumeInput){
 
@@ -319,10 +319,16 @@ router
     try{
       const newUser = await createUser(nEmailAddress, passwordInput);
       if(newUser.insertedUser === true ){
-        const newRecruiter = await recruiterData.createRecruiter(firstNameInput, lastNameInput, nEmailAddress, companyInput,  []);
-        if(newRecruiter.insertedRecruiter === true) {
-          return res.status(201).render("regsuccess", {title: "Recruiter Registration Successful"});
-        }else{
+        try {
+          const newRecruiter = await recruiterData.createRecruiter(firstNameInput, lastNameInput, nEmailAddress, companyInput,  []);
+          if(newRecruiter.insertedRecruiter === true) {
+            return res.status(201).render("regsuccess", {title: "Recruiter Registration Successful"});
+          }else{
+            removeUser(nEmailAddress); // remove user if applicant creation failed
+            return res.status(400).render("error", {title: "Recruiter Registration Error" ,error: "Registration Failed"});
+          }
+        } catch (error) {
+          removeUser(nEmailAddress); // remove user if applicant creation failed
           return res.status(400).render("error", {title: "Recruiter Registration Error" ,error: "Registration Failed"});
         }
       } else {
@@ -470,7 +476,7 @@ router.route("/jobSearch").get(async (req, res) => {
   try {
     jobsreturned = await jobData.getAllJobs();
 
-    res.render("jobsearch", {
+    return res.render("jobsearch", {
       title: "Job Search",
       emailAddress: req.session.user.emailAddress,
       recruiter: req.session.user.recruiter,
@@ -478,7 +484,7 @@ router.route("/jobSearch").get(async (req, res) => {
       jobs: jobsreturned,
     });
   } catch (e) {
-    res.status(400).render("error", { title: "Error In Job Search", error: e });
+    return res.status(400).render("error", { title: "Error In Job Search", error: e });
   }
 })
   .post(async (req, res) => {
@@ -489,12 +495,12 @@ router.route("/jobSearch").get(async (req, res) => {
       if (!tagInput) throw 'Error: no tag given to search on';
       jobsreturned = await jobData.getJobsByTag(tagInput);
         
-      res.render('jobsearch', {title: 'Job Search', emailAddress: req.session.user.emailAddress, 
+      return res.render('jobsearch', {title: 'Job Search', emailAddress: req.session.user.emailAddress, 
         recruiter:req.session.user.recruiter, applicant:req.session.user.applicant,
         jobs: jobsreturned});
 
   } catch (e) {
-    res.status(400).render('error', {title:'Error In Job Search by Tag', error:e});
+    return res.status(400).render('error', {title:'Error In Job Search by Tag', error:e});
   }
 });
   
@@ -606,10 +612,10 @@ router.route("/jobSearch").get(async (req, res) => {
       
       await applicantData.unfavoriteJob(req.session.user.applicant._id, req.params.id);
       
-      res.redirect('/homepage');      
+      return res.redirect('/homepage');      
       
     } catch (e) {
-      res.status(400).render('error', {title:'Error In Unfavorite Job Operation', error:e});
+      return res.status(400).render('error', {title:'Error In Unfavorite Job Operation', error:e});
     }
   });
 
@@ -637,7 +643,7 @@ router
 
       return res.render("jobapplicant", { title: "Job Applicant", superid:req.params.superid, job:job, applicant:applicant, status:status, notes:notes, todayDate: formattedDate });
     } catch (e) {
-      res.status(400).render('error', {title:'Error In Job Applicant View', error:e});
+      return res.status(400).render('error', {title:'Error In Job Applicant View', error:e});
 
     }
   });
@@ -678,27 +684,207 @@ router
       //return res.render("jobapplicant", { title: "Job Applicant", superid:superid, job:job, applicant:applicant, status:status, notes:notes, todayDate: formattedDate });
       return res.redirect('/jobapplicant/'+superid);   
     } catch (e) {
-      res.status(400).render('error', {title:'Error In Job Applicant Post', error:e});
+      return res.status(400).render('error', {title:'Error In Job Applicant Post', error:e});
 
     }
    
   });
 
+router
+  .route('/profile')
+  .get( async (req, res) => {
+    if(!req.session.user){
+      return res.redirect("/login")
+    }
+    if(!req.session.user.applicant){
+      return res.redirect("/homepage")
+    }
+    try {
+      let applicant = await applicantData.getByEmailApplicant(req.session.user.emailAddress);
+      return res.render("edituserprofile", {title: "Edit Profile", applicant: applicant})
+    } catch (error) {
+      return res.status(400).render('error', {title:'Error', error:e});
+    }
+  })
+  .post( async (req, res) => {
+    if(!req.session.user){
+      return res.redirect("/login")
+    }
+    if(!req.session.user.applicant){
+      return res.redirect("/homepage")
+    }
+    try {
+      
+      
+    const firstNameInput = xss(req.body.firstNameInput);
+    const lastNameInput = xss(req.body.lastNameInput);
+    // const emailAddressInput = xss(req.body.emailAddressInput);
+    const birthDateInput = xss(req.body.birthDateInput);
+    // const stateInput = xss(req.body.state);
+    const gradYearInput = xss(req.body.gradYearInput);
+    // const passwordInput = xss(req.body.passwordInput);
+    // const confirmPasswordInput = xss(req.body.confirmPasswordInput);
+    const resumeInput = xss(req.body.resumeInput);
+
+    if(!firstNameInput || !lastNameInput || !birthDateInput || !gradYearInput || !resumeInput){
+
+      let missingInputs = [];
+      if (!firstNameInput) {
+        missingInputs.push("First Name");
+      }
+      if (!lastNameInput) {
+        missingInputs.push("Last Name");
+      }
+      // if (!emailAddressInput) {
+      //   missingInputs.push("Email Address");
+      // }
+      if (!birthDateInput) {
+        missingInputs.push("Birth Date");
+      }
+      // if (!stateInput) {
+      //   missingInputs.push("State");
+      // }
+      if (!gradYearInput) {
+        missingInputs.push("Graduation Year");
+      }
+      // if (!passwordInput) {
+      //   missingInputs.push("Password");
+      // }
+      // if (!confirmPasswordInput) {
+      //   missingInputs.push("Confirm Password");
+      // }
+
+      if (!resumeInput) {
+        missingInputs.push("Resume");
+      }
+      // return res.status(400).render("studentregister", {title: "Student Registration" ,error: missingInputs});
+      const currentDate = new Date();
+      const year = currentDate.getFullYear();
+      const month = String(currentDate.getMonth() + 1).padStart(2, '0');
+      const day = String(currentDate.getDate()).padStart(2, '0');
+      const formattedDate = `${year - 14}-${month}-${day}`;
+  
+      return res.render("studentregister", { title: "Student Register", todayDate: formattedDate , error: "Missing some are more of "+missingInputs });
+
+    }
+
+    const wrongParams = [];
+    if (
+      typeof firstNameInput !== "string" ||
+      /\d/.test(firstNameInput) ||
+      firstNameInput.length < 2 ||
+      firstNameInput.length > 25
+    ) {
+      wrongParams.push("First Name wrong");
+    }
+
+    if (
+      typeof lastNameInput !== "string" ||
+      /\d/.test(lastNameInput) ||
+      lastNameInput.length < 2 ||
+      lastNameInput.length > 25
+    ) {
+      wrongParams.push("Last Name wrong");
+    }
+    // let nEmailAddress;
+    // if (!validEmail(emailAddressInput)) {
+    //   wrongParams.push("Email wrong");
+    // } else {
+    //   nEmailAddress = emailAddressInput.toLowerCase();
+    // }
+
+    // let ageInputNum = parseInt(ageInput);
+    // if(typeof ageInputNum !== 'number' ||  ageInputNum < 0){
+    //   wrongParams.push("Age wrong");
+    // }
+    
+    // if(typeof stateInput !== 'string' ||  /\d/.test(stateInput) || (stateInput.length < 2) || stateInput.length > 25){
+    //   wrongParams.push("State wrong");
+    // }
+    if (typeof birthDateInput !== 'string'){
+      wrongParams.push("Birth Date is in wrong format");  //<<<<<<<<<<<<<<<<<<<<<<<<<< Review further to add age validation at least 14 years!
+    }
+
+
+    let gradYearInputNum = "";
+    if (!isNaN(gradYearInput)) {gradYearInputNum = parseInt(gradYearInput);}
+    if(typeof gradYearInputNum !== 'number' ||  gradYearInputNum < 0 || /^\d{4}$/.test(gradYearInput) === false){  
+
+      wrongParams.push("Graduation Year wrong");
+    }
+
+    // if (
+    //   typeof passwordInput !== "string" ||
+    //   passwordInput.length < 8 ||
+    //   passwordInput.length > 25
+    // ) {
+    //   wrongParams.push("Password wrong");
+    // }
+    // const passwordPattern =
+    //   "^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,}$";
+    // const passwordReg = new RegExp(passwordPattern);
+    // if (!passwordReg.test(passwordInput)) {
+    //   //throw return res.status(400).send({error: 'This is an error!'});
+    //   wrongParams.push("Password wrong");
+    // }
+
+    // if (
+    //   typeof confirmPasswordInput !== "string" ||
+    //   confirmPasswordInput.length < 8 ||
+    //   confirmPasswordInput.length > 25
+    // ) {
+    //   wrongParams.push("Confirm Password wrong");
+    // }
+
+    // if (passwordInput !== confirmPasswordInput) {
+    //   wrongParams.push("Password and Confirm Password do not match");
+    // }
+
+
+    if(wrongParams.length > 0){
+      return res.status(400).render("error", {title: "Student Registration Error" ,error: wrongParams});
+    }
+
+    
+
+    let applicant = await applicantData.getByEmailApplicant(req.session.user.emailAddress);
+    let result = await applicantData.update(
+      applicant._id,
+      firstNameInput,
+      lastNameInput,
+      applicant.email,
+      birthDateInput,
+      // state,
+      gradYearInput,
+      applicant.jobsApplied,
+      applicant.jobsFavorited,
+      resumeInput)
+      // !firstNameInput || !lastNameInput || !emailAddressInput || !birthDateInput || !gradYearInput || !resumeInput
+
+      return res.redirect("/homepage")
+
+
+      // return res.render("edituserprofile", {title: "Edit Profile", applicant: applicant})
+    } catch (error) {
+      return res.status(400).render('error', {title:'Error', error: error});
+    }
+
+  })
 
   // router
   // .route('/resume/:id')
   // .get( async (req, res) => {
   //   if(!req.session.user){
-  //     res.redirect("/login")
+  //     return res.redirect("/login")
   //   }
   //   if(!req.session.user.recruiter){
-  //     res.redirect("/homepage")
+  //     return res.redirect("/homepage")
   //   }
   //   try {
   //     if(!req.params.id) throw "No id was provided!"
   //     let applicant = await applicantData.get(req.params.id);
   //   } catch (error) {
-  //     res.status(400).render('error', {title:'Error', error:e});
+  //     return res.status(400).render('error', {title:'Error', error:e});
   //   }
   // })
 

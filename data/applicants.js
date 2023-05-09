@@ -50,6 +50,7 @@ export const createApplicant = async (
     if (!gradYr) throw 'You must enter your graduation year';
     if (typeof gradYr !== 'number' || gradYr == NaN) throw 'Graduation year must be a number';
     if (gradYr < 1950 || gradYr > new Date().getFullYear()+30) throw 'Invalid graduation year';
+    if (!resume) throw 'Resume is missing!';
 
 
 
@@ -111,7 +112,7 @@ export const getByEmailApplicant = async (applicantEmail) => {
    // applicantId = validation.checkId(applicantId);
     const applicantCollection = await applicants();
     const applicantW = await applicantCollection.findOne({email: applicantEmail});
-    if (applicantW === null) throw 'No applicant listings with that id';
+    if (applicantW === null) throw 'No applicant listings with that email';
     applicantW._id = applicantW._id.toString();
     return applicantW;
 };
@@ -123,7 +124,7 @@ const remove = async (applicantId) => {
         _id: new ObjectId(id)
     });
     if (deletionInfo.lastErrorObject.n === 0)
-        throw `Could not delete post with id of ${id}`;
+        throw `Could not delete Applicant with id of ${id}`;
     return {deleted: true};
 };
 
@@ -142,6 +143,7 @@ const update = async (
 ) => {
     id = validation.checkId(id);
     //TODO: more error handling
+    if (!resume) throw "Resume is missing!"
     let updatedApp = {
         firstName: firstName,
         lastName: lastName,
@@ -190,7 +192,7 @@ const favoriteJob = async (
     //should probably check that jobId is not already in the array
     if (jobIdArray.includes(jobId)) throw 'Error: applicant has already favorited for this job';
     jobIdArray.push(jobId);
-    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.birthDate, applicant.gradYr, applicant.jobsApplied, jobIdArray);
+    update(applicant._id.toString(), applicant.firstName, applicant.lastName, applicant.email, applicant.birthDate, applicant.gradYr, applicant.jobsApplied, jobIdArray, applicant.resume);
 };
 //users need to be able to filter jobs based on a favorites list
 

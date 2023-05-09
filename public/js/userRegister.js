@@ -21,6 +21,7 @@
               
               fetch('/registerStudents', {
                 method: 'POST',
+                redirect: 'follow',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     firstNameInput: document.getElementById("firstNameInput").value,
@@ -34,7 +35,17 @@
                     resumeInput: pdfBase64 
                 })
               })
-                .then(response => response.text())
+                .then(response => 
+                  {
+                    if (response.redirected) 
+                    {
+                      window.location.href = response.url;
+                    } 
+                    else 
+                    {
+                      response.text()
+                    }
+                  })
                 .then(data => console.log(data))
                 .catch(error => console.error(error));
             }

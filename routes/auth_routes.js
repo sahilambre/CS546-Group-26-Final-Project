@@ -190,7 +190,9 @@ router
           try {
             const newApplicant = await applicantData.createApplicant(firstNameInput, lastNameInput, nEmailAddress, birthDateInput, gradYearInputNum, resumeInput);
           if(newApplicant.insertedApplicant === true) {
-            return res.status(201).render("login", {title: "Student Login"});
+            //return res.status(201).render("login", {title: "Student Login"});
+            return res.redirect('/login');
+
           }else{
             return res.status(400).render("error", {title: "Applicant Registration" ,error: "Registration Failed"});
           }

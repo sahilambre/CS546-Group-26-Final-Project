@@ -7,7 +7,7 @@ CS546 Group 26 Web Programming I
 
 #Setup:
 - Install all the npm dependencies (npm install)
-- Seed the seed.js file (npm run seed.js)
+- Seed the seed.js file (npm run seed)
 - Run the application (npm start)
 
 # Run on : http://localhost:3000/
@@ -15,19 +15,24 @@ CS546 Group 26 Web Programming I
 #Application Logins:
 
 1. User One
-- Username: 
-- Password: 
+- Username: rmartin@gmail.com
+- Password: RMartin123!
 
 2. User Two
-- Username: 
-- Password: 
+- Username: jwilliams@gmail.com
+- Password: JWilliams123!1!
 
 #Recruiter Logins:
 
 1. User One
-- Username: 
-- Password: 
+- Username: jsmith@google.com
+- Password: JSmith123!
 
 2. User Two
-- Username: 
-- Password: 
+- Username: mjones@nokia.com
+- Password: MJones123!
+
+3. User Three
+- Username: badams@amazon.com
+- Password: BAdams123!
+

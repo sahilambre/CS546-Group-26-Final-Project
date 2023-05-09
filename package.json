@@ -5,6 +5,7 @@
   "main": "app.js",
   "scripts": {
     "start": "node app.js",
+    "seed": "node seed.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Harshil, Sahil, Kesav, Thomas, Mihir ",

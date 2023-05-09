@@ -12,9 +12,6 @@ function validUsername(username) {
   if (!username) { throw "username is not defined"; }
   if (username.constructor !== String) { throw "username must be a string"; }
   if (username.length < 6) { throw "username length must be at least 6 characters"; }
-  //let letterNumber = /^[0-9a-zA-Z]+$/;
-  //if (!username.match(letterNumber)) { throw "username can only contain letters and numbers"; }
-  // maybe check for email address instead
 }
 
 export function validPassword(password) {

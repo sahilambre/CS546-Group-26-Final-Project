@@ -4,19 +4,22 @@ import bcryptjs from 'bcryptjs';
 
 function validID(id) {
   if (!id) { throw "id is not defined"; }
-  if (typeof id !== String) { throw "id must be a string"; }
+  if (id.constructor !== String) { throw "id must be a string"; }
   if (!ObjectId.isValid(id)) { throw "id is invalid"; }
 }
 
 function validUsername(username) {
   if (!username) { throw "username is not defined"; }
-  if (typeof username !== String) { throw "username must be a string"; }
+  if (username.constructor !== String) { throw "username must be a string"; }
   if (username.length < 6) { throw "username length must be at least 6 characters"; }
+  //let letterNumber = /^[0-9a-zA-Z]+$/;
+  //if (!username.match(letterNumber)) { throw "username can only contain letters and numbers"; }
+  // maybe check for email address instead
 }
 
 export function validPassword(password) {
   if (!password) { throw "password is not defined"; }
-  if (typeof password !== String) { throw "password must be a string"; }
+  if (password.constructor !== String) { throw "password must be a string"; }
   if (password.length < 8) { throw "password length must be at least 8 characters"; }
   if (password.length > 31) { throw "password length must not exceed 31 characters"; }
 }
